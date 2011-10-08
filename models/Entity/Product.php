@@ -48,7 +48,7 @@ class Product extends TimestampedModel {
 
 	/**
 	 * @var float
-	 * @Column(type="decimal", precision=12, scale=2, nullable=false)
+	 * @Column(type="decimal", precision=14, scale=2, nullable=false)
 	 */
 	protected $price;
 

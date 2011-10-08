@@ -19,188 +19,371 @@
 
 namespace Doctrine\ORM\Mapping;
 
-use Doctrine\Common\Annotations\Annotation;
+interface Annotation {}
+
 
 /* Annotations */
 
-/** @Annotation */
-final class Entity extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("CLASS")
+ */
+final class Entity implements Annotation {
+    /** @var string */
     public $repositoryClass;
+    /** @var boolean */
     public $readOnly = false;
 }
 
-/** @Annotation */
-final class MappedSuperclass extends Annotation {}
-
-/** @Annotation */
-final class InheritanceType extends Annotation {}
-
-/** @Annotation */
-final class DiscriminatorColumn extends Annotation {
-    public $name;
-    public $fieldName; // field name used in non-object hydration (array/scalar)
-    public $type;
-    public $length;
+/** 
+ * @Annotation 
+ * @Target("CLASS")
+ */
+final class MappedSuperclass implements Annotation {
+    /** @var string */
+    public $repositoryClass;
 }
 
-/** @Annotation */
-final class DiscriminatorMap extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("CLASS")
+ */
+final class InheritanceType implements Annotation {
+    /** @var string */
+    public $value;
+}
 
-/** @Annotation */
-final class Id extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("CLASS")
+ */
+final class DiscriminatorColumn implements Annotation {
+    /** @var string */
+    public $name;
+    /** @var string */
+    public $type;
+    /** @var integer */
+    public $length;
+    /** @var mixed */
+    public $fieldName; // field name used in non-object hydration (array/scalar)
+}
 
-/** @Annotation */
-final class GeneratedValue extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("CLASS")
+ */
+final class DiscriminatorMap implements Annotation {
+    /** @var array<string> */
+    public $value;
+}
+
+/** 
+ * @Annotation 
+ * @Target("PROPERTY")
+ */
+final class Id implements Annotation {}
+
+/** 
+ * @Annotation 
+ * @Target("PROPERTY")
+ */
+final class GeneratedValue implements Annotation {
+     /** @var string */
     public $strategy = 'AUTO';
 }
 
-/** @Annotation */
-final class Version extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("PROPERTY")
+ */
+final class Version implements Annotation {}
 
-/** @Annotation */
-final class JoinColumn extends Annotation {
+/** 
+ * @Annotation 
+ * @Target({"PROPERTY","ANNOTATION"})
+ */
+final class JoinColumn implements Annotation {
+    /** @var string */
     public $name;
-    public $fieldName; // field name used in non-object hydration (array/scalar)
+    /** @var string */
     public $referencedColumnName = 'id';
+    /** @var boolean */
     public $unique = false;
+    /** @var boolean */
     public $nullable = true;
+    /** @var mixed */
     public $onDelete;
-    public $onUpdate;
+    /** @var string */
     public $columnDefinition;
+    /** @var string */
+    public $fieldName; // field name used in non-object hydration (array/scalar)
 }
 
-/** @Annotation */
-final class JoinColumns extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("PROPERTY")
+ */
+final class JoinColumns implements Annotation {
+    /** @var array<Doctrine\ORM\Mapping\JoinColumn> */
+    public $value;
+}
 
-/** @Annotation */
-final class Column extends Annotation {
-    public $type = 'string';
-    public $length;
-    // The precision for a decimal (exact numeric) column (Applies only for decimal column)
-    public $precision = 0;
-    // The scale for a decimal (exact numeric) column (Applies only for decimal column)
-    public $scale = 0;
-    public $unique = false;
-    public $nullable = false;
+/** 
+ * @Annotation 
+ * @Target("PROPERTY")
+ */
+final class Column implements Annotation {
+    /** @var string */
     public $name;
+    /** @var mixed */
+    public $type = 'string';
+    /** @var integer */
+    public $length;
+    /** @var integer */
+    public $precision = 0; // The precision for a decimal (exact numeric) column (Applies only for decimal column)
+    /** @var integer */
+    public $scale = 0; // The scale for a decimal (exact numeric) column (Applies only for decimal column)
+    /** @var boolean */
+    public $unique = false;
+    /** @var boolean */
+    public $nullable = false;
+    /** @var array */
     public $options = array();
+    /** @var string */
     public $columnDefinition;
 }
 
-/** @Annotation */
-final class OneToOne extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("PROPERTY")
+ */
+final class OneToOne implements Annotation {
+    /** @var string */
     public $targetEntity;
+    /** @var string */
     public $mappedBy;
+    /** @var string */
     public $inversedBy;
+    /** @var array<string> */
     public $cascade;
+    /** @var string */
     public $fetch = 'LAZY';
+    /** @var boolean */
     public $orphanRemoval = false;
 }
 
-/** @Annotation */
-final class OneToMany extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("PROPERTY")
+ */
+final class OneToMany implements Annotation {
+    /** @var string */
     public $mappedBy;
+    /** @var string */
     public $targetEntity;
+    /** @var array<string> */
     public $cascade;
+    /** @var string */
     public $fetch = 'LAZY';
+    /** @var boolean */
     public $orphanRemoval = false;
+    /** @var string */
     public $indexBy;
 }
 
-/** @Annotation */
-final class ManyToOne extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("PROPERTY")
+ */
+final class ManyToOne implements Annotation {
+    /** @var string */
     public $targetEntity;
+    /** @var array<string> */
     public $cascade;
+    /** @var string */
     public $fetch = 'LAZY';
+    /** @var string */
     public $inversedBy;
 }
 
-/** @Annotation */
-final class ManyToMany extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("PROPERTY")
+ */
+final class ManyToMany implements Annotation {
+    /** @var string */
     public $targetEntity;
+    /** @var string */
     public $mappedBy;
+    /** @var string */
     public $inversedBy;
+    /** @var array<string> */
     public $cascade;
+    /** @var string */
     public $fetch = 'LAZY';
+    /** @var string */
     public $indexBy;
 }
 
-/** @Annotation */
-final class ElementCollection extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("ALL")
+ * @todo check available targets
+ */
+final class ElementCollection implements Annotation {
+    /** @var string */
     public $tableName;
 }
 
-/** @Annotation */
-final class Table extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("CLASS")
+ */
+final class Table implements Annotation {
+    /** @var string */
     public $name;
+    /** @var string */
     public $schema;
+    /** @var array<Doctrine\ORM\Mapping\Index> */
     public $indexes;
+    /** @var array<Doctrine\ORM\Mapping\UniqueConstraint> */
     public $uniqueConstraints;
 }
 
-/** @Annotation */
-final class UniqueConstraint extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("ANNOTATION")
+ */
+final class UniqueConstraint implements Annotation {
+    /** @var string */
     public $name;
+    /** @var array<string> */
     public $columns;
 }
 
-/** @Annotation */
-final class Index extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("ANNOTATION")
+ */
+final class Index implements Annotation {
+    /** @var string */
     public $name;
+    /** @var array<string> */
     public $columns;
 }
 
-/** @Annotation */
-final class JoinTable extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("PROPERTY")
+ */
+final class JoinTable implements Annotation {
+    /** @var string */
     public $name;
+    /** @var string */
     public $schema;
+    /** @var array<Doctrine\ORM\Mapping\JoinColumn> */
     public $joinColumns = array();
+    /** @var array<Doctrine\ORM\Mapping\JoinColumn> */
     public $inverseJoinColumns = array();
 }
 
-/** @Annotation */
-final class SequenceGenerator extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("PROPERTY")
+ */
+final class SequenceGenerator implements Annotation {
+    /** @var string */
     public $sequenceName;
+    /** @var integer */
     public $allocationSize = 1;
+    /** @var integer */
     public $initialValue = 1;
 }
 
-/** @Annotation */
-final class ChangeTrackingPolicy extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("CLASS")
+ */
+final class ChangeTrackingPolicy implements Annotation {
+    /** @var string */
+    public $value;
+}
 
-/** @Annotation */
-final class OrderBy extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("PROPERTY")
+ */
+final class OrderBy implements Annotation {
+    /** @var array<string> */
+    public $value;
+}
 
-/** @Annotation */
-final class NamedQueries extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("CLASS")
+ */
+final class NamedQueries implements Annotation {
+    /** @var array<Doctrine\ORM\Mapping\NamedQuery> */
+    public $value;
+}
 
-/** @Annotation */
-final class NamedQuery extends Annotation {
+/** 
+ * @Annotation 
+ * @Target("ANNOTATION")
+ */
+final class NamedQuery implements Annotation {
+    /** @var string */
     public $name;
+    /** @var string */
     public $query;
 }
 
 /* Annotations for lifecycle callbacks */
-/** @Annotation */
-final class HasLifecycleCallbacks extends Annotation {}
 
-/** @Annotation */
-final class PrePersist extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("CLASS")
+ */
+final class HasLifecycleCallbacks implements Annotation {}
 
-/** @Annotation */
-final class PostPersist extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("METHOD")
+ */
+final class PrePersist implements Annotation {}
 
-/** @Annotation */
-final class PreUpdate extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("METHOD")
+ */
+final class PostPersist implements Annotation {}
 
-/** @Annotation */
-final class PostUpdate extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("METHOD")
+ */
+final class PreUpdate implements Annotation {}
 
-/** @Annotation */
-final class PreRemove extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("METHOD")
+ */
+final class PostUpdate implements Annotation {}
 
-/** @Annotation */
-final class PostRemove extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("METHOD")
+ */
+final class PreRemove implements Annotation {}
 
-/** @Annotation */
-final class PostLoad extends Annotation {}
+/** 
+ * @Annotation 
+ * @Target("METHOD")
+ */
+final class PostRemove implements Annotation {}
+
+/** 
+ * @Annotation 
+ * @Target("METHOD")
+ */
+final class PostLoad implements Annotation {}

@@ -49,11 +49,13 @@ class YamlExporter extends AbstractExporter
     public function exportClassMetadata(ClassMetadataInfo $metadata)
     {
         $array = array();
+        
         if ($metadata->isMappedSuperclass) {
             $array['type'] = 'mappedSuperclass';
         } else {
             $array['type'] = 'entity';
         }
+        
         $array['table'] = $metadata->table['name'];
 
         if (isset($metadata->table['schema'])) {
@@ -79,6 +81,10 @@ class YamlExporter extends AbstractExporter
 
         if (isset($metadata->table['indexes'])) {
             $array['indexes'] = $metadata->table['indexes'];
+        }
+
+        if ($metadata->customRepositoryClassName) {
+            $array['repositoryClass'] = $metadata->customRepositoryClassName;
         }
 
         if (isset($metadata->table['uniqueConstraints'])) {
@@ -153,9 +159,6 @@ class YamlExporter extends AbstractExporter
                     $newJoinColumns[$joinColumn['name']]['referencedColumnName'] = $joinColumn['referencedColumnName'];
                     if (isset($joinColumn['onDelete'])) {
                         $newJoinColumns[$joinColumn['name']]['onDelete'] = $joinColumn['onDelete'];
-                    }
-                    if (isset($joinColumn['onUpdate'])) {
-                        $newJoinColumns[$joinColumn['name']]['onUpdate'] = $joinColumn['onUpdate'];
                     }
                 }
                 $oneToOneMappingArray = array(

@@ -11,7 +11,10 @@ class Doctrine {
 
 	public function __construct()
 	{
-		// Get the CodeIgniter instance so that we can retrieve the DB details
+		// Include the database configuration file so we can retrieve the DB details
+		require APPPATH . 'config/database.php';
+
+		// Also get the CodeIgniter instance so that we can find out the table prefix
 		$ci = get_instance();
 
 		// Set up class loading.
@@ -70,10 +73,10 @@ class Doctrine {
 		// Database connection information
 		$connectionOptions = array(
 			'driver' => 'pdo_mysql',
-			'user' => $ci->db->username,
-			'password' => $ci->db->password,
-			'host' => $ci->db->hostname,
-			'dbname' => $ci->db->database
+			'user' => $db[ENVIRONMENT]['username'],
+			'password' => $db[ENVIRONMENT]['password'],
+			'host' => $db[ENVIRONMENT]['hostname'],
+			'dbname' => $db[ENVIRONMENT]['database']
 		);
 
 		// Create EntityManager

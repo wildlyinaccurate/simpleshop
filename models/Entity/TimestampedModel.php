@@ -26,7 +26,7 @@ class TimestampedModel extends BaseModel {
 	/**
 	 * @var	\DateTime
 	 *
-	 * @column(type="datetime", nullable="true")
+	 * @column(type="datetime", nullable=true)
 	 */
 	protected $modified_date;
 

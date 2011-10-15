@@ -202,14 +202,16 @@ class Product extends TimestampedModel {
 	}
 
 	/**
-	 * Set title
+	 * Set the title and slug
 	 *
 	 * @param   string  $title
-	 * @return  Product
+	 * @return  Category
 	 */
 	public function setTitle($title)
 	{
 		$this->title = $title;
+		$this->slug = url_title($title, 'dash', TRUE);
+
 		return $this;
 	}
 

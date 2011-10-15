@@ -30,13 +30,13 @@ class Category extends TimestampedModel {
 
 	/**
 	 * @var	string
-	 * @Column(type="string", length=255, nullable=false)
+	 * @Column(type="string", length=130, nullable=false)
 	 */
 	protected $title;
 
 	/**
 	 * @var	string
-	 * @Column(type="string", length=255, nullable=false)
+	 * @Column(type="string", length=130, nullable=false)
 	 */
 	protected $slug;
 
@@ -170,7 +170,7 @@ class Category extends TimestampedModel {
 	}
 
 	/**
-	 * Set title
+	 * Set the title and slug
 	 *
 	 * @param   string  $title
 	 * @return  Category
@@ -178,6 +178,8 @@ class Category extends TimestampedModel {
 	public function setTitle($title)
 	{
 		$this->title = $title;
+		$this->slug = url_title($title, 'dash', TRUE);
+
 		return $this;
 	}
 

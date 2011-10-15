@@ -13,7 +13,9 @@ class Module_Simpleshop extends Module {
 	public function __construct()
 	{
 		require_once __DIR__ . '/libraries/Doctrine.php';
-		$this->em = new Doctrine;
+
+		$doctrine = new Doctrine;
+		$this->em = $doctrine->em;
 	}
 
 	public function info()
@@ -29,13 +31,17 @@ class Module_Simpleshop extends Module {
 			'backend' => TRUE,
 			'menu' => 'simpleshop',
 
+			'roles' => array(
+				'create_category'
+			),
+
             'sections' => array(
                 'categories' => array(
-                    'name' => 'simpleshop.categories_title',
+                    'name' => 'categories_title',
                     'uri' => 'admin/simpleshop/categories',
                     'shortcuts' => array(
                         array(
-                            'name' => 'simpleshop.create_category',
+                            'name' => 'create_category',
                             'uri' => 'admin/simpleshop/categories/create',
                         ),
                     ),
@@ -46,49 +52,24 @@ class Module_Simpleshop extends Module {
 
 	public function install()
 	{
-		$this->dbforge->drop_table('simpleshop_products');
-		$this->dbforge->drop_table('simpleshop_categories');
+		$metadatas = $this->em->getMetadataFactory()->getAllMetadata();
 
-		$products = <<<SQL
-CREATE TABLE `{$this->db->dbprefix('simpleshop_products')}` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
-  `price` double(14,2) NOT NULL,
-  `stock` mediumint(8) unsigned DEFAULT NULL,
-  `unlimited_stock` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8
-SQL;
-
-		$categories = <<<SQL
-CREATE TABLE `{$this->db->dbprefix('simpleshop_categories')}` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `image_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`),
-  KEY `image_id` (`image_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-SQL;
-
-
-		if ($this->db->query($products) && $this->db->query($categories))
-		{
-			return TRUE;
-		}
+		$schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
+		$schemaTool->dropSchema($metadatas);
+		$schemaTool->createSchema($metadatas);
+		
+		return TRUE;
 	}
 
 	public function uninstall()
 	{
-		if ($this->dbforge->drop_table('simpleshop_products') &&
-			$this->dbforge->drop_table('simpleshop_categories'))
-		{
-			return TRUE;
-		}
+		$metadatas = $this->em->getMetadataFactory()->getAllMetadata();
+
+		$schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
+		$schemaTool->dropSchema($metadatas);
+
+		return TRUE;
+		
 	}
 
 	public function upgrade($old_version)

@@ -2,7 +2,37 @@
 
 class Admin_Categories extends Admin_Controller {
 
+	/**
+	 * Doctrine EntityManager
+	 * @access  protected
+	 * @var     \Doctrine\ORM\EntityManager
+	 */
+	protected $em;
+
+	/**
+	 * The current active section
+	 * @access  protected
+	 * @var     int
+	 */
 	protected $section = 'categories';
+
+	/**
+	 * The array containing the rules for categories
+	 * @access  private
+	 * @var     array
+	 */
+	private $validation_rules = array(
+		array(
+			'field' => 'title',
+			'label' => 'lang:category_title_label',
+			'rules' => 'trim|required|max_length[130]'
+		),
+		array(
+			'field'	=> 'description',
+			'label'	=> 'lang:category_description_label',
+			'rules'	=> 'trim|max_length[2000]'
+		)
+	);
 
 	/**
 	 * Constructor
@@ -11,16 +41,17 @@ class Admin_Categories extends Admin_Controller {
 	{
 		parent::__construct();
 
-		$metadatas = $this->doctrine->em->getMetadataFactory()->getAllMetadata();
-		$tool = new \Doctrine\ORM\Tools\SchemaTool($this->doctrine->em);
-		$tool->createSchema($metadatas);
-
-		exit ("J");
-
-		$this->load->model('category_model');
-		$this->lang->load(array('simpleshop'));
-
+		$this->lang->load(array(
+			'simpleshop',
+			'categories'
+		));
 		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts');
+
+	    $this->load->library(array(
+		    'doctrine',
+		    'form_validation'
+	    ));
+	    $this->em = $this->doctrine->em;
 	}
 
 	/**
@@ -31,9 +62,9 @@ class Admin_Categories extends Admin_Controller {
 	public function index()
 	{
 		$this->template
-			->title($this->module_details['name'], lang('simpleshop.categories_title'))
+			->title($this->module_details['name'], lang('categories_title'))
 			->build('admin/categories/index', array(
-				'categories' => $this->category_model->get_all()
+				'categories' => $this->em->getRepository('Entity\Category')->findAll(array(), 'title')
 		));
 	}
 
@@ -44,10 +75,36 @@ class Admin_Categories extends Admin_Controller {
 	 */
 	public function create()
 	{
-		$this->template
-			->title($this->module_details['name'], lang('simpleshop.create_category'))
-			->build('admin/categories/create', array(
+		role_or_die('simpleshop', 'create_category');
+		
+		$this->form_validation->set_rules($this->validation_rules);
 
+		// Create a new Category
+		$category = new \Entity\Category;
+		$category->setTitle($this->input->post('title'))
+				->setDescription($this->input->post('description'));
+
+		if ($this->form_validation->run())
+		{
+			// Save the Category
+		    $this->em->persist($category);
+		    $this->em->flush();
+
+			// Redirect back to the form or main page
+			if ($this->input->post('btnAction') == 'save_exit')
+			{
+				redirect('admin/simpleshop');
+			}
+			else
+			{
+				redirect('admin/simpleshop/categories/edit/' . $category->getId());
+			}
+		}
+
+		$this->template
+			->title($this->module_details['name'], lang('create_category'))
+			->build('admin/categories/form', array(
+				'category' => $category
 		));
 	}
 

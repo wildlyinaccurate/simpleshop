@@ -1,9 +1,5 @@
 <section class="title">
-<?php if ($this->method == 'create'): ?>
-	<h4><?php echo lang('create_category'); ?></h4>
-<?php else: ?>
-	<h4><?php echo sprintf(lang('edit_category'), $category->getTitle()); ?></h4>
-<?php endif; ?>
+	<h4><?php echo $page_title; ?></h4>
 </section>
 
 <section class="item">

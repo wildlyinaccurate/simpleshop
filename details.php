@@ -32,10 +32,14 @@ class Module_Simpleshop extends Module {
 			'menu' => 'simpleshop',
 
 			'roles' => array(
-				'create_category'
+				'create_edit_category'
 			),
 
             'sections' => array(
+                'orders' => array(
+                    'name' => 'orders_title',
+                    'uri' => 'admin/simpleshop/orders',
+                ),
                 'categories' => array(
                     'name' => 'categories_title',
                     'uri' => 'admin/simpleshop/categories',
@@ -43,6 +47,16 @@ class Module_Simpleshop extends Module {
                         array(
                             'name' => 'create_category',
                             'uri' => 'admin/simpleshop/categories/create',
+                        ),
+                    ),
+                ),
+                'products' => array(
+                    'name' => 'products_title',
+                    'uri' => 'admin/simpleshop/products',
+                    'shortcuts' => array(
+                        array(
+                            'name' => 'create_product',
+                            'uri' => 'admin/simpleshop/products/create',
                         ),
                     ),
                 ),

@@ -94,7 +94,7 @@ class Admin_Categories extends Admin_Controller {
 				}
 				catch (InvalidArgumentException $e)
 				{
-					$this->session->set_flashdata('error', sprintf($this->lang->line('cat_mass_delete_error'), $category->getTitle()));
+					$this->session->set_flashdata('error', sprintf($this->lang->line('cat_single_delete_error'), $category->getTitle()));
 				}
 			}
 
@@ -105,7 +105,7 @@ class Admin_Categories extends Admin_Controller {
 			}
 			catch (\Doctrine\ORM\OptimisticLockException $e)
 			{
-				$this->session->set_flashdata('error', sprintf($this->lang->line('cat_mass_delete_error'), $category->getTitle()));
+				$this->session->set_flashdata('error', $this->lang->line('cat_mass_delete_error'));
 			}
 		}
 		else

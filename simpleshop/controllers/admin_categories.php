@@ -1,6 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Admin_Categories extends Admin_Controller {
+// Include the SimpleShop base controller
+require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Controller.php';
+
+/**
+ * Category management controller
+ */
+class Admin_Categories extends Simpleshop_Controller {
 
 	/**
 	 * Doctrine EntityManager
@@ -41,17 +47,7 @@ class Admin_Categories extends Admin_Controller {
 	{
 		parent::__construct();
 
-		$this->lang->load(array(
-			'simpleshop',
-			'categories'
-		));
-		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts');
-
-	    $this->load->library(array(
-		    'doctrine',
-		    'form_validation'
-	    ));
-	    $this->em = $this->doctrine->em;
+		$this->lang->load('categories');
 	}
 
 	/**
@@ -94,23 +90,23 @@ class Admin_Categories extends Admin_Controller {
 				}
 				catch (InvalidArgumentException $e)
 				{
-					$this->session->set_flashdata('error', sprintf($this->lang->line('cat_single_delete_error'), $category->getTitle()));
+					$this->session->set_flashdata('error', sprintf($this->lang->line('category_single_delete_error'), $category->getTitle()));
 				}
 			}
 
 			try
 			{
 				$this->em->flush();
-				$this->session->set_flashdata('success', sprintf($this->lang->line('cat_mass_delete_success'), implode(', ', $deleted)));
+				$this->session->set_flashdata('success', sprintf($this->lang->line('category_mass_delete_success'), implode(', ', $deleted)));
 			}
 			catch (\Doctrine\ORM\OptimisticLockException $e)
 			{
-				$this->session->set_flashdata('error', $this->lang->line('cat_mass_delete_error'));
+				$this->session->set_flashdata('error', $this->lang->line('category_mass_delete_error'));
 			}
 		}
 		else
 		{
-			$this->session->set_flashdata('error', $this->lang->line('cat_no_select_error'));
+			$this->session->set_flashdata('error', $this->lang->line('category_no_select_error'));
 		}
 
 		redirect('admin/simpleshop/categories');
@@ -204,7 +200,7 @@ class Admin_Categories extends Admin_Controller {
 	{
 		if ($this->em->getRepository('\Entity\Category')->findOneBy(array('title' => $title)))
 		{
-			$this->form_validation->set_message('_check_title', sprintf($this->lang->line('cat_already_exist_error'), $title));
+			$this->form_validation->set_message('_check_title', sprintf($this->lang->line('category_already_exist_error'), $title));
 			return FALSE;
 		}
 

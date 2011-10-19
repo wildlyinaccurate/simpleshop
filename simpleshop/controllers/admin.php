@@ -1,6 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Admin extends Admin_Controller {
+// Include the SimpleShop base controller
+require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Controller.php';
+
+/**
+ * Orders (default admin controller)
+ */
+class Admin extends Simpleshop_Controller {
 
     protected $section = 'orders';
 

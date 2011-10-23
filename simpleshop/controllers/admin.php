@@ -1,14 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 // Include the SimpleShop base controller
-require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Controller.php';
+require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php';
 
 /**
- * Orders (default admin controller)
+ * Catalogue (default admin controller)
  */
-class Admin extends Simpleshop_Controller {
+class Admin extends Simpleshop_Admin_Controller {
 
-    protected $section = 'orders';
+    protected $section = 'catalogue';
 
 	/**
 	 * Constructor
@@ -16,10 +16,6 @@ class Admin extends Simpleshop_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->lang->load(array('simpleshop'));
-
-		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts');
 	}
 
 	/**
@@ -29,9 +25,15 @@ class Admin extends Simpleshop_Controller {
 	 */
 	function index()
 	{
+		$categories = $this->em->getRepository('Entity\Category')->findAll(array(), 'title');
+		$products = $this->em->getRepository('Entity\Product')->findAll(array(), 'title');
+
 		$this->template
-            ->title($this->module_details['name'])
-            ->build('admin/index');
+            ->title($this->module_details['name'], lang('catalogue_title'))
+            ->build('admin/catalogue/index', array(
+				'categories' => $categories,
+				'products' => $products
+		));
 	}
 
 }

@@ -2,22 +2,16 @@
 
 class Module_Simpleshop extends Module {
 
-	public $version = '1.0';
+	public $version = '0.1';
 
 	/** @var \Doctrine\ORM\EntityManager */
 	private $em;
 
 	/**
-	 * Constructor - Load Doctrine
+	 * Returns the module information array
+	 *
+	 * @return array
 	 */
-	public function __construct()
-	{
-		require_once __DIR__ . '/libraries/Doctrine.php';
-
-		$doctrine = new Doctrine;
-		$this->em = $doctrine->em;
-	}
-
 	public function info()
 	{
 		return array(
@@ -36,36 +30,38 @@ class Module_Simpleshop extends Module {
 			),
 
             'sections' => array(
+                'catalogue' => array(
+                    'name' => 'catalogue_title',
+                    'uri' => 'admin/simpleshop/catalogue',
+                    'shortcuts' => array(
+	                    array(
+	                        'name' => 'create_product',
+	                        'uri' => 'admin/simpleshop/products/create',
+	                    ),
+	                    array(
+	                        'name' => 'create_category',
+	                        'uri' => 'admin/simpleshop/categories/create',
+	                    ),
+                    ),
+                ),
                 'orders' => array(
                     'name' => 'orders_title',
                     'uri' => 'admin/simpleshop/orders',
-                ),
-                'categories' => array(
-                    'name' => 'categories_title',
-                    'uri' => 'admin/simpleshop/categories',
-                    'shortcuts' => array(
-                        array(
-                            'name' => 'create_category',
-                            'uri' => 'admin/simpleshop/categories/create',
-                        ),
-                    ),
-                ),
-                'products' => array(
-                    'name' => 'products_title',
-                    'uri' => 'admin/simpleshop/products',
-                    'shortcuts' => array(
-                        array(
-                            'name' => 'create_product',
-                            'uri' => 'admin/simpleshop/products/create',
-                        ),
-                    ),
                 ),
             )
 		);
 	}
 
+	/**
+	 * Install SimpleShop module
+	 *
+	 * @return bool
+	 */
 	public function install()
 	{
+		$this->_load_doctrine();
+		$this->_clear_metadata_cache();
+
 		$metadatas = $this->em->getMetadataFactory()->getAllMetadata();
 
 		$schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
@@ -75,8 +71,16 @@ class Module_Simpleshop extends Module {
 		return TRUE;
 	}
 
+	/**
+	 * Uninstall SimpleShop module
+	 *
+	 * @return bool
+	 */
 	public function uninstall()
 	{
+		$this->_load_doctrine();
+		$this->_clear_metadata_cache();
+		
 		$metadatas = $this->em->getMetadataFactory()->getAllMetadata();
 
 		$schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
@@ -86,12 +90,35 @@ class Module_Simpleshop extends Module {
 		
 	}
 
+	/**
+	 * Upgrade the module - keep the schema up-to-date
+	 *
+	 * @param   string  $old_version
+	 * @return  bool
+	 */
 	public function upgrade($old_version)
 	{
-		// Your Upgrade Logic
+		$old_version = (float) $old_version;
+
+		if ($old_version < (float) $this->version)
+		{
+			$this->_load_doctrine();
+			$this->_clear_metadata_cache();
+
+			$metadatas = $this->em->getMetadataFactory()->getAllMetadata();
+
+			$schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
+			$schemaTool->updateSchema($metadatas, TRUE);
+		}
+
 		return TRUE;
 	}
 
+	/**
+	 * Returns the module's help text
+	 *
+	 * @return string
+	 */
 	public function help()
 	{
 		return <<<HTML
@@ -99,5 +126,33 @@ class Module_Simpleshop extends Module {
 HTML;
 
 	}
+
+	/**
+	 * Load up Doctrine for any schema changes (we don't want to
+	 * do this in the constructor as it creates unnecessary overhead)
+	 */
+	private function _load_doctrine()
+	{
+		require_once __DIR__ . '/libraries/Doctrine.php';
+
+		$doctrine = new Doctrine;
+		$this->em = $doctrine->em;
+	}
+
+	/**
+	 * Clear Doctrine's metadata cache
+	 *
+	 * @return  void
+	 */
+	private function _clear_metadata_cache()
+	{
+		$cacheDriver = $this->em->getConfiguration()->getMetadataCacheImpl();
+
+	    // We not only want to invalidate (delete) the cache entries, we also
+	    // want to flush it to ensure out metadata is up-to-date
+	    $cacheDriver->deleteAll();
+	    $cacheDriver->flushAll();
+	}
+
 }
 /* End of file details.php */

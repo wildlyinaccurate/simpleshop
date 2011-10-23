@@ -1,12 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 // Include the SimpleShop base controller
-require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Controller.php';
+require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php';
 
 /**
  * Category management controller
  */
-class Admin_Categories extends Simpleshop_Controller {
+class Admin_Categories extends Simpleshop_Admin_Controller {
 
 	/**
 	 * Doctrine EntityManager
@@ -20,7 +20,7 @@ class Admin_Categories extends Simpleshop_Controller {
 	 * @access  protected
 	 * @var     int
 	 */
-	protected $section = 'categories';
+	protected $section = 'catalogue';
 
 	/**
 	 * The array containing the rules for categories
@@ -185,7 +185,8 @@ class Admin_Categories extends Simpleshop_Controller {
 			->title($this->module_details['name'], $page_title)
 			->build('admin/categories/form', array(
 				'page_title' => $page_title,
-				'category' => $category
+				'category' => $category,
+				'categories' => $this->em->getRepository('Entity\Category')->getForDropdown()
 		));
 	}
 

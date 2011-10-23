@@ -5,7 +5,7 @@ namespace Entity;
 /**
  * Category
  *
- * @Entity
+ * @Entity(repositoryClass="Entity\CategoryRepository")
  * @Table(name="simpleshop_category",
  * 		uniqueConstraints={
  * 			@uniqueConstraint(name="category_title_unique", columns={"title"}),
@@ -55,9 +55,28 @@ class Category extends TimestampedModel {
 	protected $image_id;
 
 	/**
+	 * Parent category
+	 *
+	 * @var \Entity\Category
+     * @ManyToOne(targetEntity="Category", inversedBy="child_categories")
+	 * @JoinColumn(name="parent_category_id", referencedColumnName="id")
+	 */
+	protected $parent_category;
+
+	/**
+	 * Child categories
+	 *
+	 * @var \Doctrine\Common\Collections\ArrayCollection
+     * @OneToMany(targetEntity="Category", mappedBy="parent_category")
+	 * @OrderBy({"title" = "ASC"})
+	 */
+	protected $child_categories;
+
+	/**
 	 * @var	\Doctrine\Common\Collections\ArrayCollection
 	 * @ManyToMany(targetEntity="Product", mappedBy="categories", cascade={"persist"})
 	 * @JoinTable(name="product_categories")
+	 * @OrderBy({"title" = "ASC"})
 	 */
 	protected $products;
 
@@ -70,6 +89,16 @@ class Category extends TimestampedModel {
 
 		$this->products = new \Doctrine\Common\Collections\ArrayCollection;
     }
+
+	/**
+	 * 
+	 *
+	 * @return  \Doctrine\Common\Collections\ArrayCollection
+	 */
+	public function getItems()
+	{
+
+	}
 
 	/**
 	 * Set description

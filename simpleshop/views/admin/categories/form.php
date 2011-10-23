@@ -17,6 +17,13 @@
 			</li>
 
 			<hr>
+			
+			<li>
+				<label for="parent-category"><?php echo lang('category_parent_label'); ?></label><br>
+				<?php echo form_dropdown('parent-category', $categories, set_value('parent-category')); ?>
+			</li>
+
+			<hr>
 
 			<li class="even editor">
 				<label for="description"><?php echo lang('category_description_label'); ?></label><br>

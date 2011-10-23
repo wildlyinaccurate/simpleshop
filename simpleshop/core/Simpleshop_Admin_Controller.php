@@ -5,7 +5,7 @@
  *
  * Loads various libraries and partials that are used throughout the module
  */
-class Simpleshop_Controller extends Admin_Controller {
+class Simpleshop_Admin_Controller extends Admin_Controller {
 
 	/**
 	 * Doctrine Entity Manager
@@ -38,4 +38,4 @@ class Simpleshop_Controller extends Admin_Controller {
 
 }
 
-/** End of file Simpleshop_Controller.php */
+/** End of file Simpleshop_Admin_Controller.php */

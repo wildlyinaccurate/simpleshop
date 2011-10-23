@@ -67,7 +67,7 @@ class Product extends TimestampedModel {
 	/**
 	 * @var \Doctrine\Common\Collections\ArrayCollection
 	 * @ManyToMany(targetEntity="Category", inversedBy="products", cascade={"persist"})
-	 * @JoinTable(name="product_categories")
+	 * @JoinTable(name="simpleshop_product_categories")
 	 */
 	protected $categories;
 

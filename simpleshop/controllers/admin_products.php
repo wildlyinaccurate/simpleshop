@@ -1,12 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 // Include the SimpleShop base controller
-require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Controller.php';
+require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php';
 
 /**
  * Product management controller
  */
-class Admin_Products extends Simpleshop_Controller {
+class Admin_Products extends Simpleshop_Admin_Controller {
 
 	/**
 	 * Doctrine EntityManager

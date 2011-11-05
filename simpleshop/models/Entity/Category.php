@@ -5,7 +5,7 @@ namespace Entity;
 /**
  * Category
  *
- * @Entity(repositoryClass="Entity\CategoryRepository")
+ * @Entity
  * @Table(name="simpleshop_category",
  * 		uniqueConstraints={
  * 			@uniqueConstraint(name="category_title_unique", columns={"title"}),
@@ -18,7 +18,7 @@ namespace Entity;
  * )
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Category extends TimestampedModel {
+class Category extends TimestampedModel implements \DoctrineExtensions\NestedSet\Node {
 
 	/**
 	 * @var	int
@@ -55,6 +55,14 @@ class Category extends TimestampedModel {
 	protected $image_id;
 
 	/**
+	 * @var	\Doctrine\Common\Collections\ArrayCollection
+	 * @ManyToMany(targetEntity="Product", mappedBy="categories", cascade={"persist"})
+	 * @JoinTable(name="product_categories")
+	 * @OrderBy({"title" = "ASC"})
+	 */
+	protected $products;
+
+	/**
 	 * Parent category
 	 *
 	 * @var \Entity\Category
@@ -73,12 +81,16 @@ class Category extends TimestampedModel {
 	protected $child_categories;
 
 	/**
-	 * @var	\Doctrine\Common\Collections\ArrayCollection
-	 * @ManyToMany(targetEntity="Product", mappedBy="categories", cascade={"persist"})
-	 * @JoinTable(name="product_categories")
-	 * @OrderBy({"title" = "ASC"})
+	 * @var int
+	 * @Column(type="integer")
 	 */
-	protected $products;
+	protected $lft;
+
+	/**
+	 * @var int
+	 * @Column(type="integer")
+	 */
+	protected $rgt;
 
     /**
      * Constructor
@@ -90,15 +102,12 @@ class Category extends TimestampedModel {
 		$this->products = new \Doctrine\Common\Collections\ArrayCollection;
     }
 
-	/**
-	 * 
-	 *
-	 * @return  \Doctrine\Common\Collections\ArrayCollection
-	 */
-	public function getItems()
-	{
-
-	}
+	/** NestedSet methods */
+	public function getLeftValue() { return $this->lft; }
+	public function setLeftValue($lft) { $this->lft = $lft; }
+	public function getRightValue() { return $this->rgt; }
+	public function setRightValue($rgt) { $this->rgt = $rgt; }
+	public function __toString() { return $this->title; }
 
 	/**
 	 * Set description

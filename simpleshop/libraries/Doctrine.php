@@ -3,7 +3,7 @@ use Doctrine\ORM\EntityManager,
 	Doctrine\ORM\Configuration;
 
 define('MODULE_PATH', dirname(__DIR__) . '/');
-define('DEBUGGING', FALSE);
+define('DEBUGGING', false);
 
 class Doctrine {
 

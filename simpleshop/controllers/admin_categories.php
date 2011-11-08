@@ -151,6 +151,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 
 		if ($_POST)
 		{
+			// Update the category if any data was submitted
 			$category->setTitle($this->input->post('title'))
 					->setDescription($this->input->post('description'));
 		}
@@ -172,6 +173,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			}
 		}
 
+		// Set the page title depending on whether we're creating or editing a category
 		if ($this->method == 'create')
 		{
 			$page_title = lang('create_category');
@@ -181,12 +183,15 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			$page_title = sprintf(lang('edit_category'), $category->getTitle());
 		}
 
+		// Get all of the top-level categories
+		$root_categories = $this->em->getRepository('Entity\Category')->findBy(array('parent_category' => null), array('title' => 'ASC'));
+
 		$this->template
 			->title($this->module_details['name'], $page_title)
 			->build('admin/categories/form', array(
 				'page_title' => $page_title,
 				'category' => $category,
-				'categories' => $this->em->getRepository('Entity\Category')->getForDropdown()
+				'categories' => $root_categories
 		));
 	}
 

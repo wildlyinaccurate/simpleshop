@@ -4,58 +4,67 @@
 
 <section class="item">
 
-	<nav id="categories">
-		<h4>Categories</h4>
+	<nav id="categories-browser" class="one_quarter">
+		<h4><?php echo lang('categories_title'); ?></h4>
 
 		<ul id="categories-nav">
-		<?php foreach ($categories as $category): ?>
-			<li><?php echo anchor('', $category->getTitle(), 'class="category-nav-item"'); ?></li>
-		<?php endforeach; ?>
+
+		<?php if ($categories): ?>
+			<?php foreach ($categories as $category): ?>
+				<li><?php echo anchor('', $category->getTitle(), 'class="category-nav-item"'); ?></li>
+			<?php endforeach; ?>
+		<?php else: ?>
+			<li><?php echo lang('no_categories'); ?> <?php echo anchor('admin/simpleshop/categories/create', lang('create_category_now')); ?></li>
+		<?php endif; ?>
+
 		</ul>
 	</nav>
-	
-	<?php if ($products): ?>
 
-		<?php echo form_open('admin/simpleshop/products/delete'); ?>
+	<div id="products" class="three_quarter">
+		<h4><?php echo lang('products_title'); ?></h4>
+		<?php if ($products): ?>
 
-		<table border="0" class="table-list">
-			<thead>
-			<tr>
-				<th width="20"><?php echo form_checkbox(array('name' => 'action_to_all', 'class' => 'check-all')); ?></th>
-				<th><?php echo lang('product_product_label'); ?></th>
-				<th><?php echo lang('product_products_label'); ?></th>
-				<th width="110"></th>
-			</tr>
-			</thead>
-			<tfoot>
+			<?php echo form_open('admin/simpleshop/products/delete'); ?>
+
+			<table border="0" class="table-list">
+				<thead>
 				<tr>
-					<td colspan="4">
-						<div class="inner"><?php $this->load->view('admin/partials/pagination'); ?></div>
-					</td>
+					<th width="20"><?php echo form_checkbox(array('name' => 'action_to_all', 'class' => 'check-all')); ?></th>
+					<th><?php echo lang('product_product_label'); ?></th>
+					<th><?php echo lang('product_products_label'); ?></th>
+					<th width="110"></th>
 				</tr>
-			</tfoot>
-			<tbody>
-				<?php foreach ($products as $product): ?>
-				<tr>
-					<td><?php echo form_checkbox('action_to[]', $product->getId()); ?></td>
-					<td><?php echo $product->getTitle(); ?></td>
-					<td><?php echo $product->getProducts()->count(); ?></td>
-					<td class="align-center buttons buttons-small">
-						<?php echo anchor('admin/simpleshop/products/edit/' . $product->getId(), lang('global:edit'), 'class="button edit"'); ?>
-						<?php echo anchor('admin/simpleshop/products/delete/' . $product->getId(), lang('global:delete'), 'class="confirm button delete"') ;?>
-					</td>
-				</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
+				</thead>
+				<tfoot>
+					<tr>
+						<td colspan="4">
+							<div class="inner"><?php $this->load->view('admin/partials/pagination'); ?></div>
+						</td>
+					</tr>
+				</tfoot>
+				<tbody>
+					<?php foreach ($products as $product): ?>
+					<tr>
+						<td><?php echo form_checkbox('action_to[]', $product->getId()); ?></td>
+						<td><?php echo $product->getTitle(); ?></td>
+						<td><?php echo $product->getProducts()->count(); ?></td>
+						<td class="align-center buttons buttons-small">
+							<?php echo anchor('admin/simpleshop/products/edit/' . $product->getId(), lang('global:edit'), 'class="button edit"'); ?>
+							<?php echo anchor('admin/simpleshop/products/delete/' . $product->getId(), lang('global:delete'), 'class="confirm button delete"') ;?>
+						</td>
+					</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
 
-		<div class="table_action_buttons">
-		<?php $this->load->view('admin/partials/buttons', array('buttons' => array('delete') )); ?>
-		</div>
+			<div class="table_action_buttons">
+			<?php $this->load->view('admin/partials/buttons', array('buttons' => array('delete') )); ?>
+			</div>
 
-		<?php echo form_close(); ?>
+			<?php echo form_close(); ?>
 
-	<?php else: ?>
-		<p><?php echo lang('product_no_products'); ?></p>
-	<?php endif; ?>
+		<?php else: ?>
+			<p><?php echo lang('product_no_products'); ?></p>
+		<?php endif; ?>
+	</div>
 </section>

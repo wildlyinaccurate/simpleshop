@@ -20,7 +20,13 @@
 			
 			<li>
 				<label for="parent-category"><?php echo lang('category_parent_label'); ?></label><br>
-				<?php echo form_dropdown('parent-category', $categories, set_value('parent-category')); ?>
+				<select name="parent-category" id="parent-category">
+					<option value="0"><?php echo lang('none_label'); ?></option>
+
+					<?php foreach ($root_categories as $parent_category): ?>
+						<option value="<?php echo $parent_category->getId(); ?>"><?php echo $parent_category->getTitle(); ?></option>
+					<?php endforeach; ?>
+				</select>
 			</li>
 
 			<hr>

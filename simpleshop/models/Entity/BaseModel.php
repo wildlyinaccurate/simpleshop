@@ -25,27 +25,24 @@ class BaseModel {
      * Please note that this method can be very slow and should be avoided where possible.
      *
      * @access  public
+     * @param   bool    $ignore_collections
      * @return  array
      */
-    public function toArray()
+    public function toArray($ignore_collections = false)
     {
         $CI =& get_instance();
         $CI->load->helper('inflector');
         
         $this_as_array = array();
 
-        foreach($this as $property => $value)
+        foreach ($this as $property => $value)
         {
             $get_method = camelize('get_' . $property);
 
-            // Try and use the getProperty() method
-            try
-            {
+            // Use the getProperty() method if it exists
+	        if (method_exists($this, $get_method))
+	        {
                 $value = $this->$get_method();
-            }
-            catch (Exception $e)
-            {
-                // Just use the property as it is
             }
 
             // If we find another instance of BaseModel, convert it to an array
@@ -53,6 +50,12 @@ class BaseModel {
             {
                 $value = $value->toArray();
             }
+
+	        // Ignore collections
+	        if ($ignore_collections && $value instanceof \Doctrine\Common\Collections\Collection)
+	        {
+		        continue;
+	        }
 
             $this_as_array[$property] = $value;
         }

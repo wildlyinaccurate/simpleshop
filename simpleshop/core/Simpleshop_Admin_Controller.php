@@ -32,6 +32,9 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 		    'form_validation'
 	    ));
 
+		// Helper functions
+		$this->load->helper('simpleshop');
+
 	    // Create a shortcut property to the Doctrine Entity Manager
 	    $this->em = $this->doctrine->em;
 	}

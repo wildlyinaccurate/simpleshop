@@ -51,7 +51,7 @@ class Doctrine {
 		$config->setProxyDir(MODULE_PATH . 'models/Proxies');
 		$config->setProxyNamespace('Proxies');
 
-		if (ENVIRONMENT == 'dev') {
+		if (ENVIRONMENT == 'development') {
 			$config->setAutoGenerateProxyClasses(TRUE);
 		} else {
 			$config->setAutoGenerateProxyClasses(FALSE);
@@ -64,10 +64,11 @@ class Doctrine {
 			$config->setSQLLogger($logger);
 		}
 
-		// Set up the table prefix
-		$tablePrefix = new \DoctrineExtensions\TablePrefix($ci->db->dbprefix);
-
+		// Event Manager
 		$evm = new \Doctrine\Common\EventManager;
+
+		// Load the TablePrefix event listener
+		$tablePrefix = new \DoctrineExtensions\TablePrefix($ci->db->dbprefix);
 		$evm->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $tablePrefix);
 
 		// Database connection information

@@ -4,24 +4,11 @@
 
 <section class="item">
 
-	<nav id="categories-browser" class="one_quarter">
-		<h4><?php echo lang('categories_title'); ?></h4>
-
-		<ul id="categories-nav">
-
+	<div id="catalogue">
 		<?php if ($categories): ?>
-			<?php foreach ($categories as $category): ?>
-				<li><?php echo anchor('', $category->getTitle(), 'class="category-nav-item"'); ?></li>
-			<?php endforeach; ?>
-		<?php else: ?>
-			<li><?php echo lang('no_categories'); ?> <?php echo anchor('admin/simpleshop/categories/create', lang('create_category_now')); ?></li>
+			<h4><?php lang('categories_title'); ?></h4>
 		<?php endif; ?>
 
-		</ul>
-	</nav>
-
-	<div id="products" class="three_quarter">
-		<h4><?php echo lang('products_title'); ?></h4>
 		<?php if ($products): ?>
 
 			<?php echo form_open('admin/simpleshop/products/delete'); ?>
@@ -64,7 +51,7 @@
 			<?php echo form_close(); ?>
 
 		<?php else: ?>
-			<p><?php echo lang('product_no_products'); ?></p>
+			<p><?php echo lang('no_products'); ?> <?php echo anchor('admin/simpleshop/products/create', lang('create_product_now')); ?></p>
 		<?php endif; ?>
 	</div>
 </section>

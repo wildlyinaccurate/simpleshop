@@ -31,7 +31,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 		array(
 			'field' => 'title',
 			'label' => 'lang:category_title_label',
-			'rules' => 'trim|required|max_length[130]|callback__check_title'
+			'rules' => 'trim|required|max_length[130]'
 		),
 		array(
 			'field'	=> 'description',
@@ -119,7 +119,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 	 */
 	public function create()
 	{
-		$this->_display_form(new \Entity\Category);
+		$this->_create_edit_category(new \Entity\Category);
 	}
 
 	/**
@@ -134,7 +134,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 
 		$category OR redirect('admin/simpleshop/categories');
 
-		$this->_display_form($category);
+		$this->_create_edit_category($category);
 	}
 
 	/**
@@ -143,7 +143,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 	 * @param   Entity\Category $category
 	 * @return  void
 	 */
-	private function _display_form(\Entity\Category $category)
+	private function _create_edit_category(\Entity\Category $category)
 	{
 		role_or_die('simpleshop', 'create_category');
 
@@ -158,8 +158,17 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 
 		if ($this->form_validation->run())
 		{
+			// See if a parent category was selected
+			$parent_category_id = $this->input->post('parent_category');
+
+			if ((int) $parent_category_id > 0 && $parent_category = $this->em->find('Entity\Category', $parent_category_id))
+			{
+				// A parent category was selected
+				$category->setParentCategory($parent_category);
+			}
+
 			// Save the Category
-		    $this->em->persist($category);
+			$this->em->persist($category);
 		    $this->em->flush();
 
 			// Redirect back to the form or main page
@@ -172,7 +181,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 				redirect('admin/simpleshop/categories/edit/' . $category->getId());
 			}
 		}
-
+		
 		// Set the page title depending on whether we're creating or editing a category
 		if ($this->method == 'create')
 		{
@@ -183,7 +192,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			$page_title = sprintf(lang('edit_category'), $category->getTitle());
 		}
 
-		// Get all of the top-level categories
+		// Get the root categories to build the tree from
 		$root_categories = $this->em->getRepository('Entity\Category')->findBy(array('parent_category' => null), array('title' => 'ASC'));
 
 		$this->template
@@ -191,26 +200,8 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			->build('admin/categories/form', array(
 				'page_title' => $page_title,
 				'category' => $category,
-				'categories' => $root_categories
+				'root_categories' => $root_categories
 		));
-	}
-
-	/**
-	 * Callback method that checks for unique category titles
-	 *
-	 * @access  public
-	 * @param   string  $title
-	 * @return  bool
-	 */
-	public function _check_title($title = '')
-	{
-		if ($this->em->getRepository('\Entity\Category')->findOneBy(array('title' => $title)))
-		{
-			$this->form_validation->set_message('_check_title', sprintf($this->lang->line('category_already_exist_error'), $title));
-			return FALSE;
-		}
-
-		return TRUE;
 	}
 
 }

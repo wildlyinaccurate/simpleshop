@@ -20,4 +20,3 @@ $lang['category_single_delete_error']    = 'An error occurred while trying to de
 $lang['category_mass_delete_error']      = 'An error occurred while trying to delete the selected categories.';
 $lang['category_mass_delete_success']    = 'The following categories have been deleted: %s.';
 $lang['category_no_select_error']        = 'You need to select categories first.';
-$lang['category_already_exist_error']    = 'A category with the name "%s" already exists.';

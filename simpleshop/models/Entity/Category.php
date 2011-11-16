@@ -18,7 +18,7 @@ namespace Entity;
  * )
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Category extends TimestampedModel implements \DoctrineExtensions\NestedSet\Node {
+class Category extends TimestampedModel {
 
 	/**
 	 * @var	int
@@ -66,7 +66,7 @@ class Category extends TimestampedModel implements \DoctrineExtensions\NestedSet
 	 * Parent category
 	 *
 	 * @var \Entity\Category
-     * @ManyToOne(targetEntity="Category", inversedBy="child_categories")
+	 * @ManyToOne(targetEntity="Category", inversedBy="child_categories")
 	 * @JoinColumn(name="parent_category_id", referencedColumnName="id")
 	 */
 	protected $parent_category;
@@ -75,39 +75,21 @@ class Category extends TimestampedModel implements \DoctrineExtensions\NestedSet
 	 * Child categories
 	 *
 	 * @var \Doctrine\Common\Collections\ArrayCollection
-     * @OneToMany(targetEntity="Category", mappedBy="parent_category")
+	 * @OneToMany(targetEntity="Category", mappedBy="parent_category")
 	 * @OrderBy({"title" = "ASC"})
 	 */
 	protected $child_categories;
 
 	/**
-	 * @var int
-	 * @Column(type="integer")
+	 * Constructor
 	 */
-	protected $lft;
-
-	/**
-	 * @var int
-	 * @Column(type="integer")
-	 */
-	protected $rgt;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
+	public function __construct()
+	{
+		parent::__construct();
 
 		$this->products = new \Doctrine\Common\Collections\ArrayCollection;
-    }
-
-	/** NestedSet methods */
-	public function getLeftValue() { return $this->lft; }
-	public function setLeftValue($lft) { $this->lft = $lft; }
-	public function getRightValue() { return $this->rgt; }
-	public function setRightValue($rgt) { $this->rgt = $rgt; }
-	public function __toString() { return $this->title; }
+		$this->child_categories = new \Doctrine\Common\Collections\ArrayCollection;
+	}
 
 	/**
 	 * Set description
@@ -229,6 +211,38 @@ class Category extends TimestampedModel implements \DoctrineExtensions\NestedSet
 	public function getTitle()
 	{
 		return $this->title;
+	}
+
+	/**
+	 * Get ChildCategories
+	 *
+	 * @return  \Doctrine\Common\Collections\ArrayCollection
+	 */
+	public function getChildCategories()
+	{
+		return $this->child_categories;
+	}
+
+	/**
+	 * Set parent_category
+	 *
+	 * @param   \Entity\Category  $parent_category
+	 * @return  Category
+	 */
+	public function setParentCategory($parent_category)
+	{
+		$this->parent_category = $parent_category;
+		return $this;
+	}
+
+	/**
+	 * Get ParentCategory
+	 *
+	 * @return  \Entity\Category
+	 */
+	public function getParentCategory()
+	{
+		return $this->parent_category;
 	}
 
 }

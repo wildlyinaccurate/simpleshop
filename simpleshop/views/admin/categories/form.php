@@ -19,12 +19,18 @@
 			<hr>
 			
 			<li>
-				<label for="parent-category"><?php echo lang('category_parent_label'); ?></label><br>
-				<select name="parent-category" id="parent-category">
+				<label for="parent_category"><?php echo lang('category_parent_label'); ?></label><br>
+				<select name="parent_category" id="parent_category">
 					<option value="0"><?php echo lang('none_label'); ?></option>
 
-					<?php foreach ($root_categories as $parent_category): ?>
-						<option value="<?php echo $parent_category->getId(); ?>"><?php echo $parent_category->getTitle(); ?></option>
+					<?php
+					$collection = new \Doctrine\Common\Collections\ArrayCollection($root_categories);
+					$category_iterator = new \Entity\RecursiveCategoryIterator($collection);
+					$recursive_iterator = new RecursiveIteratorIterator($category_iterator, RecursiveIteratorIterator::SELF_FIRST);
+					?>
+
+					<?php foreach ($recursive_iterator as $index => $child_category): ?>
+						<option value="<?php echo $child_category->getId(); ?>"><?php echo str_repeat('&nbsp;&nbsp;', $recursive_iterator->getDepth() * 2) . $child_category->getTitle(); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</li>

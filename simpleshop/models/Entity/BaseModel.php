@@ -51,10 +51,21 @@ class BaseModel {
                 $value = $value->toArray();
             }
 
-	        // Ignore collections
-	        if ($ignore_collections && $value instanceof \Doctrine\Common\Collections\Collection)
+	        // Loop through collections, or just ignore them
+	        if ($value instanceof \Doctrine\Common\Collections\Collection)
 	        {
-		        continue;
+				if ($ignore_collections)
+				{
+					continue;
+				}
+
+				foreach ($value as $key => $item)
+				{
+					if ($item instanceof self)
+					{
+						$value = $item->toArray();
+					}
+				}
 	        }
 
             $this_as_array[$property] = $value;

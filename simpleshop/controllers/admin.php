@@ -16,6 +16,11 @@ class Admin extends Simpleshop_Admin_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->load->language(array(
+			'categories',
+			'products'
+		));
 	}
 
 	/**
@@ -25,15 +30,18 @@ class Admin extends Simpleshop_Admin_Controller {
 	 */
 	function index()
 	{
-		$categories = $this->em->getRepository('Entity\Category')->findBy(array(), array('title' => 'ASC'));
-		$products = $this->em->getRepository('Entity\Product')->findBy(array(), array('title' => 'ASC'));
+		$category_id = $this->input->get('category_id') ?: null;
+
+		$category = $this->em->find('Entity\Category', $category_id);
+		$child_categories = $this->em->getRepository('Entity\Category')->findBy(array('parent_category' => $category_id), array('title' => 'ASC'));
 
 		$this->template
             ->title($this->module_details['name'], lang('catalogue_title'))
 			->append_metadata(css('simpleshop.css', 'simpleshop'))
             ->build('admin/catalogue/index', array(
-				'categories' => $categories,
-				'products' => $products
+				'category_id' => $category_id,
+				'category' => $category,
+				'child_categories' => $child_categories
 		));
 	}
 

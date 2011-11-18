@@ -84,10 +84,10 @@ class Product extends TimestampedModel {
 	/**
 	 * Add a category
 	 *
-	 * @param   \Entity\Category
+	 * @param   Category    $category
 	 * @return  Product
 	 */
-	public function addCategory($category)
+	public function addCategory(Category $category)
 	{
 		$this->categories[] = $category;
 		return $this;

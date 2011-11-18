@@ -148,12 +148,17 @@ class Category extends TimestampedModel {
 	/**
 	 * Add product
 	 *
-	 * @param	\Entity\Product	$product
+	 * @param	Product	$product
 	 * @return	Category
 	 */
-	public function addProduct($product)
+	public function addProduct(Product $product)
 	{
-		$this->products[] = $product;
+		if ( ! $this->products->contains($product))
+		{
+			$this->products[] = $product;
+			$product->addCategory($this);
+		}
+
 		return $this;
 	}
 

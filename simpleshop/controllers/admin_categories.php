@@ -109,7 +109,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			$this->session->set_flashdata('error', $this->lang->line('category_no_select_error'));
 		}
 
-		redirect('admin/simpleshop/categories');
+		redirect('admin/simpleshop');
 	}
 
 	/**
@@ -132,7 +132,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 	{
 		$category = $this->em->find('\Entity\Category', $category_id);
 
-		$category OR redirect('admin/simpleshop/categories');
+		$category OR redirect('admin/simpleshop');
 
 		$this->_create_edit_category($category);
 	}
@@ -174,7 +174,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			// Redirect back to the form or main page
 			if ($this->input->post('btnAction') == 'save_exit')
 			{
-				redirect('admin/simpleshop/categories');
+				redirect('admin/simpleshop');
 			}
 			else
 			{

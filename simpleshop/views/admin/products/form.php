@@ -12,10 +12,15 @@
 		<ul>
 			<li class="even">
 				<label for="title"><?php echo lang('product_title_label'); ?></label><br>
-				<?php echo form_input('title', htmlspecialchars_decode($product->getTitle()), 'maxlength="130"'); ?>
+				<?php echo form_input('title', htmlspecialchars_decode($product->getTitle()), 'id="title" maxlength="130"'); ?>
 				<span class="required-icon tooltip"><?php echo lang('required_label'); ?></span>
 			</li>
 
+			<li class="even">
+				<label for="price"><?php echo lang('product_price_label'); ?></label><br>
+				<?php echo form_input('price', htmlspecialchars_decode($product->getPrice()), 'id="title" maxlength="130"'); ?>
+				<span class="required-icon tooltip"><?php echo lang('required_label'); ?></span>
+			</li>
 			<hr>
 
 			<li class="even editor">

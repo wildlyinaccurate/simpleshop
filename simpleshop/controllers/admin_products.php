@@ -37,7 +37,27 @@ class Admin_Products extends Simpleshop_Admin_Controller {
 			'field'	=> 'description',
 			'label'	=> 'lang:product_description_label',
 			'rules'	=> 'trim|max_length[2000]'
-		)
+		),
+		array(
+			'field'	=> 'price',
+			'label'	=> 'lang:product_price_label',
+			'rules'	=> 'numeric'
+		),
+		array(
+			'field'	=> 'categories',
+			'label'	=> 'lang:product_categories_label',
+			'rules'	=> ''
+		),
+		array(
+			'field' => 'stock',
+			'label' => 'lang:product_stock_label',
+			'rules' => 'is_natural'
+		),
+		array(
+			'field' => 'unlimited_stock',
+			'label' => 'lang:product_unlimited_stock_label',
+			'rules' => ''
+		),
 	);
 
 	/**
@@ -109,7 +129,7 @@ class Admin_Products extends Simpleshop_Admin_Controller {
 			$this->session->set_flashdata('error', $this->lang->line('product_no_select_error'));
 		}
 
-		redirect('admin/simpleshop/products');
+		redirect('admin/simpleshop');
 	}
 
 	/**
@@ -132,7 +152,7 @@ class Admin_Products extends Simpleshop_Admin_Controller {
 	{
 		$product = $this->em->find('\Entity\Product', $product_id);
 
-		$product OR redirect('admin/simpleshop/products');
+		$product OR redirect('admin/simpleshop');
 
 		$this->_display_form($product);
 	}
@@ -152,7 +172,21 @@ class Admin_Products extends Simpleshop_Admin_Controller {
 		if ($_POST)
 		{
 			$product->setTitle($this->input->post('title'))
-					->setDescription($this->input->post('description'));
+				->setDescription($this->input->post('description'))
+				->setPrice($this->input->post('price'))
+				->setStock($this->input->post('stock'))
+				->setUnlimitedStock($this->input->post('unlimited_stock'));
+
+			// Remove all product categories, and then set them from form data
+			$product->getCategories()->clear();
+
+			foreach ($this->input->post('categories') as $category_id)
+			{
+				if ($category = $this->em->find('Entity\Category', $category_id))
+				{
+					$product->addCategory($category);
+				}
+			}
 		}
 
 		if ($this->form_validation->run())
@@ -164,7 +198,7 @@ class Admin_Products extends Simpleshop_Admin_Controller {
 			// Redirect back to the form or main page
 			if ($this->input->post('btnAction') == 'save_exit')
 			{
-				redirect('admin/simpleshop/products');
+				redirect('admin/simpleshop');
 			}
 			else
 			{

@@ -1,9 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 // labels
-$lang['product_title_label']            = 'Title';
 $lang['product_product_label']          = 'Product';
 $lang['product_products_label']         = 'Products';
+$lang['product_title_label']            = 'Title';
+$lang['product_description_label']      = 'Description';
+$lang['product_price_label']            = 'Price';
+$lang['product_categories_label']       = 'Categories';
+$lang['product_stock_label']            = 'Stock';
+$lang['product_unlimited_stock_label']  = 'Unlimited Stock?';
 
 // titles
 $lang['product_create_title']           = 'Add Product';

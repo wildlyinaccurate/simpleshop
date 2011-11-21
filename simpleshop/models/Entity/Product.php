@@ -85,11 +85,16 @@ class Product extends TimestampedModel {
 	 * Add a category
 	 *
 	 * @param   Category    $category
-	 * @return  Product
+	 * @return  \Entity\Product
 	 */
 	public function addCategory(Category $category)
 	{
-		$this->categories[] = $category;
+		if ( ! $this->categories->contains($category))
+		{
+			$this->categories[] = $category;
+			$category->addProduct($this);
+		}
+
 		return $this;
 	}
 
@@ -107,7 +112,7 @@ class Product extends TimestampedModel {
 	 * Set description
 	 *
 	 * @param   string  $description
-	 * @return  Product
+	 * @return  \Entity\Product
 	 */
 	public function setDescription($description)
 	{
@@ -139,11 +144,11 @@ class Product extends TimestampedModel {
 	 * Set price
 	 *
 	 * @param   float  $price
-	 * @return  Product
+	 * @return  \Entity\Product
 	 */
 	public function setPrice($price)
 	{
-		$this->price = $price;
+		$this->price = (float) $price;
 		return $this;
 	}
 
@@ -161,7 +166,7 @@ class Product extends TimestampedModel {
 	 * Set slug
 	 *
 	 * @param   string  $slug
-	 * @return  Product
+	 * @return  \Entity\Product
 	 */
 	public function setSlug($slug)
 	{
@@ -183,11 +188,11 @@ class Product extends TimestampedModel {
 	 * Set stock
 	 *
 	 * @param   int  $stock
-	 * @return  Product
+	 * @return  \Entity\Product
 	 */
 	public function setStock($stock)
 	{
-		$this->stock = $stock;
+		$this->stock = (int) $stock;
 		return $this;
 	}
 
@@ -205,7 +210,7 @@ class Product extends TimestampedModel {
 	 * Set the title and slug
 	 *
 	 * @param   string  $title
-	 * @return  Category
+	 * @return  \Entity\Product
 	 */
 	public function setTitle($title)
 	{
@@ -229,11 +234,11 @@ class Product extends TimestampedModel {
 	 * Set unlimited_stock
 	 *
 	 * @param   boolean  $unlimited_stock
-	 * @return  Product
+	 * @return  \Entity\Product
 	 */
 	public function setUnlimitedStock($unlimited_stock)
 	{
-		$this->unlimited_stock = $unlimited_stock;
+		$this->unlimited_stock = (bool) $unlimited_stock;
 		return $this;
 	}
 

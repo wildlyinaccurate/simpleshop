@@ -38,6 +38,7 @@ class Admin extends Simpleshop_Admin_Controller {
 		$this->template
             ->title($this->module_details['name'], lang('catalogue_title'))
 			->append_metadata(css('simpleshop.css', 'simpleshop'))
+			->append_metadata(js('catalogue.js', 'simpleshop'))
             ->build('admin/catalogue/index', array(
 				'category_id' => $category_id,
 				'category' => $category,

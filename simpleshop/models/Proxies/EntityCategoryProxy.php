@@ -66,7 +66,7 @@ class EntityCategoryProxy extends \Entity\Category implements \Doctrine\ORM\Prox
         return parent::getImageId();
     }
 
-    public function addProduct($product)
+    public function addProduct(\Entity\Product $product)
     {
         $this->__load();
         return parent::addProduct($product);
@@ -153,7 +153,7 @@ class EntityCategoryProxy extends \Entity\Category implements \Doctrine\ORM\Prox
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'title', 'slug', 'description', 'image_id', 'products', 'parent_category', 'child_categories', 'created_date', 'modified_date');
+        return array('__isInitialized__', 'id', 'title', 'slug', 'description', 'image_id', 'created_date', 'modified_date', 'products', 'parent_category', 'child_categories');
     }
 
     public function __clone()

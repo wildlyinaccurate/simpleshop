@@ -5,10 +5,10 @@
 <section class="item">
 
 	<div id="catalogue">
+	<?php if ($child_categories): ?>
 		<h4><?php echo lang('categories_title'); ?></h4>
 
-		<?php if ($child_categories): ?>
-			<?php echo form_open('admin/simpleshop/categories/delete'); ?>
+		<?php echo form_open('admin/simpleshop/categories/delete'); ?>
 
 			<table border="0" class="table-list">
 				<thead>

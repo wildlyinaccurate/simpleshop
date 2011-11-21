@@ -37,10 +37,12 @@ class Module_Simpleshop extends Module {
 	                    array(
 	                        'name' => 'create_product',
 	                        'uri' => 'admin/simpleshop/products/create',
+		                    'class' => 'add'
 	                    ),
 	                    array(
 	                        'name' => 'create_category',
 	                        'uri' => 'admin/simpleshop/categories/create',
+                            'class' => 'add'
 	                    ),
                     ),
                 ),

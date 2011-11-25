@@ -555,9 +555,8 @@ class Connection implements DriverConnection
     public function quote($input, $type = null)
     {
         $this->connect();
-
-        list($value, $bindingType) = $this->getBindingInfo($input, $type);
-        return $this->_conn->quote($input, $bindingType);
+        
+        return $this->_conn->quote($input, $type);
     }
 
     /**
@@ -984,7 +983,7 @@ class Connection implements DriverConnection
      * Gets the SchemaManager that can be used to inspect or change the
      * database schema through the connection.
      *
-     * @return Doctrine\DBAL\Schema\AbstractSchemaManager
+     * @return Doctrine\DBAL\Schema\SchemaManager
      */
     public function getSchemaManager()
     {
@@ -1070,7 +1069,15 @@ class Connection implements DriverConnection
                 $typeIndex = $bindIndex + $typeOffset;
                 if (isset($types[$typeIndex])) {
                     $type = $types[$typeIndex];
-                    list($value, $bindingType) = $this->getBindingInfo($value, $type);
+                    if (is_string($type)) {
+                        $type = Type::getType($type);
+                    }
+                    if ($type instanceof Type) {
+                        $value = $type->convertToDatabaseValue($value, $this->_platform);
+                        $bindingType = $type->getBindingType();
+                    } else {
+                        $bindingType = $type; // PDO::PARAM_* constants
+                    }
                     $stmt->bindValue($bindIndex, $value, $bindingType);
                 } else {
                     $stmt->bindValue($bindIndex, $value);
@@ -1082,7 +1089,15 @@ class Connection implements DriverConnection
             foreach ($params as $name => $value) {
                 if (isset($types[$name])) {
                     $type = $types[$name];
-                    list($value, $bindingType) = $this->getBindingInfo($value, $type);
+                    if (is_string($type)) {
+                        $type = Type::getType($type);
+                    }
+                    if ($type instanceof Type) {
+                        $value = $type->convertToDatabaseValue($value, $this->_platform);
+                        $bindingType = $type->getBindingType();
+                    } else {
+                        $bindingType = $type; // PDO::PARAM_* constants
+                    }
                     $stmt->bindValue($name, $value, $bindingType);
                 } else {
                     $stmt->bindValue($name, $value);
@@ -1090,28 +1105,7 @@ class Connection implements DriverConnection
             }
         }
     }
-
-    /**
-     * Gets the binding type of a given type. The given type can be a PDO or DBAL mapping type.
-     *
-     * @param mixed $value The value to bind
-     * @param mixed $type The type to bind (PDO or DBAL)
-     * @return array [0] => the (escaped) value, [1] => the binding type
-     */
-    private function getBindingInfo($value, $type)
-    {
-        if (is_string($type)) {
-            $type = Type::getType($type);
-        }
-        if ($type instanceof Type) {
-            $value = $type->convertToDatabaseValue($value, $this->_platform);
-            $bindingType = $type->getBindingType();
-        } else {
-            $bindingType = $type; // PDO::PARAM_* constants
-        }
-        return array($value, $bindingType);
-    }
-
+    
     /**
      * Create a new instance of a SQL query builder.
      * 

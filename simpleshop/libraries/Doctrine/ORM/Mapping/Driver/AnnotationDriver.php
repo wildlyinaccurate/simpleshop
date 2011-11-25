@@ -98,16 +98,6 @@ class AnnotationDriver implements Driver
     }
 
     /**
-     * Retrieve the current annotation reader
-     * 
-     * @return AnnotationReader
-     */
-    public function getReader()
-    {
-        return $this->_reader;
-    }
-
-    /**
      * Get the file extension used to look for mapping files under
      *
      * @return void
@@ -147,15 +137,12 @@ class AnnotationDriver implements Driver
         // Evaluate Entity annotation
         if (isset($classAnnotations['Doctrine\ORM\Mapping\Entity'])) {
             $entityAnnot = $classAnnotations['Doctrine\ORM\Mapping\Entity'];
-            if ($entityAnnot->repositoryClass !== null) {
-                $metadata->setCustomRepositoryClass($entityAnnot->repositoryClass);
-            }
+            $metadata->setCustomRepositoryClass($entityAnnot->repositoryClass);
+
             if ($entityAnnot->readOnly) {
                 $metadata->markReadOnly();
             }
         } else if (isset($classAnnotations['Doctrine\ORM\Mapping\MappedSuperclass'])) {
-            $mappedSuperclassAnnot = $classAnnotations['Doctrine\ORM\Mapping\MappedSuperclass'];
-            $metadata->setCustomRepositoryClass($mappedSuperclassAnnot->repositoryClass);
             $metadata->isMappedSuperclass = true;
         } else {
             throw MappingException::classIsNotAValidEntityOrMappedSuperClass($className);
@@ -256,6 +243,7 @@ class AnnotationDriver implements Driver
                     'unique' => $joinColumnAnnot->unique,
                     'nullable' => $joinColumnAnnot->nullable,
                     'onDelete' => $joinColumnAnnot->onDelete,
+                    'onUpdate' => $joinColumnAnnot->onUpdate,
                     'columnDefinition' => $joinColumnAnnot->columnDefinition,
                 );
             } else if ($joinColumnsAnnot = $this->_reader->getPropertyAnnotation($property, 'Doctrine\ORM\Mapping\JoinColumns')) {
@@ -266,6 +254,7 @@ class AnnotationDriver implements Driver
                         'unique' => $joinColumn->unique,
                         'nullable' => $joinColumn->nullable,
                         'onDelete' => $joinColumn->onDelete,
+                        'onUpdate' => $joinColumn->onUpdate,
                         'columnDefinition' => $joinColumn->columnDefinition,
                     );
                 }
@@ -373,6 +362,7 @@ class AnnotationDriver implements Driver
                             'unique' => $joinColumn->unique,
                             'nullable' => $joinColumn->nullable,
                             'onDelete' => $joinColumn->onDelete,
+                            'onUpdate' => $joinColumn->onUpdate,
                             'columnDefinition' => $joinColumn->columnDefinition,
                         );
                     }
@@ -384,6 +374,7 @@ class AnnotationDriver implements Driver
                             'unique' => $joinColumn->unique,
                             'nullable' => $joinColumn->nullable,
                             'onDelete' => $joinColumn->onDelete,
+                            'onUpdate' => $joinColumn->onUpdate,
                             'columnDefinition' => $joinColumn->columnDefinition,
                         );
                     }
@@ -508,7 +499,7 @@ class AnnotationDriver implements Driver
                     new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
                     \RecursiveIteratorIterator::LEAVES_ONLY
                 ),
-                '/^.+' . str_replace('.', '\.', $this->_fileExtension) . '$/i', 
+                '/^.+\\' . $this->_fileExtension . '$/i', 
                 \RecursiveRegexIterator::GET_MATCH
             );
             

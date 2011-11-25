@@ -239,5 +239,5 @@ interface Collection extends Countable, IteratorAggregate, ArrayAccess
      * @param int $length
      * @return array
      */
-    function slice($offset, $length = null);
+    public function slice($offset, $length = null);
 }

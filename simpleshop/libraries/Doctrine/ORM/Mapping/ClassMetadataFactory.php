@@ -43,14 +43,14 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
      * @var EntityManager
      */
     private $em;
-    
+
     /**
      * @var AbstractPlatform
      */
     private $targetPlatform;
 
     /**
-     * @var \Doctrine\ORM\Mapping\Driver\Driver
+     * @var Driver\Driver
      */
     private $driver;
 
@@ -73,7 +73,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
      * @var bool
      */
     private $initialized = false;
-    
+
     /**
      * @param EntityManager $$em
      */
@@ -101,16 +101,16 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
     {
         return $this->cacheDriver;
     }
-    
+
     public function getLoadedMetadata()
     {
         return $this->loadedMetadata;
     }
-    
+
     /**
      * Forces the factory to load the metadata of all classes known to the underlying
      * mapping driver.
-     * 
+     *
      * @return array The ClassMetadata instances of all mapped classes.
      */
     public function getAllMetadata()
@@ -188,7 +188,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
 
     /**
      * Checks whether the factory has the metadata for a class loaded already.
-     * 
+     *
      * @param string $className
      * @return boolean TRUE if the metadata of the class in question is already loaded, FALSE otherwise.
      */
@@ -199,7 +199,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
 
     /**
      * Sets the metadata descriptor for a specific class.
-     * 
+     *
      * NOTE: This is only useful in very special cases, like when generating proxy classes.
      *
      * @param string $className
@@ -274,9 +274,6 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
                 $class->setDiscriminatorMap($parent->discriminatorMap);
                 $class->setLifecycleCallbacks($parent->lifecycleCallbacks);
                 $class->setChangeTrackingPolicy($parent->changeTrackingPolicy);
-                if ($parent->isMappedSuperclass) {
-                    $class->setCustomRepositoryClass($parent->customRepositoryClassName);
-                }
             }
 
             // Invoke driver
@@ -309,6 +306,10 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
                 $class->setPrimaryTable($parent->table);
             }
 
+            if ($parent && $parent->containsForeignIdentifier) {
+                $class->containsForeignIdentifier = true;
+            }
+
             $class->setParentClasses($visited);
 
             if ($this->evm->hasListeners(Events::loadClassMetadata)) {
@@ -317,7 +318,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
             }
 
             $this->validateRuntimeMetadata($class, $parent);
-            
+
             $this->loadedMetadata[$className] = $class;
 
             $parent = $class;
@@ -451,7 +452,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
                 // <table>_<column>_seq in PostgreSQL for SERIAL columns.
                 // Not pretty but necessary and the simplest solution that currently works.
                 $seqName = $this->targetPlatform instanceof Platforms\PostgreSQLPlatform ?
-                        $class->getTableName() . '_' . $class->columnNames[$class->identifier[0]] . '_seq' :
+                        $class->table['name'] . '_' . $class->columnNames[$class->identifier[0]] . '_seq' :
                         null;
                 $class->setIdGenerator(new \Doctrine\ORM\Id\IdentityGenerator($seqName));
                 break;
@@ -483,13 +484,12 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
     }
 
     /**
-     * Check if this class is mapped by this EntityManager + ClassMetadata configuration
-     *
-     * @param $class
-     * @return bool
+     * {@inheritDoc}
      */
-    public function isTransient($class)
+    public function isTransient($className)
     {
-        return $this->driver->isTransient($class);
+        $this->initialize();
+
+        return $this->driver->isTransient($className);
     }
 }

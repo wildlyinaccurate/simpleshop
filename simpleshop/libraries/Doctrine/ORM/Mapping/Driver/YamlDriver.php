@@ -46,16 +46,13 @@ class YamlDriver extends AbstractFileDriver
         $element = $this->getElement($className);
 
         if ($element['type'] == 'entity') {
-            if (isset($element['repositoryClass'])) {
-                $metadata->setCustomRepositoryClass($element['repositoryClass']);  
-            }
+            $metadata->setCustomRepositoryClass(
+                isset($element['repositoryClass']) ? $element['repositoryClass'] : null
+            );
             if (isset($element['readOnly']) && $element['readOnly'] == true) {
                 $metadata->markReadOnly();
             }
         } else if ($element['type'] == 'mappedSuperclass') {
-            $metadata->setCustomRepositoryClass(
-                isset($element['repositoryClass']) ? $element['repositoryClass'] : null
-            );
             $metadata->isMappedSuperclass = true;
         } else {
             throw MappingException::classIsNotAValidEntityOrMappedSuperClass($className);
@@ -491,6 +488,10 @@ class YamlDriver extends AbstractFileDriver
 
         if (isset($joinColumnElement['onDelete'])) {
             $joinColumn['onDelete'] = $joinColumnElement['onDelete'];
+        }
+
+        if (isset($joinColumnElement['onUpdate'])) {
+            $joinColumn['onUpdate'] = $joinColumnElement['onUpdate'];
         }
 
         if (isset($joinColumnElement['columnDefinition'])) {

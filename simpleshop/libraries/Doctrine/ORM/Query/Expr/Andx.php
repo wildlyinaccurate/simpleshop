@@ -39,6 +39,5 @@ class Andx extends Composite
         'Doctrine\ORM\Query\Expr\Comparison',
         'Doctrine\ORM\Query\Expr\Func',
         'Doctrine\ORM\Query\Expr\Orx',
-        'Doctrine\ORM\Query\Expr\Andx',
     );
 }

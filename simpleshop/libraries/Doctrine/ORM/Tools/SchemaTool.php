@@ -523,6 +523,10 @@ class SchemaTool
                 $uniqueConstraints[] = array('columns' => array($columnName));
             }
 
+            if (isset($joinColumn['onUpdate'])) {
+                $fkOptions['onUpdate'] = $joinColumn['onUpdate'];
+            }
+
             if (isset($joinColumn['onDelete'])) {
                 $fkOptions['onDelete'] = $joinColumn['onDelete'];
             }

@@ -323,8 +323,6 @@ class QueryBuilder
      */
     public function setParameter($key, $value, $type = null)
     {
-        $key = trim($key, ':');
-        
         if ($type === null) {
             $type = Query\ParameterTypeInferer::inferType($value);
         }
@@ -595,12 +593,11 @@ class QueryBuilder
      *
      * @param string $from   The class name.
      * @param string $alias  The alias of the class.
-     * @param string $indexBy The index for the from.
      * @return QueryBuilder This QueryBuilder instance.
      */
-    public function from($from, $alias, $indexBy = null)
+    public function from($from, $alias)
     {
-        return $this->add('from', new Expr\From($from, $alias, $indexBy), true);
+        return $this->add('from', new Expr\From($from, $alias), true);
     }
 
     /**

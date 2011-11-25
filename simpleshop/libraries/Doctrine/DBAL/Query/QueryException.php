@@ -17,27 +17,24 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\Common\Annotations\Annotation;
+namespace Doctrine\DBAL\Query;
+
+use Doctrine\DBAL\DBALException;
 
 /**
- * Annotation that can be used to signal to the parser to ignore specific
- * annotations during the parsing process.
+ * Driver interface.
+ * Interface that all DBAL drivers must implement.
  *
- * @author Johannes M. Schmitt <schmittjoh@gmail.com>
+ * @since 2.1.4
  */
-final class IgnoreAnnotation
+class QueryException extends DBALException
 {
-    public $names;
-
-    public function __construct(array $values)
+    static public function unknownFromAlias($alias, $registeredAliases)
     {
-        if (is_string($values['value'])) {
-            $values['value'] = array($values['value']);
-        }
-        if (!is_array($values['value'])) {
-            throw new \RuntimeException(sprintf('@IgnoreAnnotation expects either a string name, or an array of strings, but got %s.', json_encode($values['value'])));
-        }
-
-        $this->names = $values['value'];
+        return new self("The given alias '" . $alias . "' is not part of " .
+            "any FROM clause table. The currently registered FROM-clause " .
+            "aliases are: " . implode(", ", $registeredAliases) . ". Join clauses " .
+            "are bound to from clauses to provide support for mixing of multiple " .
+            "from and join clauses.");
     }
 }

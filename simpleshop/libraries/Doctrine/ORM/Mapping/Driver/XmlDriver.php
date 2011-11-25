@@ -52,16 +52,13 @@ class XmlDriver extends AbstractFileDriver
         $xmlRoot = $this->getElement($className);
 
         if ($xmlRoot->getName() == 'entity') {
-            if (isset($xmlRoot['repository-class'])) {
-                $metadata->setCustomRepositoryClass((string)$xmlRoot['repository-class']);
-            }
+            $metadata->setCustomRepositoryClass(
+                isset($xmlRoot['repository-class']) ? (string)$xmlRoot['repository-class'] : null
+            );
             if (isset($xmlRoot['read-only']) && $xmlRoot['read-only'] == "true") {
                 $metadata->markReadOnly();
             }
         } else if ($xmlRoot->getName() == 'mapped-superclass') {
-            $metadata->setCustomRepositoryClass(
-                isset($xmlRoot['repository-class']) ? (string)$xmlRoot['repository-class'] : null
-            );
             $metadata->isMappedSuperclass = true;
         } else {
             throw MappingException::classIsNotAValidEntityOrMappedSuperClass($className);
@@ -89,7 +86,7 @@ class XmlDriver extends AbstractFileDriver
         if (isset($xmlRoot['schema'])) {
             $metadata->table['schema'] = (string)$xmlRoot['schema'];
         }*/
-        
+
         if (isset($xmlRoot['inheritance-type'])) {
             $inheritanceType = (string)$xmlRoot['inheritance-type'];
             $metadata->setInheritanceType(constant('Doctrine\ORM\Mapping\ClassMetadata::INHERITANCE_TYPE_' . $inheritanceType));
@@ -327,6 +324,8 @@ class XmlDriver extends AbstractFileDriver
 
                 if (isset($oneToManyElement['index-by'])) {
                     $mapping['indexBy'] = (string)$oneToManyElement['index-by'];
+                } else if (isset($oneToManyElement->{'index-by'})) {
+                    throw new \InvalidArgumentException("<index-by /> is not a valid tag");
                 }
 
                 $metadata->mapOneToMany($mapping);
@@ -432,8 +431,10 @@ class XmlDriver extends AbstractFileDriver
                     $mapping['orderBy'] = $orderBy;
                 }
 
-                if (isset($manyToManyElement->{'index-by'})) {
-                    $mapping['indexBy'] = (string)$manyToManyElement->{'index-by'};
+                if (isset($manyToManyElement['index-by'])) {
+                    $mapping['indexBy'] = (string)$manyToManyElement['index-by'];
+                } else if (isset($manyToManyElement->{'index-by'})) {
+                    throw new \InvalidArgumentException("<index-by /> is not a valid tag");
                 }
 
                 $metadata->mapManyToMany($mapping);
@@ -472,6 +473,10 @@ class XmlDriver extends AbstractFileDriver
 
         if (isset($joinColumnElement['on-delete'])) {
             $joinColumn['onDelete'] = (string)$joinColumnElement['on-delete'];
+        }
+
+        if (isset($joinColumnElement['on-update'])) {
+            $joinColumn['onUpdate'] = (string)$joinColumnElement['on-update'];
         }
 
         if (isset($joinColumnElement['column-definition'])) {

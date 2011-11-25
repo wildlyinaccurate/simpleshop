@@ -33,25 +33,10 @@ namespace Doctrine\Common;
  */
 class ClassLoader
 {
-    /**
-     * @var string PHP file extension
-     */
-    protected $fileExtension = '.php';
-    
-    /**
-     * @var string Current namespace
-     */
-    protected $namespace;
-    
-    /**
-     * @var string Current include path
-     */
-    protected $includePath;
-    
-    /**
-     * @var string PHP namespace separator
-     */
-    protected $namespaceSeparator = '\\';
+    private $fileExtension = '.php';
+    private $namespace;
+    private $includePath;
+    private $namespaceSeparator = '\\';
 
     /**
      * Creates a new <tt>ClassLoader</tt> that loads classes of the
@@ -184,7 +169,7 @@ class ClassLoader
             return file_exists($this->includePath . DIRECTORY_SEPARATOR . $file);
         }
 
-        return (false !== stream_resolve_include_path($file));
+        return self::fileExistsInIncludePath($file);
     }
 
     /**
@@ -258,5 +243,19 @@ class ClassLoader
         }
 
         return null;
+    }
+    
+    /**
+     * @param string $file The file relative path.
+     * @return boolean Whether file exists in include_path.
+     */
+    public static function fileExistsInIncludePath($file)
+    {
+        foreach (explode(PATH_SEPARATOR, get_include_path()) as $dir) {
+            if (file_exists($dir . DIRECTORY_SEPARATOR . $file)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

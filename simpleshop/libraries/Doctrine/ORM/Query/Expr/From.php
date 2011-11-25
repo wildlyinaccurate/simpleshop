@@ -34,55 +34,27 @@ namespace Doctrine\ORM\Query\Expr;
  */
 class From
 {
-    /**
-     * @var string
-     */
     private $_from;
-    
-    /**
-     * @var string 
-     */
     private $_alias;
-    
-    /**
-     * @var string 
-     */
-    private $_indexBy;
-    
-    /**
-     * @param string $from      The class name.
-     * @param string $alias     The alias of the class.
-     * @param string $indexBy   The index for the from.
-     */
-    public function __construct($from, $alias, $indexBy = null)
+
+    public function __construct($from, $alias)
     {
-        $this->_from    = $from;
-        $this->_alias   = $alias;
-        $this->_indexBy = $indexBy;
+        $this->_from  = $from;
+        $this->_alias  = $alias;
     }
-    
-    /**
-     * @return string
-     */
+
     public function getFrom()
     {
         return $this->_from;
     }
 
-    /**
-     * @return string
-     */
     public function getAlias()
     {
         return $this->_alias;
     }
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
-        return $this->_from . ' ' . $this->_alias . 
-                ($this->_indexBy ? ' INDEX BY ' . $this->_indexBy : '');
+        return $this->_from . ' ' . $this->_alias;
     }
 }

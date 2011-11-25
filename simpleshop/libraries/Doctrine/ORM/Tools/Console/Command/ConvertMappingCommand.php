@@ -137,7 +137,7 @@ EOT
 
         if ( ! file_exists($destPath)) {
             throw new \InvalidArgumentException(
-                sprintf("Mapping destination directory '<info>%s</info>' does not exist.", $input->getArgument('dest-path'))
+                sprintf("Mapping destination directory '<info>%s</info>' does not exist.", $destPath)
             );
         } else if ( ! is_writable($destPath)) {
             throw new \InvalidArgumentException(

@@ -23,6 +23,7 @@ use Doctrine\Common\Cache\Cache,
     Doctrine\Common\Cache\ArrayCache,
     Doctrine\Common\Annotations\AnnotationRegistry,
     Doctrine\Common\Annotations\AnnotationReader,
+    Doctrine\Common\Annotations\SimpleAnnotationReader,
     Doctrine\ORM\Mapping\Driver\Driver,
     Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
@@ -128,7 +129,7 @@ class Configuration extends \Doctrine\DBAL\Configuration
             // Register the ORM Annotations in the AnnotationRegistry
             AnnotationRegistry::registerFile(__DIR__ . '/Mapping/Driver/DoctrineAnnotations.php');
 
-            $reader = new \Doctrine\Common\Annotations\SimpleAnnotationReader();
+            $reader = new SimpleAnnotationReader();
             $reader->addNamespace('Doctrine\ORM\Mapping');
             $reader = new \Doctrine\Common\Annotations\CachedReader($reader, new ArrayCache());
         } else if (version_compare(\Doctrine\Common\Version::VERSION, '2.1.0-DEV', '>=')) {
@@ -515,33 +516,5 @@ class Configuration extends \Doctrine\DBAL\Configuration
             $this->_attributes['classMetadataFactoryName'] = 'Doctrine\ORM\Mapping\ClassMetadataFactory';
         }
         return $this->_attributes['classMetadataFactoryName'];
-    }
-    
-    /**
-     * Set default repository class.
-     * 
-     * @since 2.2
-     * @param string $className
-     * @throws ORMException If not is a Doctrine\ORM\EntityRepository
-     */
-    public function setDefaultRepositoryClassName($className)
-    {
-        if ($className != "Doctrine\ORM\EntityRepository" && 
-           !is_subclass_of($className, 'Doctrine\ORM\EntityRepository')){
-            throw ORMException::invalidEntityRepository($className);
-        }
-        $this->_attributes['defaultRepositoryClassName'] = $className;
-    }
-
-    /**
-     * Get default repository class.
-     * 
-     * @since 2.2
-     * @return string
-     */
-    public function getDefaultRepositoryClassName()
-    {
-        return isset($this->_attributes['defaultRepositoryClassName']) ?
-                $this->_attributes['defaultRepositoryClassName'] : 'Doctrine\ORM\EntityRepository';
     }
 }

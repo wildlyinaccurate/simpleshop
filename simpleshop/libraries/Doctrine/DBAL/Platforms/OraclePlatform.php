@@ -475,16 +475,9 @@ LEFT JOIN all_cons_columns r_cols
     public function getListTableColumnsSQL($table, $database = null)
     {
         $table = strtoupper($table);
-        $ownerCondition = '';
-        
-        if(null !== $database){
-            $database = strtoupper($database);
-            $ownerCondition = "AND c.owner = '".$database."'";
-        }
-        
         return "SELECT c.*, d.comments FROM all_tab_columns c ".
                "INNER JOIN all_col_comments d ON d.OWNER = c.OWNER AND d.TABLE_NAME = c.TABLE_NAME AND d.COLUMN_NAME = c.COLUMN_NAME ".
-               "WHERE c.table_name = '" . $table . "' ".$ownerCondition." ORDER BY c.column_name";
+               "WHERE c.table_name = '" . $table . "' ORDER BY c.column_name";
     }
 
     /**
@@ -754,8 +747,10 @@ LEFT JOIN all_cons_columns r_cols
             'long'              => 'string',
             'clob'              => 'text',
             'nclob'             => 'text',
+            'raw'               => 'text',
+            'long raw'          => 'text',
             'rowid'             => 'string',
-            'urowid'            => 'string'
+            'urowid'            => 'string',
         );
     }
 

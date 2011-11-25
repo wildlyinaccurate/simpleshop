@@ -36,7 +36,7 @@ interface ClassMetadataFactory
      *
      * @return array The ClassMetadata instances of all mapped classes.
      */
-    function getAllMetadata();
+    public function getAllMetadata();
 
     /**
      * Gets the class metadata descriptor for a class.
@@ -44,7 +44,7 @@ interface ClassMetadataFactory
      * @param string $className The name of the class.
      * @return Doctrine\ODM\MongoDB\Mapping\ClassMetadata
      */
-    function getMetadataFor($className);
+    public function getMetadataFor($className);
 
     /**
      * Checks whether the factory has the metadata for a class loaded already.
@@ -52,7 +52,7 @@ interface ClassMetadataFactory
      * @param string $className
      * @return boolean TRUE if the metadata of the class in question is already loaded, FALSE otherwise.
      */
-    function hasMetadataFor($className);
+    public function hasMetadataFor($className);
 
     /**
      * Sets the metadata descriptor for a specific class.
@@ -60,5 +60,5 @@ interface ClassMetadataFactory
      * @param string $className
      * @param ClassMetadata $class
      */
-    function setMetadataFor($className, $class);
+    public function setMetadataFor($className, $class);
 }

@@ -119,7 +119,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 	 */
 	public function create()
 	{
-		$this->_create_edit_category(new \Entity\Category);
+		$this->_display_form(new \Entity\Category);
 	}
 
 	/**
@@ -134,7 +134,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 
 		$category OR redirect('admin/simpleshop');
 
-		$this->_create_edit_category($category);
+		$this->_display_form($category);
 	}
 
 	/**
@@ -143,7 +143,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 	 * @param   Entity\Category $category
 	 * @return  void
 	 */
-	private function _create_edit_category(\Entity\Category $category)
+	private function _display_form(\Entity\Category $category)
 	{
 		role_or_die('simpleshop', 'create_category');
 

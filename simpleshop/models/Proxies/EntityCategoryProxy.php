@@ -120,6 +120,12 @@ class EntityCategoryProxy extends \Entity\Category implements \Doctrine\ORM\Prox
         return parent::getParentCategory();
     }
 
+    public function __toString()
+    {
+        $this->__load();
+        return parent::__toString();
+    }
+
     public function setCreatedDate()
     {
         $this->__load();

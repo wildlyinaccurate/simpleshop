@@ -250,4 +250,12 @@ class Category extends TimestampedModel {
 		return $this->parent_category;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return $this->getTitle();
+	}
+
 }

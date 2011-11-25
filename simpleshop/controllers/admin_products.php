@@ -20,7 +20,7 @@ class Admin_Products extends Simpleshop_Admin_Controller {
 	 * @access  protected
 	 * @var     int
 	 */
-	protected $section = 'products';
+	protected $section = 'catalogue';
 
 	/**
 	 * The array containing the rules for products
@@ -215,11 +215,16 @@ class Admin_Products extends Simpleshop_Admin_Controller {
 			$page_title = sprintf(lang('edit_product'), $product->getTitle());
 		}
 
+		// Get the root categories to build the tree from
+		$root_categories = $this->em->getRepository('Entity\Category')->findBy(array('parent_category' => null), array('title' => 'ASC'));
+
 		$this->template
 			->title($this->module_details['name'], $page_title)
+			->append_metadata($this->load->view('fragments/wysiwyg', $this->data, true))
 			->build('admin/products/form', array(
 				'page_title' => $page_title,
-				'product' => $product
+				'product' => $product,
+				'root_categories' => $root_categories
 		));
 	}
 

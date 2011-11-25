@@ -24,7 +24,8 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 		$this->lang->load('simpleshop');
 
 		// Shortcuts partial
-		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts');
+		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts')
+				->append_metadata(css('simpleshop.css', 'simpleshop'));
 
 		// Form validation and Doctrine
 	    $this->load->library(array(

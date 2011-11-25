@@ -1,3 +1,28 @@
+/* Remove margin-top from section headers */
 section h4:first-child {
 	margin-top: 0;
+}
+
+/* Forms */
+label.inline-checkbox, .inline-checkbox label {
+	float: none !important;
+	vertical-align: text-top;
+}
+
+input.inline-checkbox, .inline-checkbox input {
+	margin-left: 24px;
+}
+
+.form_inputs .input {
+	padding-left: 0;
+	width: 73%;
+}
+
+/* Product categories tree */
+.product-categories h4 {
+	margin-bottom: 0;
+}
+
+.product-categories ul ul {
+	margin-left: 24px !important;
 }

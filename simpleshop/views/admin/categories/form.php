@@ -29,7 +29,7 @@
 					$recursive_iterator = new RecursiveIteratorIterator($category_iterator, RecursiveIteratorIterator::SELF_FIRST);
 					?>
 
-					<?php foreach ($recursive_iterator as $index => $child_category): ?>
+					<?php foreach ($recursive_iterator as $child_category): ?>
 						<option value="<?php echo $child_category->getId(); ?>"><?php echo str_repeat('&nbsp;&nbsp;', $recursive_iterator->getDepth() * 2) . $child_category->getTitle(); ?></option>
 					<?php endforeach; ?>
 				</select>

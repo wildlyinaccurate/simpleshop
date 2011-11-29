@@ -7,7 +7,11 @@ define('DEBUGGING', false);
 
 class Doctrine {
 
-	public $em = null;
+	/** @var \Doctrine\ORM\EntityManager */
+	public $em;
+
+	/** @var \CI_Controller */
+	private $_ci;
 
 	public function __construct()
 	{
@@ -15,7 +19,7 @@ class Doctrine {
 		require APPPATH . 'config/database.php';
 
 		// Also get the CodeIgniter instance so that we can find out the table prefix
-		$ci = get_instance();
+		$this->_ci = get_instance();
 
 		// Set up class loading.
 		require_once MODULE_PATH . 'libraries/Doctrine/Common/ClassLoader.php';
@@ -42,8 +46,29 @@ class Doctrine {
 		$driverImpl = $config->newDefaultAnnotationDriver(MODULE_PATH . 'models');
 		$config->setMetadataDriverImpl($driverImpl);
 
-		// Caching
-		$cache = new \Doctrine\Common\Cache\ApcCache;
+		// Detect which caching mechanism is available, if any
+		if (extension_loaded('apc') && ini_get('apc.enabled'))
+		{
+			$cache = new \Doctrine\Common\Cache\ApcCache;
+		}
+		elseif (extension_loaded('memcache'))
+		{
+			$cache = new \Doctrine\Common\Cache\MemcacheCache;
+		}
+		elseif (extension_loaded('memcached'))
+		{
+			$cache = new \Doctrine\Common\Cache\MemcachedCache;
+		}
+		elseif (extension_loaded('xcache') && ini_get('xcache.cacher'))
+		{
+			$cache = new \Doctrine\Common\Cache\XcacheCache;
+		}
+		else
+		{
+			$cache = new \Doctrine\Common\Cache\ArrayCache;
+		}
+
+		// Set metadata and query caching
 		$config->setMetadataCacheImpl($cache);
 		$config->setQueryCacheImpl($cache);
 
@@ -68,7 +93,7 @@ class Doctrine {
 		$evm = new \Doctrine\Common\EventManager;
 
 		// Load the TablePrefix event listener
-		$tablePrefix = new \DoctrineExtensions\TablePrefix($ci->db->dbprefix);
+		$tablePrefix = new \DoctrineExtensions\TablePrefix($this->_ci->db->dbprefix);
 		$evm->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $tablePrefix);
 
 		// Database connection information

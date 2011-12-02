@@ -51,7 +51,17 @@
 
 			<?php foreach ($recursive_iterator as $category): ?>
 				<li>
-					<input type="checkbox" name="categories[]" id="category-<?php echo $category->getId(); ?>" value="<?php echo $category->getId(); ?>" <?php echo set_checkbox('categories[]', $category->getId(), $product->getCategories()->contains($category)); ?> />
+					<?php
+					$default_selected = $product->getCategories()->contains($category);
+					$data = array(
+						'type' => 'checkbox',
+						'name' => "categories[{$category->getId()}]",
+						'id' => "category-{$category->getId()}",
+						'selected' => "selected"
+					);
+
+					echo form_input($data, $category->getId(), set_checkbox("categories[{$category->getId()}]", $category->getId(), $default_selected));
+					?>
 					<label for="category-<?php echo $category->getId(); ?>"><?php echo $category->getTitle(); ?></label>
 
 					<?php if ($recursive_iterator->hasChildren()): ?>

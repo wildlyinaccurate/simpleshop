@@ -74,7 +74,7 @@
 					<tr>
 						<td><?php echo form_checkbox('action_to[]', $product->getId()); ?></td>
 						<td><?php echo $product->getTitle(); ?></td>
-						<td><?php echo $product->getProducts()->count(); ?></td>
+						<td><?php echo $product->getPrice(); ?></td>
 						<td class="align-center buttons buttons-small">
 							<?php echo anchor('admin/simpleshop/products/edit/' . $product->getId(), lang('global:edit'), 'class="button edit"'); ?>
 							<?php echo anchor('admin/simpleshop/products/delete/' . $product->getId(), lang('global:delete'), 'class="confirm button delete"') ;?>

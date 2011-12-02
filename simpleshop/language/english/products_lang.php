@@ -17,12 +17,9 @@ $lang['product_list_title']             = 'Products';
 
 // messages
 $lang['product_no_products']            = 'There are no products.';
-$lang['product_add_success']            = 'Your product has been saved.';
-$lang['product_add_error']              = 'An error occurred.';
-$lang['product_edit_success']           = 'The product was saved.';
-$lang['product_edit_error']             = 'An error occurred.';
+$lang['product_save_success']           = 'The product has been saved.';
+$lang['product_save_error']             = 'An error occurred.';
 $lang['product_single_delete_error']    = 'An error occurred while trying to delete "%s".';
 $lang['product_mass_delete_error']      = 'An error occurred while trying to delete the selected products.';
 $lang['product_mass_delete_success']    = 'The following products have been deleted: %s.';
 $lang['product_no_select_error']        = 'You need to select products first.';
-$lang['product_already_exist_error']    = 'A product with the name "%s" already exists.';

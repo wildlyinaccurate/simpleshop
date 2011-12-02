@@ -31,7 +31,7 @@ class Admin_Products extends Simpleshop_Admin_Controller {
 		array(
 			'field' => 'title',
 			'label' => 'lang:product_title_label',
-			'rules' => 'trim|required|max_length[130]|callback__check_title'
+			'rules' => 'trim|required|max_length[130]'
 		),
 		array(
 			'field'	=> 'description',
@@ -195,6 +195,8 @@ class Admin_Products extends Simpleshop_Admin_Controller {
 		    $this->em->persist($product);
 		    $this->em->flush();
 
+			$this->session->set_flashdata('success', lang('product_save_success'));
+
 			// Redirect back to the form or main page
 			if ($this->input->post('btnAction') == 'save_exit')
 			{
@@ -226,24 +228,6 @@ class Admin_Products extends Simpleshop_Admin_Controller {
 				'product' => $product,
 				'root_categories' => $root_categories
 		));
-	}
-
-	/**
-	 * Callback method that checks for unique product titles
-	 *
-	 * @access  public
-	 * @param   string  $title
-	 * @return  bool
-	 */
-	public function _check_title($title = '')
-	{
-		if ($this->em->getRepository('\Entity\Product')->findOneBy(array('title' => $title)))
-		{
-			$this->form_validation->set_message('_check_title', sprintf($this->lang->line('product_already_exist_error'), $title));
-			return FALSE;
-		}
-
-		return TRUE;
 	}
 
 }

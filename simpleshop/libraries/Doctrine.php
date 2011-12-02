@@ -46,18 +46,27 @@ class Doctrine {
 		$driverImpl = $config->newDefaultAnnotationDriver(MODULE_PATH . 'models');
 		$config->setMetadataDriverImpl($driverImpl);
 
-		// Detect which caching mechanism is available, if any
+		// Detect which caching mechanism is available, if any.
+		// See http://www.doctrine-project.org/docs/orm/2.1/en/reference/caching.html
 		if (extension_loaded('apc') && ini_get('apc.enabled'))
 		{
 			$cache = new \Doctrine\Common\Cache\ApcCache;
 		}
 		elseif (extension_loaded('memcache'))
 		{
+			// Configure your Memcache server here
+			$memcache = new Memcache;
+			$memcache->connect('memcache_host', 11211);
+
 			$cache = new \Doctrine\Common\Cache\MemcacheCache;
+			$cache->setMemcache($memcache);
 		}
 		elseif (extension_loaded('memcached'))
 		{
+			$memcached = new Memcached;
+
 			$cache = new \Doctrine\Common\Cache\MemcachedCache;
+			$cache->setMemcached($memcached);
 		}
 		elseif (extension_loaded('xcache') && ini_get('xcache.cacher'))
 		{
@@ -65,6 +74,8 @@ class Doctrine {
 		}
 		else
 		{
+			// This is a fallback cache which is used if none of the above caches
+			// are installed. It provides very little (if any) performance gains.
 			$cache = new \Doctrine\Common\Cache\ArrayCache;
 		}
 

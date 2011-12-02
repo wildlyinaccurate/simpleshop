@@ -149,11 +149,7 @@ HTML;
 	private function _clear_metadata_cache()
 	{
 		$cacheDriver = $this->em->getConfiguration()->getMetadataCacheImpl();
-
-	    // We not only want to invalidate (delete) the cache entries, we also
-	    // want to flush it to ensure out metadata is up-to-date
 	    $cacheDriver->deleteAll();
-	    $cacheDriver->flushAll();
 	}
 
 }

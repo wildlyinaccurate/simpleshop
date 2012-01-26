@@ -30,7 +30,7 @@
 					<?php foreach ($child_categories as $child_category): ?>
 					<tr>
 						<td><?php echo form_checkbox('action_to[]', $child_category->getId()); ?></td>
-						<td><?php echo anchor("admin/simpleshop/catalogue?category_id={$child_category->getId()}", $child_category->getTitle()); ?></td>
+						<td><?php echo anchor("admin/simpleshop/catalogue", $child_category->getTitle()); ?></td>
 						<td><?php echo $child_category->getProducts()->count(); ?></td>
 						<td class="align-center buttons buttons-small">
 							<?php echo anchor('admin/simpleshop/products/edit/' . $child_category->getId(), lang('global:edit'), 'class="button edit"'); ?>
@@ -91,7 +91,7 @@
 			<?php echo form_close(); ?>
 
 		<?php else: ?>
-			<p><?php echo lang('no_products'); ?> <?php echo anchor("admin/simpleshop/products/create?category_id={$category_id}", lang('create_product_now')); ?></p>
+			<p><?php echo lang('no_products'); ?> <?php echo anchor("admin/simpleshop/products/create", lang('create_product_now')); ?></p>
 		<?php endif; ?>
 	</div>
 </section>

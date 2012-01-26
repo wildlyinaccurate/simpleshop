@@ -41,6 +41,10 @@
 		<li class="even inline-checkbox product-categories">
 			<h4><?php echo lang('product_categories_label'); ?></h4>
 
+			<?php if (empty($root_categories)): ?>
+				<p><?php echo lang('no_categories') . ' ' . anchor('admin/simpleshop/categories/create', lang('create_category_now')); ?></p>
+			<?php endif; ?>
+
 			<ul>
 			<?php
 			$collection = new \Doctrine\Common\Collections\ArrayCollection($root_categories);

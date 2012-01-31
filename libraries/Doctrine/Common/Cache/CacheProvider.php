@@ -28,13 +28,14 @@ namespace Doctrine\Common\Cache;
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
+ * @author  Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
 abstract class CacheProvider implements Cache
 {
     const DOCTRINE_NAMESPACE_CACHEKEY = 'DoctrineNamespaceCacheKey[%s]';
-    
-    /** 
-     * @var string The namespace to prefix all cache ids with 
+
+    /**
+     * @var string The namespace to prefix all cache ids with
      */
     private $namespace = '';
 
@@ -48,7 +49,7 @@ abstract class CacheProvider implements Cache
     {
         $this->namespace = (string) $namespace;
     }
-    
+
     /**
      * Retrieve the namespace that prefixes all cache ids.
      *
@@ -58,7 +59,7 @@ abstract class CacheProvider implements Cache
     {
         return $this->namespace;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -92,6 +93,14 @@ abstract class CacheProvider implements Cache
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getStats()
+    {
+        return $this->doGetStats();
+    }
+
+    /**
      * Deletes all cache entries.
      *
      * @return boolean TRUE if the cache entries were successfully flushed, FALSE otherwise.
@@ -100,7 +109,7 @@ abstract class CacheProvider implements Cache
     {
         return $this->doFlush();
     }
-    
+
     /**
      * Delete all cache entries.
      *
@@ -110,10 +119,10 @@ abstract class CacheProvider implements Cache
     {
         $namespaceCacheKey = sprintf(self::DOCTRINE_NAMESPACE_CACHEKEY, $this->namespace);
         $namespaceVersion  = ($this->doContains($namespaceCacheKey)) ? $this->doFetch($namespaceCacheKey) : 1;
-        
+
         return $this->doSave($namespaceCacheKey, $namespaceVersion + 1);
     }
-    
+
     /**
      * Prefix the passed id with the configured namespace value
      *
@@ -124,8 +133,7 @@ abstract class CacheProvider implements Cache
     {
         $namespaceCacheKey = sprintf(self::DOCTRINE_NAMESPACE_CACHEKEY, $this->namespace);
         $namespaceVersion  = ($this->doContains($namespaceCacheKey)) ? $this->doFetch($namespaceCacheKey) : 1;
-        $idCacheKey        = strtr($id,  array('[' => '', ']' => ''));
-        
+
         return sprintf('%s[%s][%s]', $this->namespace, $id, $namespaceVersion);
     }
 
@@ -169,4 +177,12 @@ abstract class CacheProvider implements Cache
      * @return boolean TRUE if the cache entry was successfully deleted, FALSE otherwise.
      */
     abstract protected function doFlush();
+
+     /**
+     * Retrieves cached information from data store
+     *
+     * @since   2.2
+     * @return  array An associative array with server's statistics if available, NULL otherwise.
+     */
+    abstract protected function doGetStats();
 }

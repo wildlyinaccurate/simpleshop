@@ -1,5 +1,5 @@
 <section class="title">
-	<h4><?php echo lang('catalogue_title'); ?></h4>
+	<h4><?php echo ($category) ? $category->getTitle() : lang('root_category'); ?></h4>
 </section>
 
 <section class="item">
@@ -32,9 +32,9 @@
 						<td><?php echo form_checkbox('action_to[]', $child_category->getId()); ?></td>
 						<td><?php echo anchor("admin/simpleshop/catalogue", $child_category->getTitle()); ?></td>
 						<td><?php echo $child_category->getProducts()->count(); ?></td>
-						<td class="align-center buttons buttons-small">
-							<?php echo anchor('admin/simpleshop/products/edit/' . $child_category->getId(), lang('global:edit'), 'class="button edit"'); ?>
-							<?php echo anchor('admin/simpleshop/products/delete/' . $child_category->getId(), lang('global:delete'), 'class="confirm button delete"') ;?>
+						<td>
+							<?php echo anchor('admin/simpleshop/products/edit/' . $child_category->getId(), lang('global:edit'), 'class="btn orange edit"'); ?>
+							<?php echo anchor('admin/simpleshop/products/delete/' . $child_category->getId(), lang('global:delete'), 'class="confirm btn red delete"') ;?>
 						</td>
 					</tr>
 					<?php endforeach; ?>

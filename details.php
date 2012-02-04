@@ -36,12 +36,12 @@ class Module_Simpleshop extends Module {
                     'shortcuts' => array(
 	                    array(
 	                        'name' => 'create_product',
-	                        'uri' => 'admin/simpleshop/products/create',
+	                        'uri' => "admin/simpleshop/products/create?category_id={$this->input->get('category_id')}",
 		                    'class' => 'add'
 	                    ),
 	                    array(
 	                        'name' => 'create_category',
-	                        'uri' => 'admin/simpleshop/categories/create',
+	                        'uri' => "admin/simpleshop/categories/create?category_id={$this->input->get('category_id')}",
                             'class' => 'add'
 	                    ),
                     ),

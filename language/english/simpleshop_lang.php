@@ -3,6 +3,7 @@
 // Titles
 $lang['orders_title']					= 'Orders';
 $lang['catalogue_title']				= 'Catalogue';
+$lang['settings_title']					= 'Settings';
 $lang['categories_title']				= 'Categories';
 $lang['products_title']					= 'Products';
 $lang['category_products_title']        = 'Products in this category';

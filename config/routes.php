@@ -23,5 +23,6 @@
 $route['simpleshop/admin/catalogue(.*)'] = 'admin$1';
 $route['simpleshop/admin/products(.*)'] = 'admin_products$1';
 $route['simpleshop/admin/categories(.*)'] = 'admin_categories$1';
+$route['simpleshop/admin/settings(.*)'] = 'admin_settings$1';
 
 ?>

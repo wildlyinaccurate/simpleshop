@@ -50,6 +50,10 @@ class Module_Simpleshop extends Module {
                     'name' => 'orders_title',
                     'uri' => 'admin/simpleshop/orders',
                 ),
+                'settings' => array(
+                    'name' => 'settings_title',
+                    'uri' => 'admin/simpleshop/settings',
+                ),
             )
 		);
 	}

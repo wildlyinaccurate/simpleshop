@@ -6,7 +6,7 @@ $lang['catalogue_title']				= 'Catalogue';
 $lang['settings_title']					= 'Settings';
 $lang['categories_title']				= 'Categories';
 $lang['products_title']					= 'Products';
-$lang['category_products_title']        = 'Products in this category';
+$lang['category_products_title']        = 'Products in "%s"';
 
 // Labels
 $lang['create_category']				= 'Add Category';

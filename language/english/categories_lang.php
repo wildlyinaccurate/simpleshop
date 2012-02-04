@@ -6,6 +6,7 @@ $lang['category_category_label']         = 'Category';
 $lang['category_products_label']         = 'Products';
 
 // titles
+$lang['category_home_title']			 = 'Home';
 $lang['category_create_title']           = 'Add Category';
 $lang['category_edit_title']             = 'Edit category "%s"';
 $lang['category_list_title']             = 'Categories';

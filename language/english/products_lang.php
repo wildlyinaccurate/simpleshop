@@ -17,7 +17,7 @@ $lang['product_list_title']             = 'Products';
 
 // messages
 $lang['product_no_products']            = 'There are no products.';
-$lang['product_save_success']           = 'The product has been saved.';
+$lang['product_save_success']           = '"%s" has been saved.';
 $lang['product_save_error']             = 'An error occurred.';
 $lang['product_single_delete_error']    = 'An error occurred while trying to delete "%s".';
 $lang['product_mass_delete_error']      = 'An error occurred while trying to delete the selected products.';

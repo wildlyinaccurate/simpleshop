@@ -195,7 +195,7 @@ class Admin_Products extends Simpleshop_Admin_Controller {
 		    $this->em->persist($product);
 		    $this->em->flush();
 
-			$this->session->set_flashdata('success', lang('product_save_success'));
+			$this->session->set_flashdata('success', sprintf(lang('product_save_success'), $product->getTitle()));
 
 			// Redirect back to the form or main page
 			if ($this->input->post('btnAction') == 'save_exit')

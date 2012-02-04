@@ -1,6 +1,7 @@
 <?php
 
 // Titles
+$lang['welcome_title']        			= 'Welcome to Simple Shop!';
 $lang['orders_title']					= 'Orders';
 $lang['catalogue_title']				= 'Catalogue';
 $lang['settings_title']					= 'Settings';

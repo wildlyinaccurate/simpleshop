@@ -171,6 +171,9 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			$this->em->persist($category);
 		    $this->em->flush();
 
+			$message = ($this->method == 'create') ? $this->lang->line('category_add_success') : $this->lang->line('category_edit_success');
+			$this->session->set_flashdata('success', sprintf($message, $this->input->post('title')));
+
 			// Redirect back to the form or main page
 			if ($this->input->post('btnAction') == 'save_exit')
 			{

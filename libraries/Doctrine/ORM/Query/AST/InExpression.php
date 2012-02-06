@@ -35,13 +35,13 @@ namespace Doctrine\ORM\Query\AST;
 class InExpression extends Node
 {
     public $not;
-    public $expression;
+    public $pathExpression;
     public $literals = array();
     public $subselect;
 
-    public function __construct($expression)
+    public function __construct($pathExpression)
     {
-        $this->expression = $expression;
+        $this->pathExpression = $pathExpression;
     }
 
     public function dispatch($sqlWalker)

@@ -1,5 +1,7 @@
 <?php
 /*
+ *  $Id$
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -30,13 +32,14 @@ use Doctrine\DBAL\Connection,
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        http://www.doctrine-project.org
  * @since       2.0
+ * @version     $Revision$
  */
 class MultiTableDeleteExecutor extends AbstractSqlExecutor
 {
     private $_createTempTableSql;
     private $_dropTempTableSql;
     private $_insertSql;
-
+    
     /**
      * Initializes a new <tt>MultiTableDeleteExecutor</tt>.
      *
@@ -60,11 +63,11 @@ class MultiTableDeleteExecutor extends AbstractSqlExecutor
         $idColumnList = implode(', ', $idColumnNames);
 
         // 1. Create an INSERT INTO temptable ... SELECT identifiers WHERE $AST->getWhereClause()
-        $sqlWalker->setSQLTableAlias($primaryClass->getTableName(), 't0', $primaryDqlAlias);
+        $sqlWalker->setSQLTableAlias($primaryClass->table['name'], 't0', $primaryDqlAlias);
 
         $this->_insertSql = 'INSERT INTO ' . $tempTable . ' (' . $idColumnList . ')'
                 . ' SELECT t0.' . implode(', t0.', $idColumnNames);
-
+        
         $rangeDecl = new AST\RangeVariableDeclaration($primaryClass->name, $primaryDqlAlias);
         $fromClause = new AST\FromClause(array(new AST\IdentificationVariableDeclaration($rangeDecl, null, array())));
         $this->_insertSql .= $sqlWalker->walkFromClause($fromClause);
@@ -84,7 +87,7 @@ class MultiTableDeleteExecutor extends AbstractSqlExecutor
             $this->_sqlStatements[] = 'DELETE FROM ' . $tableName
                     . ' WHERE (' . $idColumnList . ') IN (' . $idSubselect . ')';
         }
-
+    
         // 4. Store DDL for temporary identifier table.
         $columnDefinitions = array();
         foreach ($idColumnNames as $idColumnName) {
@@ -99,7 +102,11 @@ class MultiTableDeleteExecutor extends AbstractSqlExecutor
     }
 
     /**
-     * {@inheritDoc}
+     * Executes all SQL statements.
+     *
+     * @param \Doctrine\DBAL\Connection $conn The database connection that is used to execute the queries.
+     * @param array $params The parameters.
+     * @override
      */
     public function execute(Connection $conn, array $params, array $types)
     {

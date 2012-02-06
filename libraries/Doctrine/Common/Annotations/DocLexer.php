@@ -49,7 +49,6 @@ final class DocLexer extends Lexer
     const T_OPEN_PARENTHESIS    = 109;
     const T_TRUE                = 110;
     const T_NULL                = 111;
-    const T_COLON               = 112;
 
     /**
      * @inheritdoc
@@ -58,7 +57,7 @@ final class DocLexer extends Lexer
     {
         return array(
             '[a-z_][a-z0-9_:]*',
-            '(?:[+-]?[0-9]+(?:[\.][0-9]+)*)(?:[eE][+-]?[0-9]+)?',
+            '(?:[0-9]+(?:[\.][0-9]+)*)(?:e[+-]?[0-9]+)?',
             '"(?:[^"]|"")*"',
         );
     }
@@ -122,9 +121,6 @@ final class DocLexer extends Lexer
 
                 case 'null':
                     return self::T_NULL;
-
-                case ':':
-                    return self::T_COLON;
 
                 default:
                     if (ctype_alpha($value[0]) || $value[0] === '_') {

@@ -36,9 +36,8 @@ class Orx extends Composite
 {
     protected $_separator = ' OR ';
     protected $_allowedClasses = array(
+        'Doctrine\ORM\Query\Expr\Andx',
         'Doctrine\ORM\Query\Expr\Comparison',
         'Doctrine\ORM\Query\Expr\Func',
-        'Doctrine\ORM\Query\Expr\Andx',
-        'Doctrine\ORM\Query\Expr\Orx',
     );
 }

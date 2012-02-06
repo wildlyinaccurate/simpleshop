@@ -39,7 +39,7 @@ class DB2Connection implements \Doctrine\DBAL\Driver\Connection
         }
     }
 
-    public function prepare($sql)
+    function prepare($sql)
     {
         $stmt = @db2_prepare($this->_conn, $sql);
         if (!$stmt) {
@@ -47,8 +47,8 @@ class DB2Connection implements \Doctrine\DBAL\Driver\Connection
         }
         return new DB2Statement($stmt);
     }
-
-    public function query()
+    
+    function query()
     {
         $args = func_get_args();
         $sql = $args[0];
@@ -57,7 +57,7 @@ class DB2Connection implements \Doctrine\DBAL\Driver\Connection
         return $stmt;
     }
 
-    public function quote($input, $type=\PDO::PARAM_STR)
+    function quote($input, $type=\PDO::PARAM_STR)
     {
         $input = db2_escape_string($input);
         if ($type == \PDO::PARAM_INT ) {
@@ -67,24 +67,24 @@ class DB2Connection implements \Doctrine\DBAL\Driver\Connection
         }
     }
 
-    public function exec($statement)
+    function exec($statement)
     {
         $stmt = $this->prepare($statement);
         $stmt->execute();
         return $stmt->rowCount();
     }
 
-    public function lastInsertId($name = null)
+    function lastInsertId($name = null)
     {
         return db2_last_insert_id($this->_conn);
     }
 
-    public function beginTransaction()
+    function beginTransaction()
     {
         db2_autocommit($this->_conn, DB2_AUTOCOMMIT_OFF);
     }
 
-    public function commit()
+    function commit()
     {
         if (!db2_commit($this->_conn)) {
             throw new DB2Exception(db2_conn_errormsg($this->_conn));
@@ -92,7 +92,7 @@ class DB2Connection implements \Doctrine\DBAL\Driver\Connection
         db2_autocommit($this->_conn, DB2_AUTOCOMMIT_ON);
     }
 
-    public function rollBack()
+    function rollBack()
     {
         if (!db2_rollback($this->_conn)) {
             throw new DB2Exception(db2_conn_errormsg($this->_conn));
@@ -100,12 +100,12 @@ class DB2Connection implements \Doctrine\DBAL\Driver\Connection
         db2_autocommit($this->_conn, DB2_AUTOCOMMIT_ON);
     }
 
-    public function errorCode()
+    function errorCode()
     {
         return db2_conn_error($this->_conn);
     }
 
-    public function errorInfo()
+    function errorInfo()
     {
         return array(
             0 => db2_conn_errormsg($this->_conn),

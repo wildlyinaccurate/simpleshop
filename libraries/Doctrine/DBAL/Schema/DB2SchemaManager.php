@@ -21,8 +21,6 @@
 
 namespace Doctrine\DBAL\Schema;
 
-use Doctrine\DBAL\Event\SchemaIndexDefinitionEventArgs;
-
 /**
  * IBM Db2 Schema Manager
  *
@@ -48,7 +46,7 @@ class DB2SchemaManager extends AbstractSchemaManager
         $sql .= " AND CREATOR = UPPER('".$this->_conn->getUsername()."')";
 
         $tables = $this->_conn->fetchAll($sql);
-
+        
         return $this->_getPortableTablesList($tables);
     }
 
@@ -70,7 +68,7 @@ class DB2SchemaManager extends AbstractSchemaManager
         $precision = false;
 
         $type = $this->_platform->getDoctrineTypeMapping($tableColumn['typename']);
-
+        
         switch (strtolower($tableColumn['typename'])) {
             case 'varchar':
                 $length = $tableColumn['length'];
@@ -122,8 +120,6 @@ class DB2SchemaManager extends AbstractSchemaManager
 
     protected function _getPortableTableIndexesList($tableIndexes, $tableName=null)
     {
-        $eventManager = $this->_platform->getEventManager();
-
         $tableIndexRows = array();
         $indexes = array();
         foreach($tableIndexes AS $indexKey => $data) {
@@ -138,31 +134,7 @@ class DB2SchemaManager extends AbstractSchemaManager
                 $keyName = $indexName;
             }
 
-            $data = array(
-                'name' => $indexName,
-                'columns' => explode("+", ltrim($data['colnames'], '+')),
-                'unique' => $unique,
-                'primary' => $primary
-            );
-
-            $index = null;
-            $defaultPrevented = false;
-
-            if (null !== $eventManager && $eventManager->hasListeners(Events::onSchemaIndexDefinition)) {
-                $eventArgs = new SchemaIndexDefinitionEventArgs($data, $tableName, $this->_conn);
-                $eventManager->dispatchEvent(Events::onSchemaIndexDefinition, $eventArgs);
-
-                $defaultPrevented = $eventArgs->isDefaultPrevented();
-                $index = $eventArgs->getIndex();
-            }
-
-            if (!$defaultPrevented) {
-                $index = new Index($data['name'], $data['columns'], $data['unique'], $data['primary']);
-            }
-
-            if ($index) {
-                $indexes[$indexKey] = $index;
-            }
+            $indexes[$keyName] = new Index($indexName, explode("+", ltrim($data['colnames'], '+')), $unique, $primary);
         }
 
         return $indexes;

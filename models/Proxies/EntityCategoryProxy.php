@@ -126,6 +126,30 @@ class EntityCategoryProxy extends \Entity\Category implements \Doctrine\ORM\Prox
         return parent::__toString();
     }
 
+    public function getRoot()
+    {
+        $this->__load();
+        return parent::getRoot();
+    }
+
+    public function getLevel()
+    {
+        $this->__load();
+        return parent::getLevel();
+    }
+
+    public function getLeft()
+    {
+        $this->__load();
+        return parent::getLeft();
+    }
+
+    public function getRight()
+    {
+        $this->__load();
+        return parent::getRight();
+    }
+
     public function setCreatedDate()
     {
         $this->__load();
@@ -159,7 +183,7 @@ class EntityCategoryProxy extends \Entity\Category implements \Doctrine\ORM\Prox
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'title', 'slug', 'description', 'image_id', 'created_date', 'modified_date', 'products', 'parent_category', 'child_categories');
+        return array('__isInitialized__', 'id', 'title', 'slug', 'description', 'image_id', 'products', 'parent_category', 'child_categories', 'lft', 'rgt', 'root', 'level', 'created_date', 'modified_date');
     }
 
     public function __clone()

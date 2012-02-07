@@ -6,14 +6,14 @@ require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php
 /**
  * Category management controller
  */
-class Admin_Categories extends Simpleshop_Admin_Controller {
+class Admin_Categories extends Simpleshop_Admin_Controller
+{
 
 	/**
-	 * Doctrine EntityManager
-	 * @access  protected
-	 * @var     \Doctrine\ORM\EntityManager
+	 * Nested Set Manager
+	 * @var \DoctrineExtensions\NestedSet\Manager
 	 */
-	protected $em;
+	protected $nsm;
 
 	/**
 	 * The current active section
@@ -48,6 +48,9 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 		parent::__construct();
 
 		$this->lang->load('categories');
+
+		$config = new \DoctrineExtensions\NestedSet\Config($this->em);
+		$this->nsm = new \DoctrineExtensions\NestedSet\Manager($config);
 	}
 
 	/**
@@ -85,7 +88,8 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 
 				try
 				{
-					$this->em->remove($category);
+					$node = $this->nsm->wrapNode($category);
+					$node->delete();
 					$deleted[] = $category->getTitle();
 				}
 				catch (InvalidArgumentException $e)
@@ -161,15 +165,22 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			// See if a parent category was selected
 			$parent_category_id = $this->input->post('parent_category');
 
-			if ((int) $parent_category_id > 0 && $parent_category = $this->em->find('Entity\Category', $parent_category_id))
+			if ((int) $parent_category_id)
 			{
-				// A parent category was selected
-				$category->setParentCategory($parent_category);
+				$parent_category = $this->em->find('Entity\Category', $parent_category_id);
 			}
 
-			// Save the Category
-			$this->em->persist($category);
-		    $this->em->flush();
+			if ($parent_category)
+			{
+				// A parent category was selected
+				$parent_node = $this->nsm->wrapNode($parent_category);
+				$parent_node->addChild($category);
+			}
+			else
+			{
+				// Create this category as a new root node
+				$this->nsm->createRoot($category);
+			}
 
 			$message = ($this->method == 'create') ? $this->lang->line('category_add_success') : $this->lang->line('category_edit_success');
 			$this->session->set_flashdata('success', sprintf($message, $this->input->post('title')));
@@ -195,12 +206,16 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			$page_title = sprintf(lang('edit_category'), $category->getTitle());
 		}
 
+		$root_categories = $this->em->getRepository('Entity\Category')
+			->findBy(array('parent_category' => null), array('title' => 'ASC'));
+
 		$this->template
 			->title($this->module_details['name'], $page_title)
 			->build('admin/categories/form', array(
 				'page_title' => $page_title,
 				'category' => $category,
-				'category_repository' => $this->em->getRepository('Entity\Category'),
+				'root_categories' => $root_categories,
+				'nsm' => $this->nsm,
 		));
 	}
 

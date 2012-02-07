@@ -36,7 +36,7 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 		// Helper functions
 		$this->load->helper('simpleshop');
 
-	    // Create a shortcut property to the Doctrine Entity Manager
+	    // Create a shortcut property to the Doctrine Entity Manager and Nested Set Manager
 	    $this->em = $this->doctrine->em;
 	}
 

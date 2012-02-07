@@ -6,14 +6,8 @@ require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php
 /**
  * Product management controller
  */
-class Admin_Products extends Simpleshop_Admin_Controller {
-
-	/**
-	 * Doctrine EntityManager
-	 * @access  protected
-	 * @var     \Doctrine\ORM\EntityManager
-	 */
-	protected $em;
+class Admin_Products extends Simpleshop_Admin_Controller
+{
 
 	/**
 	 * The current active section

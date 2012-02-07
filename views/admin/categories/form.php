@@ -23,19 +23,14 @@
 				<select name="parent_category" id="parent_category">
 					<option value="0"><?php echo lang('none_label'); ?></option>
 
-					<?php
-					$options = array(
-						'decorate' => true,
-						'rootOpen' => '',
-						'rootClose' => '',
-						'childOpen' => '',
-						'childClose' => '',
-						'nodeDecorator' => function($node) {
-							return '<option value="' . $node['id'] . '">' . str_repeat('&nbsp;&nbsp;', $node['level'] * 2) . $node['title'] . '</option>';
-						}
-					);
-					echo $category_repository->childrenHierarchy(null, false, $options);
-					?>
+					<?php foreach ($root_categories as $root_category): ?>
+						<option value="<?php echo $root_category->getId(); ?>"><?php echo $root_category->getTitle(); ?></option>
+
+						<?php $child_categories = array(); ?>
+						<?php foreach ($child_categories as $child_category): ?>
+							<option value="<?php echo $child_category->getId(); ?>"><?php echo str_repeat('&nbsp;&nbsp;', $child_category->getLevel() * 2) . $child_category->getTitle(); ?></option>
+						<?php endforeach; ?>
+					<?php endforeach; ?>
 				</select>
 			</li>
 

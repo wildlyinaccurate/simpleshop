@@ -6,7 +6,8 @@ require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php
 /**
  * Catalogue (default admin controller)
  */
-class Admin_settings extends Simpleshop_Admin_Controller {
+class Admin_settings extends Simpleshop_Admin_Controller
+{
 
     protected $section = 'settings';
 

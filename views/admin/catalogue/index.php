@@ -33,8 +33,8 @@
 						<td><?php echo anchor("admin/simpleshop/catalogue?category_id={$child_category->getId()}", $child_category->getTitle()); ?></td>
 						<td><?php echo $child_category->getProducts()->count(); ?></td>
 						<td>
-							<?php echo anchor('admin/simpleshop/products/edit/' . $child_category->getId(), lang('global:edit'), 'class="btn orange edit"'); ?>
-							<?php echo anchor('admin/simpleshop/products/delete/' . $child_category->getId(), lang('global:delete'), 'class="confirm btn red delete"') ;?>
+							<?php echo anchor('admin/simpleshop/categories/edit/' . $child_category->getId(), lang('global:edit'), 'class="btn orange edit"'); ?>
+							<?php echo anchor('admin/simpleshop/categories/delete/' . $child_category->getId(), lang('global:delete'), 'class="confirm btn red delete"') ;?>
 						</td>
 					</tr>
 					<?php endforeach; ?>

@@ -30,10 +30,12 @@ class Admin extends Simpleshop_Admin_Controller {
 	 */
 	function index()
 	{
+		/** @var $category_repository \Entity\Repository\CategoryRepository */
+		$category_repository = $this->em->getRepository('Entity\Category');
 		$category_id = $this->input->get('category_id');
 
-		$category = $this->em->find('Entity\Category', $category_id);
-		$child_categories = $this->em->getRepository('Entity\Category')->findBy(array('parent_category' => $category_id), array('title' => 'ASC'));
+		$category = $category_repository->find($category_id);
+		$child_categories = ($category === null) ? $category_repository->getRootNodes() : $category_repository->children($category);
 
 		$this->template
             ->title($this->module_details['name'], lang('catalogue_title'))

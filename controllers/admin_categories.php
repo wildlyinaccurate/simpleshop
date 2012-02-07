@@ -195,15 +195,12 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			$page_title = sprintf(lang('edit_category'), $category->getTitle());
 		}
 
-		// Get the root categories to build the tree from
-		$root_categories = $this->em->getRepository('Entity\Category')->findBy(array('parent_category' => null), array('title' => 'ASC'));
-
 		$this->template
 			->title($this->module_details['name'], $page_title)
 			->build('admin/categories/form', array(
 				'page_title' => $page_title,
 				'category' => $category,
-				'root_categories' => $root_categories
+				'category_repository' => $this->em->getRepository('Entity\Category'),
 		));
 	}
 

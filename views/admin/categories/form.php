@@ -24,14 +24,18 @@
 					<option value="0"><?php echo lang('none_label'); ?></option>
 
 					<?php
-					$collection = new \Doctrine\Common\Collections\ArrayCollection($root_categories);
-					$category_iterator = new \Entity\RecursiveCategoryIterator($collection);
-					$recursive_iterator = new RecursiveIteratorIterator($category_iterator, RecursiveIteratorIterator::SELF_FIRST);
+					$options = array(
+						'decorate' => true,
+						'rootOpen' => '',
+						'rootClose' => '',
+						'childOpen' => '',
+						'childClose' => '',
+						'nodeDecorator' => function($node) {
+							return '<option value="' . $node['id'] . '">' . str_repeat('&nbsp;&nbsp;', $node['level'] * 2) . $node['title'] . '</option>';
+						}
+					);
+					echo $category_repository->childrenHierarchy(null, false, $options);
 					?>
-
-					<?php foreach ($recursive_iterator as $child_category): ?>
-						<option value="<?php echo $child_category->getId(); ?>"><?php echo str_repeat('&nbsp;&nbsp;', $recursive_iterator->getDepth() * 2) . $child_category->getTitle(); ?></option>
-					<?php endforeach; ?>
 				</select>
 			</li>
 

@@ -2,10 +2,13 @@
 
 namespace Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
+
 /**
  * Category
  *
- * @Entity
+ * @Entity(repositoryClass="Entity\Repository\CategoryRepository")
+ * @Gedmo\Tree(type="nested")
  * @Table(name="simpleshop_category",
  * 		uniqueConstraints={
  * 			@uniqueConstraint(name="category_title_unique", columns={"title"}),
@@ -66,8 +69,9 @@ class Category extends TimestampedModel {
 	 * Parent category
 	 *
 	 * @var \Entity\Category
+     * @Gedmo\TreeParent
 	 * @ManyToOne(targetEntity="Category", inversedBy="child_categories")
-	 * @JoinColumn(name="parent_category_id", referencedColumnName="id")
+	 * @JoinColumn(name="parent_category_id", referencedColumnName="id", onDelete="SET NULL")
 	 */
 	protected $parent_category;
 
@@ -79,6 +83,30 @@ class Category extends TimestampedModel {
 	 * @OrderBy({"title" = "ASC"})
 	 */
 	protected $child_categories;
+
+	/**
+     * @Gedmo\TreeLeft
+     * @Column(type="integer")
+     */
+    protected $lft;
+
+    /**
+     * @Gedmo\TreeRight
+     * @Column(type="integer")
+     */
+    protected $rgt;
+
+    /**
+     * @Gedmo\TreeRoot
+     * @Column(type="integer", nullable=true)
+     */
+    protected $root;
+
+    /**
+     * @Gedmo\TreeLevel
+     * @Column(name="lvl", type="integer")
+     */
+    protected $level;
 
 	/**
 	 * Constructor
@@ -257,5 +285,25 @@ class Category extends TimestampedModel {
 	{
 		return $this->getTitle();
 	}
+
+    public function getRoot()
+    {
+        return $this->root;
+    }
+
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    public function getLeft()
+    {
+    	return $this->lft;
+    }
+
+	public function getRight()
+    {
+        return $this->rgt;
+    }
 
 }

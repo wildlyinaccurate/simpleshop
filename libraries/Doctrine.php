@@ -123,5 +123,6 @@ class Doctrine {
 	    $db_platform = $this->em->getConnection()->getDatabasePlatform();
 	    $db_platform->registerDoctrineTypeMapping('enum', 'string');
 	    $db_platform->registerDoctrineTypeMapping('set', 'string');
+            $db_platform->registerDoctrineTypeMapping('blob', 'string');
 	}
 }

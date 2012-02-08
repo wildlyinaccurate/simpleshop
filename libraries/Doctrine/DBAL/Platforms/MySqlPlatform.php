@@ -644,6 +644,7 @@ class MySqlPlatform extends AbstractPlatform
             'mediumtext'    => 'text',
             'longtext'      => 'text',
             'text'          => 'text',
+            'blob'			=> 'text',
             'varchar'       => 'string',
             'string'        => 'string',
             'char'          => 'string',

@@ -61,7 +61,7 @@ class TableDiff
     /**
      * All removed fields
      *
-     * @var array(string=>Column)
+     * @var array(string=>bool)
      */
     public $removedColumns = array();
 

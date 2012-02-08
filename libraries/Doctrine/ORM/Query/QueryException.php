@@ -47,11 +47,6 @@ class QueryException extends \Doctrine\ORM\ORMException
         return new self('[Semantical Error] ' . $message);
     }
 
-    public static function invalidLockMode()
-    {
-        return new self('Invalid lock mode hint provided.');
-    }
-
     public static function invalidParameterType($expected, $received)
     {
         return new self('Invalid parameter type, ' . $received . ' given, but ' . $expected . ' expected.');

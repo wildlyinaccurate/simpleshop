@@ -168,7 +168,7 @@ interface TreeWalker
      * @param GroupByItem
      * @return string The SQL.
      */
-    function walkGroupByItem($groupByItem);
+    function walkGroupByItem(AST\PathExpression $pathExpr);
 
     /**
      * Walks down an UpdateStatement AST node, thereby generating the appropriate SQL.
@@ -393,14 +393,6 @@ interface TreeWalker
      * @return string The SQL.
      */
     function walkPathExpression($pathExpr);
-
-    /**
-     * Walks down an ResultVariable AST node, thereby generating the appropriate SQL.
-     *
-     * @param string $resultVariable
-     * @return string The SQL.
-     */
-    function walkResultVariable($resultVariable);
 
     /**
      * Gets an executor that can be used to execute the result of this walker.

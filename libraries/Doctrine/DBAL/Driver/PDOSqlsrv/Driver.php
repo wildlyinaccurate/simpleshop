@@ -1,5 +1,7 @@
 <?php
 /*
+ *  $Id$
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -27,7 +29,7 @@ namespace Doctrine\DBAL\Driver\PDOSqlsrv;
 class Driver implements \Doctrine\DBAL\Driver
 {
     public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
-    {
+    {        
         return new Connection(
             $this->_constructPdoDsn($params),
             $username,
@@ -44,31 +46,31 @@ class Driver implements \Doctrine\DBAL\Driver
     private function _constructPdoDsn(array $params)
     {
         $dsn = 'sqlsrv:server=';
-
+		
         if (isset($params['host'])) {
             $dsn .= $params['host'];
         }
-
+                
         if (isset($params['port']) && !empty($params['port'])) {
             $dsn .= ',' . $params['port'];
         }
-
+		
 		if (isset($params['dbname'])) {
 			$dsn .= ';Database=' .  $params['dbname'];
 		}
-
+		
         return $dsn;
     }
 
 
     public function getDatabasePlatform()
     {
-        return new \Doctrine\DBAL\Platforms\SQLServer2008Platform();
+        return new \Doctrine\DBAL\Platforms\MsSqlPlatform();
     }
 
     public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
     {
-        return new \Doctrine\DBAL\Schema\SQLServerSchemaManager($conn);
+        return new \Doctrine\DBAL\Schema\MsSqlSchemaManager($conn);
     }
 
     public function getName()

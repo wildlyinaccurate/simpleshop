@@ -1,5 +1,7 @@
 <?php
 /*
+ *  $Id$
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -26,30 +28,10 @@ use Doctrine\DBAL\Schema\Visitor\Visitor;
 /**
  * Object representation of a database schema
  *
- * Different vendors have very inconsistent naming with regard to the concept
- * of a "schema". Doctrine understands a schema as the entity that conceptually
- * wraps a set of database objects such as tables, sequences, indexes and
- * foreign keys that belong to each other into a namespace. A Doctrine Schema
- * has nothing to do with the "SCHEMA" defined as in PostgreSQL, it is more
- * related to the concept of "DATABASE" that exists in MySQL and PostgreSQL.
- *
- * Every asset in the doctrine schema has a name. A name consists of either a
- * namespace.local name pair or just a local unqualified name.
- *
- * The abstraction layer that covers a PostgreSQL schema is the namespace of an
- * database object (asset). A schema can have a name, which will be used as
- * default namespace for the unqualified database objects that are created in
- * the schema.
- *
- * In the case of MySQL where cross-database queries are allowed this leads to
- * databases being "misinterpreted" as namespaces. This is intentional, however
- * the CREATE/DROP SQL visitors will just filter this queries and do not
- * execute them. Only the queries for the currently connected database are
- * executed.
- *
  * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link    www.doctrine-project.org
  * @since   2.0
+ * @version $Revision$
  * @author  Benjamin Eberlei <kontakt@beberlei.de>
  */
 class Schema extends AbstractAsset
@@ -58,7 +40,7 @@ class Schema extends AbstractAsset
      * @var array
      */
     protected $_tables = array();
-
+    
     /**
      * @var array
      */
@@ -82,7 +64,6 @@ class Schema extends AbstractAsset
             $schemaConfig = new SchemaConfig();
         }
         $this->_schemaConfig = $schemaConfig;
-        $this->_setName($schemaConfig->getName() ?: 'public');
 
         foreach ($tables AS $table) {
             $this->_addTable($table);
@@ -105,7 +86,7 @@ class Schema extends AbstractAsset
      */
     protected function _addTable(Table $table)
     {
-        $tableName = $table->getFullQualifiedName($this->getName());
+        $tableName = strtolower($table->getName());
         if(isset($this->_tables[$tableName])) {
             throw SchemaException::tableAlreadyExists($tableName);
         }
@@ -119,7 +100,7 @@ class Schema extends AbstractAsset
      */
     protected function _addSequence(Sequence $sequence)
     {
-        $seqName = $sequence->getFullQualifiedName($this->getName());
+        $seqName = strtolower($sequence->getName());
         if (isset($this->_sequences[$seqName])) {
             throw SchemaException::sequenceAlreadyExists($seqName);
         }
@@ -128,7 +109,7 @@ class Schema extends AbstractAsset
 
     /**
      * Get all tables of this schema.
-     *
+     * 
      * @return array
      */
     public function getTables()
@@ -142,7 +123,7 @@ class Schema extends AbstractAsset
      */
     public function getTable($tableName)
     {
-        $tableName = $this->getFullQualifiedAssetName($tableName);
+        $tableName = strtolower($tableName);
         if (!isset($this->_tables[$tableName])) {
             throw SchemaException::tableDoesNotExist($tableName);
         }
@@ -151,42 +132,24 @@ class Schema extends AbstractAsset
     }
 
     /**
-     * @return string
-     */
-    private function getFullQualifiedAssetName($name)
-    {
-        if (strpos($name, ".") === false) {
-            $name = $this->getName() . "." . $name;
-        }
-        return strtolower($name);
-    }
-
-    /**
      * Does this schema have a table with the given name?
-     *
+     * 
      * @param  string $tableName
      * @return Schema
      */
     public function hasTable($tableName)
     {
-        $tableName = $this->getFullQualifiedAssetName($tableName);
+        $tableName = strtolower($tableName);
         return isset($this->_tables[$tableName]);
     }
 
     /**
-     * Get all table names, prefixed with a schema name, even the default one
-     * if present.
-     *
-     * @return array
+     * @param  string $sequenceName
+     * @return bool
      */
-    public function getTableNames()
-    {
-        return array_keys($this->_tables);
-    }
-
     public function hasSequence($sequenceName)
     {
-        $sequenceName = $this->getFullQualifiedAssetName($sequenceName);
+        $sequenceName = strtolower($sequenceName);
         return isset($this->_sequences[$sequenceName]);
     }
 
@@ -197,7 +160,7 @@ class Schema extends AbstractAsset
      */
     public function getSequence($sequenceName)
     {
-        $sequenceName = $this->getFullQualifiedAssetName($sequenceName);
+        $sequenceName = strtolower($sequenceName);
         if(!$this->hasSequence($sequenceName)) {
             throw SchemaException::sequenceDoesNotExist($sequenceName);
         }
@@ -214,7 +177,7 @@ class Schema extends AbstractAsset
 
     /**
      * Create a new table
-     *
+     * 
      * @param  string $tableName
      * @return Table
      */
@@ -250,7 +213,7 @@ class Schema extends AbstractAsset
      */
     public function dropTable($tableName)
     {
-        $tableName = $this->getFullQualifiedAssetName($tableName);
+        $tableName = strtolower($tableName);
         $table = $this->getTable($tableName);
         unset($this->_tables[$tableName]);
         return $this;
@@ -258,7 +221,7 @@ class Schema extends AbstractAsset
 
     /**
      * Create a new sequence
-     *
+     * 
      * @param  string $sequenceName
      * @param  int $allocationSize
      * @param  int $initialValue
@@ -277,7 +240,7 @@ class Schema extends AbstractAsset
      */
     public function dropSequence($sequenceName)
     {
-        $sequenceName = $this->getFullQualifiedAssetName($sequenceName);
+        $sequenceName = strtolower($sequenceName);
         unset($this->_sequences[$sequenceName]);
         return $this;
     }
@@ -338,7 +301,7 @@ class Schema extends AbstractAsset
     public function visit(Visitor $visitor)
     {
         $visitor->acceptSchema($this);
-
+        
         foreach ($this->_tables AS $table) {
             $table->visit($visitor);
         }

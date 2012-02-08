@@ -46,7 +46,7 @@ class IdentityGenerator extends AbstractIdGenerator
      */
     public function generate(EntityManager $em, $entity)
     {
-        return (int)$em->getConnection()->lastInsertId($this->_seqName);
+        return $em->getConnection()->lastInsertId($this->_seqName);
     }
 
     /**

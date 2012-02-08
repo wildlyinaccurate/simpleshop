@@ -20,7 +20,6 @@
 namespace Doctrine\ORM\Id;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\ORMException;
 
 /**
@@ -43,29 +42,46 @@ class AssignedGenerator extends AbstractIdGenerator
      */
     public function generate(EntityManager $em, $entity)
     {
-        $class      = $em->getClassMetadata(get_class($entity));
-        $idFields   = $class->getIdentifierFieldNames();
+        $class = $em->getClassMetadata(get_class($entity));
         $identifier = array();
-
-        foreach ($idFields as $idField) {
-            $value = $class->reflFields[$idField]->getValue($entity);
-
-            if ( ! isset($value)) {
-                throw ORMException::entityMissingAssignedIdForField($entity, $idField);
-            }
-
-            if (isset($class->associationMappings[$idField])) {
-                if ( ! $em->getUnitOfWork()->isInIdentityMap($value)) {
-                    throw ORMException::entityMissingForeignAssignedId($entity, $value);
+        if ($class->isIdentifierComposite) {
+            $idFields = $class->getIdentifierFieldNames();
+            foreach ($idFields as $idField) {
+                $value = $class->reflFields[$idField]->getValue($entity);
+                if (isset($value)) {
+                    if (isset($class->associationMappings[$idField])) {
+                        if (!$em->getUnitOfWork()->isInIdentityMap($value)) {
+                            throw ORMException::entityMissingForeignAssignedId($entity, $value);
+                        }
+                        
+                        // NOTE: Single Columns as associated identifiers only allowed - this constraint it is enforced.
+                        $identifier[$idField] = current($em->getUnitOfWork()->getEntityIdentifier($value));
+                    } else {
+                        $identifier[$idField] = $value;
+                    }
+                } else {
+                    throw ORMException::entityMissingAssignedId($entity);
                 }
-
-                // NOTE: Single Columns as associated identifiers only allowed - this constraint it is enforced.
-                $value = current($em->getUnitOfWork()->getEntityIdentifier($value));
             }
-
-            $identifier[$idField] = $value;
+        } else {
+            $idField = $class->identifier[0];
+            $value = $class->reflFields[$idField]->getValue($entity);
+            if (isset($value)) {
+                if (isset($class->associationMappings[$idField])) {
+                    if (!$em->getUnitOfWork()->isInIdentityMap($value)) {
+                        throw ORMException::entityMissingForeignAssignedId($entity, $value);
+                    }
+                    
+                    // NOTE: Single Columns as associated identifiers only allowed - this constraint it is enforced.
+                    $identifier[$idField] = current($em->getUnitOfWork()->getEntityIdentifier($value));
+                } else {
+                    $identifier[$idField] = $value;
+                }
+            } else {
+                throw ORMException::entityMissingAssignedId($entity);
+            }
         }
-
+        
         return $identifier;
     }
 }

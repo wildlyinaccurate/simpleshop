@@ -465,16 +465,6 @@ class Table extends AbstractAsset
         return $this->_fkConstraints[$constraintName];
     }
 
-    public function removeForeignKey($constraintName)
-    {
-        $constraintName = strtolower($constraintName);
-        if(!$this->hasForeignKey($constraintName)) {
-            throw SchemaException::foreignKeyDoesNotExist($constraintName, $this->_name);
-        }
-
-        unset($this->_fkConstraints[$constraintName]);
-    }
-
     /**
      * @return Column[]
      */

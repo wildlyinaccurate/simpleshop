@@ -33,7 +33,7 @@ class SqliteSchemaManager extends AbstractSchemaManager
 {
     /**
      * {@inheritdoc}
-     *
+     * 
      * @override
      */
     public function dropDatabase($database)
@@ -45,7 +45,7 @@ class SqliteSchemaManager extends AbstractSchemaManager
 
     /**
      * {@inheritdoc}
-     *
+     * 
      * @override
      */
     public function createDatabase($database)
@@ -93,21 +93,18 @@ class SqliteSchemaManager extends AbstractSchemaManager
 
         // fetch regular indexes
         foreach($tableIndexes AS $tableIndex) {
-            // Ignore indexes with reserved names, e.g. autoindexes
-            if (strpos($tableIndex['name'], 'sqlite_') !== 0) {
-                $keyName = $tableIndex['name'];
-                $idx = array();
-                $idx['key_name'] = $keyName;
-                $idx['primary'] = false;
-                $idx['non_unique'] = $tableIndex['unique']?false:true;
+            $keyName = $tableIndex['name'];
+            $idx = array();
+            $idx['key_name'] = $keyName;
+            $idx['primary'] = false;
+            $idx['non_unique'] = $tableIndex['unique']?false:true;
 
-                $stmt = $this->_conn->executeQuery( "PRAGMA INDEX_INFO ( '{$keyName}' )" );
-                $indexArray = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $stmt = $this->_conn->executeQuery( "PRAGMA INDEX_INFO ( '{$keyName}' )" );
+            $indexArray = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-                foreach ( $indexArray as $indexColumnRow ) {
-                    $idx['column_name'] = $indexColumnRow['name'];
-                    $indexBuffer[] = $idx;
-                }
+            foreach ( $indexArray as $indexColumnRow ) {
+                $idx['column_name'] = $indexColumnRow['name'];
+                $indexBuffer[] = $idx;
             }
         }
 
@@ -139,10 +136,6 @@ class SqliteSchemaManager extends AbstractSchemaManager
         $default = $tableColumn['dflt_value'];
         if  ($default == 'NULL') {
             $default = null;
-        }
-        if ($default !== null) {
-            // SQLite returns strings wrapped in single quotes, so we need to strip them
-            $default = preg_replace("/^'(.*)'$/", '\1', $default);
         }
         $notnull = (bool) $tableColumn['notnull'];
 
@@ -177,7 +170,7 @@ class SqliteSchemaManager extends AbstractSchemaManager
             'default'  => $default,
             'precision' => $precision,
             'scale'     => $scale,
-            'autoincrement' => false,
+            'autoincrement' => (bool) $tableColumn['pk'],
         );
 
         return new Column($tableColumn['name'], \Doctrine\DBAL\Types\Type::getType($type), $options);

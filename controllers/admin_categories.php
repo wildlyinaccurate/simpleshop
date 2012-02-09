@@ -10,12 +10,6 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 {
 
 	/**
-	 * Nested Set Manager
-	 * @var \DoctrineExtensions\NestedSet\Manager
-	 */
-	protected $nsm;
-
-	/**
 	 * The current active section
 	 * @access  protected
 	 * @var     int
@@ -48,9 +42,6 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 		parent::__construct();
 
 		$this->lang->load('categories');
-
-		$config = new \DoctrineExtensions\NestedSet\Config($this->em);
-		$this->nsm = new \DoctrineExtensions\NestedSet\Manager($config);
 	}
 
 	/**
@@ -73,7 +64,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 	 * @param   int     $id
 	 * @return  void
 	 */
-	public function delete($id = 0)
+	public function delete($id = null)
 	{
 		$id_array = ( ! empty($id)) ? array($id) : $this->input->post('action_to');
 
@@ -86,34 +77,22 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 			{
 				$category = $this->em->find('\Entity\Category', $id);
 
-				try
+				if ($category)
 				{
 					$node = $this->nsm->wrapNode($category);
 					$node->delete();
 					$deleted[] = $category->getTitle();
 				}
-				catch (InvalidArgumentException $e)
-				{
-					$this->session->set_flashdata('error', sprintf($this->lang->line('category_single_delete_error'), $category->getTitle()));
-				}
 			}
 
-			try
-			{
-				$this->em->flush();
-				$this->session->set_flashdata('success', sprintf($this->lang->line('category_mass_delete_success'), implode(', ', $deleted)));
-			}
-			catch (\Doctrine\ORM\OptimisticLockException $e)
-			{
-				$this->session->set_flashdata('error', $this->lang->line('category_mass_delete_error'));
-			}
+			$this->session->set_flashdata('success', sprintf($this->lang->line('category_mass_delete_success'), implode(', ', $deleted)));
 		}
 		else
 		{
 			$this->session->set_flashdata('error', $this->lang->line('category_no_select_error'));
 		}
 
-		redirect('admin/simpleshop');
+		redirect("admin/simpleshop/catalogue?category_id={$this->viewing_category_id}");
 	}
 
 	/**
@@ -136,7 +115,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 	{
 		$category = $this->em->find('\Entity\Category', $category_id);
 
-		$category OR redirect('admin/simpleshop');
+		$category OR redirect("admin/simpleshop/catalogue?category_id={$this->viewing_category_id}");
 
 		$this->_display_form($category);
 	}
@@ -164,22 +143,35 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 		{
 			// See if a parent category was selected
 			$parent_category_id = $this->input->post('parent_category');
-
-			if ((int) $parent_category_id)
-			{
-				$parent_category = $this->em->find('Entity\Category', $parent_category_id);
-			}
+			$parent_category = $this->em->find('Entity\Category', $parent_category_id);
 
 			if ($parent_category)
 			{
-				// A parent category was selected
+				$category->setParentCategory($parent_category);
 				$parent_node = $this->nsm->wrapNode($parent_category);
-				$parent_node->addChild($category);
+
+				if ($this->method == 'create')
+				{
+					$parent_node->addChild($category);
+				}
+				else
+				{
+					$category_node = $this->nsm->wrapNode($category);
+					$category_node->moveAsLastChildOf($parent_node);
+				}
 			}
 			else
 			{
-				// Create this category as a new root node
-				$this->nsm->createRoot($category);
+				if ($this->method == 'create')
+				{
+					$this->nsm->createRoot($category);
+				}
+				else
+				{
+					$category->setParentCategory(null);
+					$category_node = $this->nsm->wrapNode($category);
+					$category_node->makeRoot($category_node);
+				}
 			}
 
 			$message = ($this->method == 'create') ? $this->lang->line('category_add_success') : $this->lang->line('category_edit_success');
@@ -188,7 +180,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 			// Redirect back to the form or main page
 			if ($this->input->post('btnAction') == 'save_exit')
 			{
-				redirect('admin/simpleshop');
+				redirect("admin/simpleshop/catalogue?category_id={$this->viewing_category_id}");
 			}
 			else
 			{
@@ -216,6 +208,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 				'category' => $category,
 				'root_categories' => $root_categories,
 				'nsm' => $this->nsm,
+				'viewing_category_id' => $this->viewing_category_id,
 		));
 	}
 

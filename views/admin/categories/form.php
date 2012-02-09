@@ -17,20 +17,32 @@
 			</li>
 
 			<hr>
-			
+
 			<li>
 				<label for="parent_category"><?php echo lang('category_parent_label'); ?></label><br>
 				<select name="parent_category" id="parent_category">
 					<option value="0"><?php echo lang('none_label'); ?></option>
 
-					<?php foreach ($root_categories as $root_category): ?>
-						<option value="<?php echo $root_category->getId(); ?>"><?php echo $root_category->getTitle(); ?></option>
+					<?php
+					foreach ($root_categories as $root_category)
+					{
+						$category_tree = $nsm->fetchTreeAsArray($root_category->getId());
 
-						<?php $child_categories = array(); ?>
-						<?php foreach ($child_categories as $child_category): ?>
-							<option value="<?php echo $child_category->getId(); ?>"><?php echo str_repeat('&nbsp;&nbsp;', $child_category->getLevel() * 2) . $child_category->getTitle(); ?></option>
-						<?php endforeach; ?>
-					<?php endforeach; ?>
+						foreach ($category_tree as $node_wrapper)
+						{
+							$selected = '';
+							$node = $node_wrapper->getNode();
+
+							if ($node->getId() == $viewing_category_id ||
+								($category->getParentCategory() && $node->getId() == $category->getParentCategory()->getId()))
+							{
+								$selected = 'selected="selected"';
+							}
+
+							echo '<option value="' . $node->getId() . '" ' . $selected . '>' . str_repeat('&nbsp;&nbsp;', $node_wrapper->getLevel() * 2) . $node->getTitle() . '</option>';
+						}
+					}
+					?>
 				</select>
 			</li>
 

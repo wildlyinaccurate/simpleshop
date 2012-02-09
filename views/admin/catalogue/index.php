@@ -33,8 +33,8 @@
 						<td><?php echo anchor("admin/simpleshop/catalogue?category_id={$child_category->getId()}", $child_category->getTitle()); ?></td>
 						<td><?php echo $child_category->getProducts()->count(); ?></td>
 						<td>
-							<?php echo anchor('admin/simpleshop/categories/edit/' . $child_category->getId(), lang('global:edit'), 'class="btn orange edit"'); ?>
-							<?php echo anchor('admin/simpleshop/categories/delete/' . $child_category->getId(), lang('global:delete'), 'class="confirm btn red delete"') ;?>
+							<?php echo anchor("admin/simpleshop/categories/edit/{$child_category->getId()}?category_id={$child_category->getId()}", lang('global:edit'), 'class="btn orange edit"'); ?>
+							<?php echo anchor("admin/simpleshop/categories/delete/{$child_category->getId()}?category_id={$child_category->getId()}", lang('global:delete'), 'class="confirm btn red delete"') ;?>
 						</td>
 					</tr>
 					<?php endforeach; ?>
@@ -76,8 +76,8 @@
 						<td><?php echo $product->getTitle(); ?></td>
 						<td><?php echo $product->getPrice(); ?></td>
 						<td class="align-center buttons buttons-small">
-							<?php echo anchor('admin/simpleshop/products/edit/' . $product->getId(), lang('global:edit'), 'class="button edit"'); ?>
-							<?php echo anchor('admin/simpleshop/products/delete/' . $product->getId(), lang('global:delete'), 'class="confirm button delete"') ;?>
+							<?php echo anchor("admin/simpleshop/products/edit/{$product->getId()}?category_id={$child_category->getId()}", lang('global:edit'), 'class="button edit"'); ?>
+							<?php echo anchor("admin/simpleshop/products/delete/{$product->getId()}?category_id={$child_category->getId()}", lang('global:delete'), 'class="confirm button delete"') ;?>
 						</td>
 					</tr>
 					<?php endforeach; ?>

@@ -6,7 +6,8 @@
  * @category    Modules
  * @author      Joseph Wynn
  */
-class Simpleshop extends Public_Controller {
+class Simpleshop extends Public_Controller
+{
 
 	/**
 	 * Constructor

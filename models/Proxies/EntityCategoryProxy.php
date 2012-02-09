@@ -126,28 +126,40 @@ class EntityCategoryProxy extends \Entity\Category implements \Doctrine\ORM\Prox
         return parent::__toString();
     }
 
-    public function getRoot()
+    public function getLeftValue()
     {
         $this->__load();
-        return parent::getRoot();
+        return parent::getLeftValue();
     }
 
-    public function getLevel()
+    public function setLeftValue($lft)
     {
         $this->__load();
-        return parent::getLevel();
+        return parent::setLeftValue($lft);
     }
 
-    public function getLeft()
+    public function getRightValue()
     {
         $this->__load();
-        return parent::getLeft();
+        return parent::getRightValue();
     }
 
-    public function getRight()
+    public function setRightValue($rgt)
     {
         $this->__load();
-        return parent::getRight();
+        return parent::setRightValue($rgt);
+    }
+
+    public function getRootValue()
+    {
+        $this->__load();
+        return parent::getRootValue();
+    }
+
+    public function setRootValue($root)
+    {
+        $this->__load();
+        return parent::setRootValue($root);
     }
 
     public function setCreatedDate()
@@ -183,7 +195,7 @@ class EntityCategoryProxy extends \Entity\Category implements \Doctrine\ORM\Prox
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'title', 'slug', 'description', 'image_id', 'products', 'parent_category', 'child_categories', 'lft', 'rgt', 'root', 'level', 'created_date', 'modified_date');
+        return array('__isInitialized__', 'id', 'title', 'slug', 'description', 'image_id', 'products', 'parent_category', 'child_categories', 'lft', 'rgt', 'root', 'created_date', 'modified_date');
     }
 
     public function __clone()

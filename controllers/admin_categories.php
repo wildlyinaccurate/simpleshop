@@ -6,14 +6,8 @@ require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php
 /**
  * Category management controller
  */
-class Admin_Categories extends Simpleshop_Admin_Controller {
-
-	/**
-	 * Doctrine EntityManager
-	 * @access  protected
-	 * @var     \Doctrine\ORM\EntityManager
-	 */
-	protected $em;
+class Admin_Categories extends Simpleshop_Admin_Controller
+{
 
 	/**
 	 * The current active section
@@ -70,7 +64,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 	 * @param   int     $id
 	 * @return  void
 	 */
-	public function delete($id = 0)
+	public function delete($id = null)
 	{
 		$id_array = ( ! empty($id)) ? array($id) : $this->input->post('action_to');
 
@@ -83,33 +77,22 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			{
 				$category = $this->em->find('\Entity\Category', $id);
 
-				try
+				if ($category)
 				{
-					$this->em->remove($category);
+					$node = $this->nsm->wrapNode($category);
+					$node->delete();
 					$deleted[] = $category->getTitle();
-				}
-				catch (InvalidArgumentException $e)
-				{
-					$this->session->set_flashdata('error', sprintf($this->lang->line('category_single_delete_error'), $category->getTitle()));
 				}
 			}
 
-			try
-			{
-				$this->em->flush();
-				$this->session->set_flashdata('success', sprintf($this->lang->line('category_mass_delete_success'), implode(', ', $deleted)));
-			}
-			catch (\Doctrine\ORM\OptimisticLockException $e)
-			{
-				$this->session->set_flashdata('error', $this->lang->line('category_mass_delete_error'));
-			}
+			$this->session->set_flashdata('success', sprintf($this->lang->line('category_mass_delete_success'), implode(', ', $deleted)));
 		}
 		else
 		{
 			$this->session->set_flashdata('error', $this->lang->line('category_no_select_error'));
 		}
 
-		redirect('admin/simpleshop');
+		redirect("admin/simpleshop/catalogue?category_id={$this->viewing_category_id}");
 	}
 
 	/**
@@ -132,7 +115,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 	{
 		$category = $this->em->find('\Entity\Category', $category_id);
 
-		$category OR redirect('admin/simpleshop');
+		$category OR redirect("admin/simpleshop/catalogue?category_id={$this->viewing_category_id}");
 
 		$this->_display_form($category);
 	}
@@ -160,16 +143,36 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 		{
 			// See if a parent category was selected
 			$parent_category_id = $this->input->post('parent_category');
+			$parent_category = $this->em->find('Entity\Category', $parent_category_id);
 
-			if ((int) $parent_category_id > 0 && $parent_category = $this->em->find('Entity\Category', $parent_category_id))
+			if ($parent_category)
 			{
-				// A parent category was selected
 				$category->setParentCategory($parent_category);
-			}
+				$parent_node = $this->nsm->wrapNode($parent_category);
 
-			// Save the Category
-			$this->em->persist($category);
-		    $this->em->flush();
+				if ($this->method == 'create')
+				{
+					$parent_node->addChild($category);
+				}
+				else
+				{
+					$category_node = $this->nsm->wrapNode($category);
+					$category_node->moveAsLastChildOf($parent_node);
+				}
+			}
+			else
+			{
+				if ($this->method == 'create')
+				{
+					$this->nsm->createRoot($category);
+				}
+				else
+				{
+					$category->setParentCategory(null);
+					$category_node = $this->nsm->wrapNode($category);
+					$category_node->makeRoot($category_node);
+				}
+			}
 
 			$message = ($this->method == 'create') ? $this->lang->line('category_add_success') : $this->lang->line('category_edit_success');
 			$this->session->set_flashdata('success', sprintf($message, $this->input->post('title')));
@@ -177,7 +180,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			// Redirect back to the form or main page
 			if ($this->input->post('btnAction') == 'save_exit')
 			{
-				redirect('admin/simpleshop');
+				redirect("admin/simpleshop/catalogue?category_id={$this->viewing_category_id}");
 			}
 			else
 			{
@@ -195,12 +198,17 @@ class Admin_Categories extends Simpleshop_Admin_Controller {
 			$page_title = sprintf(lang('edit_category'), $category->getTitle());
 		}
 
+		$root_categories = $this->em->getRepository('Entity\Category')
+			->findBy(array('parent_category' => null), array('title' => 'ASC'));
+
 		$this->template
 			->title($this->module_details['name'], $page_title)
 			->build('admin/categories/form', array(
 				'page_title' => $page_title,
 				'category' => $category,
-				'category_repository' => $this->em->getRepository('Entity\Category'),
+				'root_categories' => $root_categories,
+				'nsm' => $this->nsm,
+				'viewing_category_id' => $this->viewing_category_id,
 		));
 	}
 

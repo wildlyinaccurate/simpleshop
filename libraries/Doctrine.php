@@ -39,9 +39,6 @@ class Doctrine {
 		$extensionsClassLoader = new \Doctrine\Common\ClassLoader('DoctrineExtensions', MODULE_PATH . 'libraries/Doctrine');
 		$extensionsClassLoader->register();
 
-		$gedmoClassLoader = new \Doctrine\Common\ClassLoader('Gedmo', MODULE_PATH . 'libraries/Doctrine/DoctrineExtensions');
-		$gedmoClassLoader->register();
-
 		// Set some configuration options
 		$config = new Configuration;
 
@@ -109,10 +106,6 @@ class Doctrine {
 		// Load the TablePrefix event listener
 		$tablePrefix = new \DoctrineExtensions\TablePrefix($this->_ci->db->dbprefix);
 		$evm->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $tablePrefix);
-
-		// Load the Gedmo Tree event subscriber
-		$gedmoListener = new Gedmo\Tree\TreeListener;
-		$evm->addEventSubscriber($gedmoListener);
 
 		// Database connection information
 		$connectionOptions = array(

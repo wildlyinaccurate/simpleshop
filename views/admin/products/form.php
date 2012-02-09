@@ -47,38 +47,30 @@
 
 			<ul>
 			<?php
-			$collection = new \Doctrine\Common\Collections\ArrayCollection($root_categories);
-			$category_iterator = new \Entity\RecursiveCategoryIterator($collection);
-			$caching_iterator = new RecursiveCachingIterator($category_iterator);
-			$recursive_iterator = new RecursiveIteratorIterator($caching_iterator, RecursiveIteratorIterator::SELF_FIRST);
-			?>
+			foreach ($root_categories as $root_category)
+			{
+				$category_tree = $nsm->fetchTreeAsArray($root_category->getId());
 
-			<?php foreach ($recursive_iterator as $category): ?>
-				<li>
-					<?php
-					$default_selected = $product->getCategories()->contains($category);
+				foreach ($category_tree as $node_wrapper)
+				{
+					$selected = '';
+					$node = $node_wrapper->getNode();
+
+					$default_selected = $product->getCategories()->contains($node);
 					$data = array(
 						'type' => 'checkbox',
-						'name' => "categories[{$category->getId()}]",
-						'id' => "category-{$category->getId()}",
+						'name' => "categories[{$node->getId()}]",
+						'id' => "category-{$node->getId()}",
 						'selected' => "selected"
 					);
-
-					echo form_input($data, $category->getId(), set_checkbox("categories[{$category->getId()}]", $category->getId(), $default_selected));
-					?>
-					<label for="category-<?php echo $category->getId(); ?>"><?php echo $category->getTitle(); ?></label>
-
-					<?php if ($recursive_iterator->hasChildren()): ?>
-						<ul>
-					<?php else: ?>
-						</li>
-
-						<?php if ( ! $recursive_iterator->hasNext()): ?>
-								</ul>
-							</li>
-						<?php endif; ?>
-					<?php endif; ?>
-			<?php endforeach; ?>
+					
+					echo '<li>' . str_repeat('&nbsp;&nbsp;', $node_wrapper->getLevel() * 2);
+					echo form_input($data, $node->getId(), set_checkbox("categories[{$node->getId()}]", $node->getId(), $default_selected));
+					echo '<label for="category-' . $node->getId() . '">' . $node->getTitle() . '</label>';
+					echo '</li>';
+				}
+			}
+			?>
 			</ul>
 		</li>
 	</ul>

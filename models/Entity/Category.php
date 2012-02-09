@@ -2,13 +2,12 @@
 
 namespace Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
+use DoctrineExtensions\NestedSet\MultipleRootNode;
 
 /**
  * Category
  *
- * @Entity(repositoryClass="Entity\Repository\CategoryRepository")
- * @Gedmo\Tree(type="nested")
+ * @Entity
  * @Table(name="simpleshop_category",
  * 		uniqueConstraints={
  * 			@uniqueConstraint(name="category_title_unique", columns={"title"}),
@@ -21,7 +20,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * )
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Category extends TimestampedModel {
+class Category extends TimestampedModel implements MultipleRootNode {
 
 	/**
 	 * @var	int
@@ -69,7 +68,6 @@ class Category extends TimestampedModel {
 	 * Parent category
 	 *
 	 * @var \Entity\Category
-     * @Gedmo\TreeParent
 	 * @ManyToOne(targetEntity="Category", inversedBy="child_categories")
 	 * @JoinColumn(name="parent_category_id", referencedColumnName="id", onDelete="SET NULL")
 	 */
@@ -85,28 +83,19 @@ class Category extends TimestampedModel {
 	protected $child_categories;
 
 	/**
-     * @Gedmo\TreeLeft
-     * @Column(type="integer")
-     */
-    protected $lft;
+	 * @Column(type="integer")
+	 */
+	private $lft;
 
-    /**
-     * @Gedmo\TreeRight
-     * @Column(type="integer")
-     */
-    protected $rgt;
+	/**
+	 * @Column(type="integer")
+	 */
+	private $rgt;
 
-    /**
-     * @Gedmo\TreeRoot
-     * @Column(type="integer", nullable=true)
-     */
-    protected $root;
-
-    /**
-     * @Gedmo\TreeLevel
-     * @Column(name="lvl", type="integer")
-     */
-    protected $level;
+	/**
+	 * @Column(type="integer")
+	 */
+	private $root;
 
 	/**
 	 * Constructor
@@ -286,24 +275,34 @@ class Category extends TimestampedModel {
 		return $this->getTitle();
 	}
 
-    public function getRoot()
-    {
-        return $this->root;
-    }
+	public function getLeftValue()
+	{
+		return $this->lft;
+	}
 
-    public function getLevel()
-    {
-        return $this->level;
-    }
+	public function setLeftValue($lft)
+	{
+		$this->lft = $lft;
+	}
 
-    public function getLeft()
-    {
-    	return $this->lft;
-    }
+	public function getRightValue()
+	{
+		return $this->rgt;
+	}
 
-	public function getRight()
-    {
-        return $this->rgt;
-    }
+	public function setRightValue($rgt)
+	{
+		$this->rgt = $rgt;
+	}
+
+	public function getRootValue()
+	{
+		return $this->root;
+	}
+
+	public function setRootValue($root)
+	{
+		$this->root = $root;
+	}
 
 }

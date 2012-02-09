@@ -6,14 +6,8 @@ require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php
 /**
  * Product management controller
  */
-class Admin_Products extends Simpleshop_Admin_Controller {
-
-	/**
-	 * Doctrine EntityManager
-	 * @access  protected
-	 * @var     \Doctrine\ORM\EntityManager
-	 */
-	protected $em;
+class Admin_Products extends Simpleshop_Admin_Controller
+{
 
 	/**
 	 * The current active section
@@ -226,7 +220,9 @@ class Admin_Products extends Simpleshop_Admin_Controller {
 			->build('admin/products/form', array(
 				'page_title' => $page_title,
 				'product' => $product,
-				'root_categories' => $root_categories
+				'selected_category_id' => $this->input->get('category_id'),
+				'root_categories' => $root_categories,
+				'nsm' => $this->nsm,
 		));
 	}
 

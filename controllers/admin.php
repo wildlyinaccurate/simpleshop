@@ -6,7 +6,8 @@ require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php
 /**
  * Catalogue (default admin controller)
  */
-class Admin extends Simpleshop_Admin_Controller {
+class Admin extends Simpleshop_Admin_Controller
+{
 
     protected $section = 'catalogue';
 
@@ -31,9 +32,10 @@ class Admin extends Simpleshop_Admin_Controller {
 	function index()
 	{
 		$category_repository = $this->em->getRepository('Entity\Category');
-		$category_id = $this->input->get('category_id');
-		$category = $category_repository->find($category_id);
-		$child_categories = $category_repository->children($category, true);
+
+		$category_id = $this->input->get('category_id') ?: null;
+		$category = ($category_id) ? $category_repository->find($category_id) : false;
+		$child_categories = $category_repository->findBy(array('parent_category' => $category_id), array('title' => 'ASC'));
 
 		$this->template
             ->title($this->module_details['name'], lang('catalogue_title'))

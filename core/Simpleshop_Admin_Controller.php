@@ -14,6 +14,18 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 	protected $em;
 
 	/**
+	 * Nested Set Manager
+	 * @var \DoctrineExtensions\NestedSet\Manager
+	 */
+	protected $nsm;
+
+	/**
+	 * ID of the category currently being viewed in the catalogue
+	 * @var int
+	 */
+	protected $viewing_category_id;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct()
@@ -22,6 +34,9 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 
 		// Module language file
 		$this->lang->load('simpleshop');
+
+		// Get the currently viewed category ID
+		$this->viewing_category_id = $this->input->get('category_id');
 
 		// Shortcuts partial
 		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts')
@@ -36,8 +51,11 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 		// Helper functions
 		$this->load->helper('simpleshop');
 
-	    // Create a shortcut property to the Doctrine Entity Manager
+	    // Create a shortcut property to the Doctrine Entity Manager and Nested Set Manager
 	    $this->em = $this->doctrine->em;
+
+		$config = new \DoctrineExtensions\NestedSet\Config($this->em, 'Entity\Category');
+		$this->nsm = new \DoctrineExtensions\NestedSet\Manager($config);
 	}
 
 }

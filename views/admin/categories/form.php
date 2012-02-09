@@ -17,24 +17,31 @@
 			</li>
 
 			<hr>
-			
+
 			<li>
 				<label for="parent_category"><?php echo lang('category_parent_label'); ?></label><br>
 				<select name="parent_category" id="parent_category">
 					<option value="0"><?php echo lang('none_label'); ?></option>
 
 					<?php
-					$options = array(
-						'decorate' => true,
-						'rootOpen' => '',
-						'rootClose' => '',
-						'childOpen' => '',
-						'childClose' => '',
-						'nodeDecorator' => function($node) {
-							return '<option value="' . $node['id'] . '">' . str_repeat('&nbsp;&nbsp;', $node['level'] * 2) . $node['title'] . '</option>';
+					foreach ($root_categories as $root_category)
+					{
+						$category_tree = $nsm->fetchTreeAsArray($root_category->getId());
+
+						foreach ($category_tree as $node_wrapper)
+						{
+							$selected = '';
+							$node = $node_wrapper->getNode();
+
+							if ($node->getId() == $viewing_category_id ||
+								($category->getParentCategory() && $node->getId() == $category->getParentCategory()->getId()))
+							{
+								$selected = 'selected="selected"';
+							}
+
+							echo '<option value="' . $node->getId() . '" ' . $selected . '>' . str_repeat('&nbsp;&nbsp;', $node_wrapper->getLevel() * 2) . $node->getTitle() . '</option>';
 						}
-					);
-					echo $category_repository->childrenHierarchy(null, false, $options);
+					}
 					?>
 				</select>
 			</li>

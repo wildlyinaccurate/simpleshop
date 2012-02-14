@@ -36,7 +36,7 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 		$this->lang->load('simpleshop');
 
 		// Get the currently viewed category ID
-		$this->viewing_category_id = $this->input->get('category_id');
+		$this->viewing_category_id = $this->input->get('category_id') ?: null;
 
 		// Shortcuts partial
 		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts')

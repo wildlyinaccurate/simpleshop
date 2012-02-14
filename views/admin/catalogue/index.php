@@ -77,7 +77,7 @@
 						<td><?php echo $product->getPrice(); ?></td>
 						<td class="align-center buttons buttons-small">
 							<?php echo anchor("admin/simpleshop/products/edit/{$product->getId()}?category_id={$child_category->getId()}", lang('global:edit'), 'class="button edit"'); ?>
-							<?php echo anchor("admin/simpleshop/products/delete/{$product->getId()}?category_id={$child_category->getId()}", lang('global:delete'), 'class="confirm button delete"') ;?>
+							<?php echo anchor("admin/simpleshop/products/delete/{$product->getId()}?category_id={$category_id}", lang('global:delete'), 'class="confirm button delete"') ;?>
 						</td>
 					</tr>
 					<?php endforeach; ?>

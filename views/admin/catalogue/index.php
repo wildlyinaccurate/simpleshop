@@ -34,7 +34,7 @@
 						<td><?php echo $child_category->getProducts()->count(); ?></td>
 						<td>
 							<?php echo anchor("admin/simpleshop/categories/edit/{$child_category->getId()}?category_id={$child_category->getId()}", lang('global:edit'), 'class="btn orange edit"'); ?>
-							<?php echo anchor("admin/simpleshop/categories/delete/{$child_category->getId()}?category_id={$child_category->getId()}", lang('global:delete'), 'class="confirm btn red delete"') ;?>
+							<?php echo anchor("admin/simpleshop/categories/delete/{$child_category->getId()}?category_id={$category_id}", lang('global:delete'), 'class="confirm btn red delete"') ;?>
 						</td>
 					</tr>
 					<?php endforeach; ?>
@@ -58,7 +58,8 @@
 				<tr>
 					<th width="20"><?php echo form_checkbox(array('name' => 'action_to_all', 'class' => 'check-all')); ?></th>
 					<th><?php echo lang('product_product_label'); ?></th>
-					<th><?php echo lang('product_products_label'); ?></th>
+					<th><?php echo lang('product_price_label'); ?></th>
+					<th><?php echo lang('product_stock_label'); ?></th>
 					<th width="110"></th>
 				</tr>
 				</thead>
@@ -75,8 +76,9 @@
 						<td><?php echo form_checkbox('action_to[]', $product->getId()); ?></td>
 						<td><?php echo $product->getTitle(); ?></td>
 						<td><?php echo $product->getPrice(); ?></td>
+						<td><?php echo $product->getStock(); ?></td>
 						<td class="align-center buttons buttons-small">
-							<?php echo anchor("admin/simpleshop/products/edit/{$product->getId()}?category_id={$child_category->getId()}", lang('global:edit'), 'class="button edit"'); ?>
+							<?php echo anchor("admin/simpleshop/products/edit/{$product->getId()}?category_id={$product->getId()}", lang('global:edit'), 'class="button edit"'); ?>
 							<?php echo anchor("admin/simpleshop/products/delete/{$product->getId()}?category_id={$category_id}", lang('global:delete'), 'class="confirm button delete"') ;?>
 						</td>
 					</tr>

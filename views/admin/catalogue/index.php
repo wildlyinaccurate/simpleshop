@@ -16,7 +16,7 @@
 		<?php if ($current_category && $current_category->getProducts()->count() > 0): ?>
 			<?php $this->load->view('admin/tables/products'); ?>
 		<?php else: ?>
-			<p><?php echo lang('no_products'); ?> <?php echo anchor("admin/simpleshop/products/create?category_id={$current_category->getId()}", lang('create_product_now')); ?></p>
+			<p><?php echo lang('no_products'); ?> <?php echo anchor("admin/simpleshop/products/create?category_id={$current_category_id}", lang('create_product_now')); ?></p>
 		<?php endif; ?>
 	</div>
 </section>

@@ -40,6 +40,7 @@ class Admin extends Simpleshop_Admin_Controller
 			->append_metadata(js('catalogue.js', 'simpleshop'))
             ->build('admin/catalogue/index', array(
 				'current_category' => $current_category,
+				'current_category_id' => $this->viewing_category_id,
 				'categories' => $categories,
 		));
 	}

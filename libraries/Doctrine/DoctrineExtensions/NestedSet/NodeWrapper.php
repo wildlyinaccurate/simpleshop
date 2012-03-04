@@ -175,10 +175,11 @@ class NodeWrapper implements Node
      * gets descendants for this node
      *
      * @param int $depth or null for unlimited depth
+	 * @param	bool	$includeSelf	Note: self isn't included in $depth
      *
      * @return array array of NodeWrapper objects
      */
-    public function getDescendants($depth = null)
+    public function getDescendants($depth = null, $includeSelf = false)
     {
         if(!$this->hasChildren())
         {
@@ -209,6 +210,12 @@ class NodeWrapper implements Node
             $results = $q->getResult();
 
             $this->descendants = array();
+
+			if ($includeSelf)
+			{
+				$this->descendants[] = $this;
+			}
+
             foreach($results as $result)
             {
                 $this->descendants[] = $this->getManager()->wrapNode($result);
@@ -276,9 +283,10 @@ class NodeWrapper implements Node
     /**
      * gets ancestors for node
      *
+	 * @param	bool	$includeSelf
      * @return array array of NodeWrapper objects
      */
-    public function getAncestors()
+    public function getAncestors($includeSelf = false)
     {
         if($this->isRoot())
         {
@@ -312,6 +320,11 @@ class NodeWrapper implements Node
             {
                 $this->ancestors[] = $this->getManager()->wrapNode($result);
             }
+
+			if ($includeSelf)
+			{
+				$this->ancestors[] = $this;
+			}
         }
 
         return $this->ancestors;

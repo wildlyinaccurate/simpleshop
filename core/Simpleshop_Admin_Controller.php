@@ -21,9 +21,21 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 
 	/**
 	 * ID of the category currently being viewed in the catalogue
-	 * @var int
+	 * @var int|null
 	 */
-	protected $viewing_category_id;
+	protected $viewing_category_id = null;
+
+	/**
+	 * The Entity for the category currently being viewed
+	 * @var \Entity\Category|null
+	 */
+	protected $viewing_category = null;
+
+	/**
+	 * NestedSet-wrapped Node for the category currently being viewed
+	 * @var DoctrineExtensions\NestedSet\NodeWrapper|null
+	 */
+	protected $viewing_category_node = null;
 
 	/**
 	 * Constructor
@@ -34,9 +46,6 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 
 		// Module language file
 		$this->lang->load('simpleshop');
-
-		// Get the currently viewed category ID
-		$this->viewing_category_id = $this->input->get('category_id') ?: null;
 
 		// Shortcuts partial
 		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts')
@@ -56,8 +65,20 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 
 		$config = new \DoctrineExtensions\NestedSet\Config($this->em, 'Entity\Category');
 		$this->nsm = new \DoctrineExtensions\NestedSet\Manager($config);
+
+		// Get the currently viewed category
+		if ($this->input->get('category_id'))
+		{
+			$this->viewing_category_id = $this->input->get('category_id');
+			$this->viewing_category = $this->em->find('\Entity\Category', $this->viewing_category_id);
+
+			if ($this->viewing_category)
+			{
+				$this->viewing_category_node = $this->nsm->wrapNode($this->viewing_category);
+			}
+		}
 	}
 
 }
 
-/** End of file Simpleshop_Admin_Controller.php */
+/* End of file Simpleshop_Admin_Controller.php */

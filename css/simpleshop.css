@@ -26,3 +26,9 @@ input.inline-checkbox, .inline-checkbox input {
 .product-categories ul ul {
 	margin-left: 24px !important;
 }
+
+/* Breadcrumbs */
+.breadcrumbs .separator {
+	float: left;
+	padding: 0 6px;
+}

@@ -1,5 +1,8 @@
 <section class="title">
-	<h4><?php echo $page_title; ?></h4>
+	<h4 class="breadcrumbs">
+		<?php echo category_breadcrumbs($viewing_category_node->getAncestors(true)); ?>
+		<?php echo $page_title; ?>
+	</h4>
 </section>
 
 <section class="item">

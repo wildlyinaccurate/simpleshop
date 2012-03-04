@@ -77,6 +77,13 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 				$this->viewing_category_node = $this->nsm->wrapNode($this->viewing_category);
 			}
 		}
+
+		// Make the currently viewed category available in all views
+		$this->load->vars(array(
+			'viewing_category' => $this->viewing_category,
+			'viewing_category_id' => $this->viewing_category_id,
+			'viewing_category_node' => $this->viewing_category_node,
+		));
 	}
 
 }

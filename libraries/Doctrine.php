@@ -87,9 +87,12 @@ class Doctrine {
 		$config->setProxyDir(MODULE_PATH . 'models/Proxies');
 		$config->setProxyNamespace('Proxies');
 
-		if (ENVIRONMENT == 'development') {
+		if (ENVIRONMENT == PYRO_DEVELOPMENT)
+		{
 			$config->setAutoGenerateProxyClasses(TRUE);
-		} else {
+		}
+		else
+		{
 			$config->setAutoGenerateProxyClasses(FALSE);
 		}
 
@@ -119,10 +122,10 @@ class Doctrine {
 		// Create EntityManager
 		$this->em = EntityManager::create($connectionOptions, $config, $evm);
 
-	    // Map ENUM as strings to get around errors with non-Doctrine tables containing ENUM columns
-	    $db_platform = $this->em->getConnection()->getDatabasePlatform();
-	    $db_platform->registerDoctrineTypeMapping('enum', 'string');
-	    $db_platform->registerDoctrineTypeMapping('set', 'string');
-            $db_platform->registerDoctrineTypeMapping('blob', 'string');
+		// Map ENUM as strings to get around errors with non-Doctrine tables containing ENUM columns
+		$db_platform = $this->em->getConnection()->getDatabasePlatform();
+		$db_platform->registerDoctrineTypeMapping('enum', 'string');
+		$db_platform->registerDoctrineTypeMapping('set', 'string');
+		$db_platform->registerDoctrineTypeMapping('blob', 'string');
 	}
 }

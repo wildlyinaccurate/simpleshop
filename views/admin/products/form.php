@@ -58,8 +58,8 @@
 				{
 					$selected = '';
 					$node = $node_wrapper->getNode();
+					$default_selected = $product->getCategories()->contains($node) || $viewing_category == $node;
 
-					$default_selected = $product->getCategories()->contains($node);
 					$data = array(
 						'type' => 'checkbox',
 						'name' => "categories[{$node->getId()}]",
@@ -69,7 +69,7 @@
 					
 					echo '<li>' . str_repeat('&nbsp;&nbsp;', $node_wrapper->getLevel() * 2);
 					echo form_input($data, $node->getId(), set_checkbox("categories[{$node->getId()}]", $node->getId(), $default_selected));
-					echo '<label for="category-' . $node->getId() . '">' . $node->getTitle() . '</label>';
+					echo ' <label for="category-' . $node->getId() . '">' . $node->getTitle() . '</label>';
 					echo '</li>';
 				}
 			}

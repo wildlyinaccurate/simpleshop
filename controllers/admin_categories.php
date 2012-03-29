@@ -1,6 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-// Include the SimpleShop base controller
 require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php';
 
 /**
@@ -187,7 +186,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 				redirect('admin/simpleshop/categories/edit/' . $category->getId());
 			}
 		}
-		
+
 		// Set the page title depending on whether we're creating or editing a category
 		if ($this->method == 'create')
 		{

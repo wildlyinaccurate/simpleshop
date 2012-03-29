@@ -1,6 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-// Include the SimpleShop base controller
 require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php';
 
 /**

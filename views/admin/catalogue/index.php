@@ -1,6 +1,6 @@
 <section class="title">
 	<h4 class="breadcrumbs">
-		<?php echo category_breadcrumbs($viewing_category_node->getAncestors()); ?>
+		<?php echo category_breadcrumbs($viewing_category_node); ?>
 		<strong><?php echo ($viewing_category) ? $viewing_category->getTitle() : lang('category_home_title'); ?></strong>
 	</h4>
 </section>

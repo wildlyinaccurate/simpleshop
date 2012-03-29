@@ -1,6 +1,6 @@
 <section class="title">
 	<h4 class="breadcrumbs">
-		<?php echo category_breadcrumbs($viewing_category_node->getAncestors(true)); ?>
+		<?php echo category_breadcrumbs($viewing_category_node, true); ?>
 		<?php echo $page_title; ?>
 	</h4>
 </section>
@@ -66,7 +66,7 @@
 						'id' => "category-{$node->getId()}",
 						'selected' => "selected"
 					);
-					
+
 					echo '<li>' . str_repeat('&nbsp;&nbsp;', $node_wrapper->getLevel() * 2);
 					echo form_input($data, $node->getId(), set_checkbox("categories[{$node->getId()}]", $node->getId(), $default_selected));
 					echo ' <label for="category-' . $node->getId() . '">' . $node->getTitle() . '</label>';

@@ -10,22 +10,28 @@
  */
 
 /**
- * Build a breadcrumb string from a collection of Category entities. Will also
- * accept a collection of NodeWrapper objects.
+ * Build a breadcrumb string a root NodeWrapper object.
  *
  * Entities are expected to implement __toString().
  *
- * @param	array	$collection
- * @param	string	$separator
- * @param	string	$uri		will be parsed with sprintf()
+ * @param	NodeWrapper	$root_category
+ * @param	bool		$include_root
+ * @param	string		$separator
  * @return	string
  * @author  Joseph Wynn <joe@chromaagency.com>
  */
-function category_breadcrumbs($collection, $separator = '<span class="separator">&raquo;</span>')
+function category_breadcrumbs($root_category, $include_root = false)
 {
-	$breadcrumbs = '';
+	if ( ! $root_category)
+	{
+		return '';
+	}
 
-	foreach ($collection as $node)
+	$breadcrumbs = '';
+	$separator = config_item('simpleshop_breadcrumb_separator');
+	$categories = $root_category->getAncestors($include_root);
+
+	foreach ($categories as $node)
 	{
 		if ($node instanceof \DoctrineExtensions\NestedSet\NodeWrapper)
 		{

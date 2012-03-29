@@ -44,21 +44,17 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 	{
 		parent::__construct();
 
-		// Module language file
 		$this->lang->load('simpleshop');
-
-		// Shortcuts partial
-		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts')
-				->append_metadata(css('simpleshop.css', 'simpleshop'));
-
-		// Form validation and Doctrine
+		$this->load->config('simpleshop');
+		$this->load->helper('simpleshop');
 	    $this->load->library(array(
 		    'doctrine',
 		    'form_validation'
 	    ));
 
-		// Helper functions
-		$this->load->helper('simpleshop');
+		// Shortcuts partial
+		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts')
+				->append_metadata(css('simpleshop.css', 'simpleshop'));
 
 	    // Create a shortcut property to the Doctrine Entity Manager and Nested Set Manager
 	    $this->em = $this->doctrine->em;

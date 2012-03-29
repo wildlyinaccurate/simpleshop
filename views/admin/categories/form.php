@@ -9,20 +9,16 @@
 
 <?php echo form_open(uri_string(), 'class="crud"'); ?>
 
-<div class="tabs">
+<div id="simpleshop-category" class="form_inputs">
+	<ul>
+		<li class="<?php echo alternator('even', ''); ?>">
+			<label for="title"><?php echo lang('category_title_label'); ?> <span>*</span></label>
+			<div class="input"><?php echo form_input('title', htmlspecialchars_decode($category->getTitle()), 'maxlength="130"'); ?></div>
+		</li>
 
-	<div id="simpleshop-category">
-		<ul>
-			<li class="even">
-				<label for="title"><?php echo lang('category_title_label'); ?></label><br>
-				<?php echo form_input('title', htmlspecialchars_decode($category->getTitle()), 'maxlength="130"'); ?>
-				<span class="required-icon tooltip"><?php echo lang('required_label'); ?></span>
-			</li>
-
-			<hr>
-
-			<li>
-				<label for="parent_category"><?php echo lang('category_parent_label'); ?></label><br>
+		<li class="<?php echo alternator('even', ''); ?>">
+			<label for="parent_category"><?php echo lang('category_parent_label'); ?></label>
+			<div class="input">
 				<select name="parent_category" id="parent_category">
 					<option value="0"><?php echo lang('none_label'); ?></option>
 
@@ -47,18 +43,15 @@
 					}
 					?>
 				</select>
-			</li>
+			</div>
+		</li>
 
-			<hr>
+		<li class="editor <?php echo alternator('even', ''); ?>">
+			<label for="description"><?php echo lang('category_description_label'); ?></label><br>
+			<?php echo form_textarea(array('id' => 'description', 'name' => 'description', 'value' => $category->getDescription(), 'rows' => 10, 'class' => 'wysiwyg-simple')); ?>
+		</li>
 
-			<li class="even editor">
-				<label for="description"><?php echo lang('category_description_label'); ?></label><br>
-				<?php echo form_textarea(array('id' => 'description', 'name' => 'description', 'value' => $category->getDescription(), 'rows' => 10, 'class' => 'wysiwyg-simple')); ?>
-			</li>
-
-		</ul>
-	</div>
-
+	</ul>
 </div>
 
 <div class="buttons float-right padding-top">

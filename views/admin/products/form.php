@@ -11,25 +11,25 @@
 
 <div id="simpleshop-product" class="form_inputs">
 	<ul>
-		<li class="even input">
+		<li class="<?php echo alternator('even', ''); ?>">
 			<label for="title"><?php echo lang('product_title_label'); ?> <span>*</span></label>
-			<?php echo form_input('title', set_value('title', $product->getTitle()), 'id="title" maxlength="130"'); ?>
+			<div class="input"><?php echo form_input('title', set_value('title', $product->getTitle()), 'id="title" maxlength="130"'); ?></div>
 		</li>
 
-		<li>
+		<li class="<?php echo alternator('even', ''); ?>">
 			<label for="price"><?php echo lang('product_price_label'); ?></label>
-			<?php echo form_input('price', set_value('price', $product->getPrice()), 'id="price"'); ?>
+			<div class="input"><?php echo form_input('price', set_value('price', $product->getPrice()), 'id="price"'); ?></div>
 		</li>
 
-		<li class="even">
+		<li class="<?php echo alternator('even', ''); ?>">
 			<label for="stock"><?php echo lang('product_stock_label'); ?></label>
-			<?php echo form_input('stock', set_value('stock', $product->getStock()), 'id="stock"'); ?>
+			<div class="inline input"><?php echo form_input('stock', set_value('stock', $product->getStock()), 'id="stock"'); ?></div>
 
 			<input type="checkbox" class="inline-checkbox" name="unlimited_stock" id="unlimited_stock" value="1" <?php echo set_checkbox('unlimited_stock', '1', $product->getUnlimitedStock()); ?> />
 			<label for="unlimited_stock" class="inline-checkbox"><?php echo lang('product_unlimited_stock_label'); ?></label>
 		</li>
 
-		<li class="editor">
+		<li class="editor <?php echo alternator('even', ''); ?>">
 			<label for="description"><?php echo lang('product_description_label'); ?></label>
 			<br style="clear: both;" />
 			<?php echo form_textarea(array(
@@ -41,7 +41,7 @@
 			?>
 		</li>
 
-		<li class="even inline-checkbox product-categories">
+		<li class="inline-checkbox product-categories <?php echo alternator('even', ''); ?>">
 			<h4><?php echo lang('product_categories_label'); ?></h4>
 
 			<?php if (empty($root_categories)): ?>

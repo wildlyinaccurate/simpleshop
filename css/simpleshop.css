@@ -10,12 +10,11 @@ label.inline-checkbox, .inline-checkbox label {
 }
 
 input.inline-checkbox, .inline-checkbox input {
-	margin-left: 24px;
+	margin: 16px 0 0 24px;
 }
 
-.form_inputs .input {
-	padding-left: 0;
-	width: 73%;
+.form_inputs .input.inline {
+	width: auto;
 }
 
 /* Product categories tree */

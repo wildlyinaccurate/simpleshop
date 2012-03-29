@@ -12,21 +12,21 @@
 	</thead>
 	<tfoot>
 		<tr>
-			<td colspan="4">
+			<td colspan="5">
 				<div class="inner"><?php $this->load->view('admin/partials/pagination'); ?></div>
 			</td>
 		</tr>
 	</tfoot>
 	<tbody>
-		<?php foreach ($category->getProducts() as $product): ?>
+		<?php foreach ($viewing_category->getProducts() as $product): ?>
 		<tr>
 			<td><?php echo form_checkbox('action_to[]', $product->getId()); ?></td>
-			<td><?php echo $product->getTitle(); ?></td>
+			<td><?php echo anchor("admin/simpleshop/products/edit/{$product->getId()}", $product->getTitle()); ?></td>
 			<td><?php echo $product->getPrice(); ?></td>
-			<td><?php echo $product->getStock(); ?></td>
+			<td><?php echo ($product->getStock() > 0) ? $product->getStock() : lang('product_unlimited_stock'); ?></td>
 			<td class="align-center buttons buttons-small">
-				<?php echo anchor("admin/simpleshop/products/edit/{$product->getId()}?category_id={$product->getId()}", lang('global:edit'), 'class="button edit"'); ?>
-				<?php echo anchor("admin/simpleshop/products/delete/{$product->getId()}?category_id={$category_id}", lang('global:delete'), 'class="confirm button delete"') ;?>
+				<?php echo anchor("admin/simpleshop/products/edit/{$product->getId()}", lang('global:edit'), 'class="button edit"'); ?>
+				<?php echo anchor("admin/simpleshop/products/delete/{$product->getId()}?category_id={$viewing_category_id}", lang('global:delete'), 'class="confirm button delete"') ;?>
 			</td>
 		</tr>
 		<?php endforeach; ?>

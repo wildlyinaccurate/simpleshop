@@ -13,6 +13,7 @@ $lang['product_unlimited_stock_label']  = 'Unlimited Stock?';
 $lang['product_create_title']           = 'Add Product';
 $lang['product_edit_title']             = 'Edit product "%s"';
 $lang['product_list_title']             = 'Products';
+$lang['product_unlimited_stock']		= 'Unlimited';
 
 // messages
 $lang['product_no_products']            = 'There are no products.';

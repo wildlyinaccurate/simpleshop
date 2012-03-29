@@ -272,7 +272,7 @@ class NodeWrapper implements Node
 				$q = $this->getManager()->addHintToQuery($q);
 			}
 			$results = $q->getResult();
-			
+
             $this->parent = $this->getManager()->wrapNode($results[0]);
         }
 
@@ -288,7 +288,7 @@ class NodeWrapper implements Node
      */
     public function getAncestors($includeSelf = false)
     {
-        if($this->isRoot())
+        if($this->isRoot() && ! $includeSelf)
         {
             return array();
         }
@@ -321,8 +321,8 @@ class NodeWrapper implements Node
                 $this->ancestors[] = $this->getManager()->wrapNode($result);
             }
 
-			if ($includeSelf)
-			{
+            if ($includeSelf)
+            {
 				$this->ancestors[] = $this;
 			}
         }

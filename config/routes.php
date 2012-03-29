@@ -20,6 +20,10 @@
 |	http://www.codeigniter.com/user_guide/general/routing.html
 */
 
+// Public Routes
+$route['simpleshop/category/(:num)(.*)'] = 'simpleshop/index/$1';
+
+// Admin Routes
 $route['simpleshop/admin/catalogue(.*)'] = 'admin$1';
 $route['simpleshop/admin/products(.*)'] = 'admin_products$1';
 $route['simpleshop/admin/categories(.*)'] = 'admin_categories$1';

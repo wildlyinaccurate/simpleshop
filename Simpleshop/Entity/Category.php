@@ -20,289 +20,293 @@ use DoctrineExtensions\NestedSet\MultipleRootNode;
  * )
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Category extends TimestampedModel implements MultipleRootNode {
+class Category extends TimestampedModel implements MultipleRootNode
+{
 
-	/**
-	 * @var	int
-	 * @Id
-	 * @Column(type="integer", nullable=false)
-	 * @GeneratedValue(strategy="IDENTITY")
-	 */
-	protected $id;
+    /**
+     * @var	int
+     * @Id
+     * @Column(type="integer", nullable=false)
+     * @GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
 
-	/**
-	 * @var	string
-	 * @Column(type="string", length=130, nullable=false)
-	 */
-	protected $title;
+    /**
+     * @var	string
+     * @Column(type="string", length=130, nullable=false)
+     */
+    protected $title;
 
-	/**
-	 * @var	string
-	 * @Column(type="string", length=130, nullable=false)
-	 */
-	protected $slug;
+    /**
+     * @var	string
+     * @Column(type="string", length=130, nullable=false)
+     */
+    protected $slug;
 
-	/**
-	 * @var	string
-	 * @Column(type="text", length=2000, nullable=true)
-	 */
-	protected $description;
+    /**
+     * @var	string
+     * @Column(type="text", length=2000, nullable=true)
+     */
+    protected $description;
 
-	/**
-	 * Foreign key for a PyroCMS `files` record
-	 *
-	 * @var	int
-	 * @Column(type="integer", nullable=true)
-	 */
-	protected $image_id;
+    /**
+     * Foreign key for a PyroCMS `files` record
+     *
+     * @var	int
+     * @Column(type="integer", nullable=true)
+     */
+    protected $image_id;
 
-	/**
-	 * @var	\Doctrine\Common\Collections\ArrayCollection
-	 * @ManyToMany(targetEntity="Product", mappedBy="categories", cascade={"persist"})
-	 * @JoinTable(name="product_categories")
-	 * @OrderBy({"title" = "ASC"})
-	 */
-	protected $products;
+    /**
+     * @var	\Doctrine\Common\Collections\ArrayCollection
+     * @ManyToMany(targetEntity="Product", mappedBy="categories", cascade={"persist"})
+     * @JoinTable(name="product_categories")
+     * @OrderBy({"title" = "ASC"})
+     */
+    protected $products;
 
-	/**
-	 * Parent category
-	 *
-	 * @var \Simpleshop\Entity\Category
-	 * @ManyToOne(targetEntity="Category", inversedBy="child_categories")
-	 * @JoinColumn(name="parent_category_id", referencedColumnName="id", onDelete="SET NULL")
-	 */
-	protected $parent_category;
+    /**
+     * Parent category
+     *
+     * @var \Simpleshop\Entity\Category
+     * @ManyToOne(targetEntity="Category", inversedBy="child_categories")
+     * @JoinColumn(name="parent_category_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $parent_category;
 
-	/**
-	 * Child categories
-	 *
-	 * @var \Doctrine\Common\Collections\ArrayCollection
-	 * @OneToMany(targetEntity="Category", mappedBy="parent_category")
-	 * @OrderBy({"title" = "ASC"})
-	 */
-	protected $child_categories;
+    /**
+     * Child categories
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @OneToMany(targetEntity="Category", mappedBy="parent_category")
+     * @OrderBy({"title" = "ASC"})
+     */
+    protected $child_categories;
 
-	/**
-	 * @Column(type="integer")
-	 */
-	private $lft;
+    /**
+     * @Column(type="integer")
+     */
+    private $lft;
 
-	/**
-	 * @Column(type="integer")
-	 */
-	private $rgt;
+    /**
+     * @Column(type="integer")
+     */
+    private $rgt;
 
-	/**
-	 * @Column(type="integer")
-	 */
-	private $root;
+    /**
+     * @Column(type="integer")
+     */
+    private $root;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		$this->products = new \Doctrine\Common\Collections\ArrayCollection;
-		$this->child_categories = new \Doctrine\Common\Collections\ArrayCollection;
-	}
+        $this->products = new \Doctrine\Common\Collections\ArrayCollection;
+        $this->child_categories = new \Doctrine\Common\Collections\ArrayCollection;
+    }
 
-	/**
-	 * Set description
-	 *
-	 * @param   string  $description
-	 * @return  Category
-	 */
-	public function setDescription($description)
-	{
-		$this->description = $description;
-		return $this;
-	}
+    /**
+     * Set description
+     *
+     * @param  string   $description
+     * @return Category
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
 
-	/**
-	 * Get Description
-	 *
-	 * @return  string
-	 */
-	public function getDescription()
-	{
-		return $this->description;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get Id
-	 *
-	 * @return  int
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
+    /**
+     * Get Description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
 
-	/**
-	 * Set image_id
-	 *
-	 * @param   int  $image_id
-	 * @return  Category
-	 */
-	public function setImageId($image_id)
-	{
-		$this->image_id = $image_id;
-		return $this;
-	}
+    /**
+     * Get Id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
-	/**
-	 * Get ImageId
-	 *
-	 * @return  int
-	 */
-	public function getImageId()
-	{
-		return $this->image_id;
-	}
+    /**
+     * Set image_id
+     *
+     * @param  int      $image_id
+     * @return Category
+     */
+    public function setImageId($image_id)
+    {
+        $this->image_id = $image_id;
 
-	/**
-	 * Add product
-	 *
-	 * @param	Product	$product
-	 * @return	Category
-	 */
-	public function addProduct(Product $product)
-	{
-		if ( ! $this->products->contains($product))
-		{
-			$this->products[] = $product;
-			$product->addCategory($this);
-		}
+        return $this;
+    }
 
-		return $this;
-	}
+    /**
+     * Get ImageId
+     *
+     * @return int
+     */
+    public function getImageId()
+    {
+        return $this->image_id;
+    }
 
-	/**
-	 * Get products
-	 *
-	 * @return \Doctrine\Common\Collections\ArrayCollection
-	 */
-	public function getProducts()
-	{
-		return $this->products;
-	}
+    /**
+     * Add product
+     *
+     * @param  Product  $product
+     * @return Category
+     */
+    public function addProduct(Product $product)
+    {
+        if ( ! $this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->addCategory($this);
+        }
 
-	/**
-	 * Set slug
-	 *
-	 * @param   string  $slug
-	 * @return  Category
-	 */
-	public function setSlug($slug)
-	{
-		$this->slug = $slug;
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get Slug
-	 *
-	 * @return  string
-	 */
-	public function getSlug()
-	{
-		return $this->slug;
-	}
+    /**
+     * Get products
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
 
-	/**
-	 * Set the title and slug
-	 *
-	 * @param   string  $title
-	 * @return  Category
-	 */
-	public function setTitle($title)
-	{
-		$this->title = $title;
-		$this->slug = url_title($title, 'dash', TRUE);
+    /**
+     * Set slug
+     *
+     * @param  string   $slug
+     * @return Category
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get Title
-	 *
-	 * @return  string
-	 */
-	public function getTitle()
-	{
-		return $this->title;
-	}
+    /**
+     * Get Slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
 
-	/**
-	 * Get ChildCategories
-	 *
-	 * @return  \Doctrine\Common\Collections\ArrayCollection
-	 */
-	public function getChildCategories()
-	{
-		return $this->child_categories;
-	}
+    /**
+     * Set the title and slug
+     *
+     * @param  string   $title
+     * @return Category
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        $this->slug = url_title($title, 'dash', TRUE);
 
-	/**
-	 * Set parent_category
-	 *
-	 * @param   \Simpleshop\Entity\Category  $parent_category
-	 * @return  Category
-	 */
-	public function setParentCategory($parent_category)
-	{
-		$this->parent_category = $parent_category;
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get ParentCategory
-	 *
-	 * @return  \Simpleshop\Entity\Category
-	 */
-	public function getParentCategory()
-	{
-		return $this->parent_category;
-	}
+    /**
+     * Get Title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function __toString()
-	{
-		return $this->getTitle();
-	}
+    /**
+     * Get ChildCategories
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getChildCategories()
+    {
+        return $this->child_categories;
+    }
 
-	public function getLeftValue()
-	{
-		return $this->lft;
-	}
+    /**
+     * Set parent_category
+     *
+     * @param  \Simpleshop\Entity\Category $parent_category
+     * @return Category
+     */
+    public function setParentCategory($parent_category)
+    {
+        $this->parent_category = $parent_category;
 
-	public function setLeftValue($lft)
-	{
-		$this->lft = $lft;
-	}
+        return $this;
+    }
 
-	public function getRightValue()
-	{
-		return $this->rgt;
-	}
+    /**
+     * Get ParentCategory
+     *
+     * @return \Simpleshop\Entity\Category
+     */
+    public function getParentCategory()
+    {
+        return $this->parent_category;
+    }
 
-	public function setRightValue($rgt)
-	{
-		$this->rgt = $rgt;
-	}
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
 
-	public function getRootValue()
-	{
-		return $this->root;
-	}
+    public function getLeftValue()
+    {
+        return $this->lft;
+    }
 
-	public function setRootValue($root)
-	{
-		$this->root = $root;
-	}
+    public function setLeftValue($lft)
+    {
+        $this->lft = $lft;
+    }
+
+    public function getRightValue()
+    {
+        return $this->rgt;
+    }
+
+    public function setRightValue($rgt)
+    {
+        $this->rgt = $rgt;
+    }
+
+    public function getRootValue()
+    {
+        return $this->root;
+    }
+
+    public function setRootValue($root)
+    {
+        $this->root = $root;
+    }
 
 }

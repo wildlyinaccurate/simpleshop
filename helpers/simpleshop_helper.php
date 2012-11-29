@@ -22,28 +22,25 @@
  */
 function category_breadcrumbs($root_category, $include_root = false)
 {
-	if ( ! $root_category)
-	{
-		return '';
-	}
+    if (! $root_category) {
+        return '';
+    }
 
-	$breadcrumbs = '';
-	$separator = config_item('simpleshop_breadcrumb_separator');
-	$categories = $root_category->getAncestors($include_root);
+    $breadcrumbs = '';
+    $separator = config_item('simpleshop_breadcrumb_separator');
+    $categories = $root_category->getAncestors($include_root);
 
-	foreach ($categories as $node)
-	{
-		if ($node instanceof \DoctrineExtensions\NestedSet\NodeWrapper)
-		{
-			$node = $node->getNode();
-		}
+    foreach ($categories as $node) {
+        if ($node instanceof \DoctrineExtensions\NestedSet\NodeWrapper) {
+            $node = $node->getNode();
+        }
 
-		// TODO: Provide a way of specifying a different URI, e.g. for front-end
-		$node_link = anchor("admin/simpleshop/catalogue?category_id={$node->getId()}", $node);
-		$breadcrumbs .= $node_link . $separator;
-	}
+        // TODO: Provide a way of specifying a different URI, e.g. for front-end
+        $node_link = anchor("admin/simpleshop/catalogue?category_id={$node->getId()}", $node);
+        $breadcrumbs .= $node_link . $separator;
+    }
 
-	return $breadcrumbs;
+    return $breadcrumbs;
 }
 
 /**
@@ -56,22 +53,18 @@ function category_breadcrumbs($root_category, $include_root = false)
  */
 function debug($var, $exit = TRUE)
 {
-	echo '<h2>Debugging</h2>';
+    echo '<h2>Debugging</h2>';
 
-	if (is_null($var) || is_bool($var))
-	{
-		// Null and booleans won't show up in print_r
-		var_dump($var);
-	}
-	else
-	{
-		echo '<pre>';
-		print_r($var);
-		echo '</pre>';
-	}
+    if (is_null($var) || is_bool($var)) {
+        // Null and booleans won't show up in print_r
+        var_dump($var);
+    } else {
+        echo '<pre>';
+        print_r($var);
+        echo '</pre>';
+    }
 
-	if ($exit)
-	{
-		exit;
-	}
+    if ($exit) {
+        exit;
+    }
 }

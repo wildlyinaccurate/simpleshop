@@ -1,12 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 // labels
-$lang['category_title_label']            = 'Title';
+$lang['category_title_label']            = 'Category Name';
+$lang['category_description_label']      = 'Category Description';
 $lang['category_category_label']         = 'Category';
+$lang['category_parent_label']           = 'Parent Category';
 $lang['category_products_label']         = 'Products';
 
 // titles
-$lang['category_home_title']			 = 'Home';
+$lang['category_home_title']             = 'Home';
 $lang['category_create_title']           = 'Add Category';
 $lang['category_edit_title']             = 'Edit category "%s"';
 $lang['category_list_title']             = 'Categories';

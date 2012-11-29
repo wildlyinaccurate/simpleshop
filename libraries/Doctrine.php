@@ -53,6 +53,30 @@ class Doctrine
         $loader = new ClassLoader($models_namespace, $models_path);
         $loader->register();
 
+        $cache = $this->getCacheProvider($dev_mode);
+
+        $config->setMetadataCacheImpl($cache);
+        $config->setQueryCacheImpl($cache);
+
+        $this->em = EntityManager::create($connection_options, $config);
+
+        // Ensure all SimpleShop tables use the PyroCMS table prefix
+        $tablePrefix = new \DoctrineExtensions\TablePrefix($ci->db->dbprefix);
+        $this->em->getEventManager()->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $tablePrefix);
+
+        // Register column types that Doctrine doesn't support
+        $dbPlatform = $this->em->getConnection()->getDatabasePlatform();
+        $dbPlatform->registerDoctrineTypeMapping('enum', 'string');
+        $dbPlatform->registerDoctrineTypeMapping('set', 'string');
+        $dbPlatform->registerDoctrineTypeMapping('blob', 'string');
+    }
+
+    protected function getCacheProvider($dev_mode = false)
+    {
+        if ($dev_mode) {
+            return new \Doctrine\Common\Cache\ArrayCache;
+        }
+
         // Detect which caching mechanism is available, if any.
         if (extension_loaded('apc') && ini_get('apc.enabled')) {
             $cache = new \Doctrine\Common\Cache\ApcCache;
@@ -76,20 +100,7 @@ class Doctrine
             $cache = new \Doctrine\Common\Cache\ArrayCache;
         }
 
-        $config->setMetadataCacheImpl($cache);
-        $config->setQueryCacheImpl($cache);
-
-        $this->em = EntityManager::create($connection_options, $config);
-
-        // Ensure all SimpleShop tables use the PyroCMS table prefix
-        $tablePrefix = new \DoctrineExtensions\TablePrefix($ci->db->dbprefix);
-        $this->em->getEventManager()->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $tablePrefix);
-
-        // Register column types that Doctrine doesn't support
-        $dbPlatform = $this->em->getConnection()->getDatabasePlatform();
-        $dbPlatform->registerDoctrineTypeMapping('enum', 'string');
-        $dbPlatform->registerDoctrineTypeMapping('set', 'string');
-        $dbPlatform->registerDoctrineTypeMapping('blob', 'string');
+        return $cache;
     }
 
 }

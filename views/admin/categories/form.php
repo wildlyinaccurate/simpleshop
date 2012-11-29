@@ -27,16 +27,21 @@
                         $category_tree = $nsm->fetchTreeAsArray($root_category->getId());
 
                         foreach ($category_tree as $node_wrapper) {
-                            $selected = '';
                             $node = $node_wrapper->getNode();
+                            $selected = '';
+                            $disabled = '';
 
-                            if ($node->getId() == $viewing_category_id ||
-                                ($category->getParentCategory() && $node->getId() == $category->getParentCategory()->getId()))
+                            if ($node->getId() === $viewing_category_id ||
+                                ($category->getParentCategory() && $node->getId() === $category->getParentCategory()->getId()))
                             {
                                 $selected = 'selected="selected"';
                             }
 
-                            echo '<option value="' . $node->getId() . '" ' . $selected . '>' . str_repeat('&nbsp;&nbsp;', $node_wrapper->getLevel() * 2) . $node->getTitle() . '</option>';
+                            if ($node->getId() === $category->getId()) {
+                                // $disabled = 'disabled="disabled"';
+                            }
+
+                            echo '<option value="' . $node->getId() . '" ' . $selected . ' ' . $disabled . '>' . str_repeat('&nbsp;&nbsp;', $node_wrapper->getLevel() * 2) . $node->getTitle() . '</option>';
                         }
                     }
                     ?>

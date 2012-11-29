@@ -21,16 +21,21 @@ class Admin_Categories extends Simpleshop_Admin_Controller
      * @var     array
      */
     private $validation_rules = array(
-        array(
+        'title' => array(
             'field' => 'title',
             'label' => 'lang:category_title_label',
             'rules' => 'trim|required|max_length[130]'
         ),
-        array(
-            'field'	=> 'description',
-            'label'	=> 'lang:category_description_label',
-            'rules'	=> 'trim|max_length[2000]'
-        )
+        'description' => array(
+            'field' => 'description',
+            'label' => 'lang:category_description_label',
+            'rules' => 'trim|max_length[2000]'
+        ),
+        'parent_category' => array(
+            'field'	=> 'parent_category',
+            'label'	=> 'lang:category_parent_label',
+            'rules'	=> ''
+        ),
     );
 
     /**
@@ -109,13 +114,15 @@ class Admin_Categories extends Simpleshop_Admin_Controller
      * @param  int  $category_id
      * @return void
      */
-    public function edit($category_id = NULL)
+    public function edit($category_id = null)
     {
         role_or_die('simpleshop', 'edit_category');
 
         $category = $this->em->find('\Simpleshop\Entity\Category', $category_id);
 
         $category OR redirect("admin/simpleshop/catalogue?category_id={$this->viewing_category_id}");
+
+        $this->validation_rules['parent_category']['rules'] = "callback__not_selected_category[{$category_id}]";
 
         $this->_display_form($category);
     }
@@ -190,7 +197,25 @@ class Admin_Categories extends Simpleshop_Admin_Controller
                 'root_categories' => $root_categories,
                 'nsm' => $this->nsm,
                 'viewing_category_id' => $this->viewing_category_id,
-        ));
+            ));
+    }
+
+    /**
+     * Ensure the submitted category ID isn't the same as the current category
+     *
+     * @param   int     $parent_category_id
+     * @param   int     $category_id
+     * @return  bool
+     * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+     */
+    public function _not_selected_category($parent_category_id, $category_id)
+    {
+        if ($parent_category_id !== $category_id) {
+            return true;
+        }
+
+        $this->form_validation->set_message('_not_selected_category', lang('category_invalid_parent'));
+        return false;
     }
 
 }

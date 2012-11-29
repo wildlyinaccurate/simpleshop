@@ -21,3 +21,4 @@ $lang['category_single_delete_error']    = 'An error occurred while trying to de
 $lang['category_mass_delete_error']      = 'An error occurred while trying to delete the selected categories.';
 $lang['category_mass_delete_success']    = 'The following categories and all of their sub-categories have been deleted: %s.';
 $lang['category_no_select_error']        = 'You need to select categories first.';
+$lang['category_invalid_parent']         = 'The category cannot be its own parent.';

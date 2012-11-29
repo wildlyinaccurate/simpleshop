@@ -22,12 +22,17 @@ class Module_Simpleshop extends Module
             'description' => array(
                 'en' => 'Manage a simple online shop.'
             ),
-            'frontend' => TRUE,
-            'backend' => TRUE,
+            'frontend' => true,
+            'backend' => true,
             'menu' => 'simpleshop',
 
             'roles' => array(
-                'create_edit_category'
+                'create_category',
+                'edit_category',
+                'delete_category',
+                'create_product',
+                'edit_product',
+                'delete_product',
             ),
 
             'sections' => array(

@@ -85,6 +85,8 @@ class Admin_Products extends Simpleshop_Admin_Controller
      */
     public function delete($id = 0)
     {
+        role_or_die('simpleshop', 'delete_product');
+
         $id_array = ( ! empty($id)) ? array($id) : $this->input->post('action_to');
 
         // Delete multiple
@@ -122,6 +124,8 @@ class Admin_Products extends Simpleshop_Admin_Controller
      */
     public function create()
     {
+        role_or_die('simpleshop', 'create_product');
+
         $this->_display_form(new \Entity\Product);
     }
 
@@ -133,6 +137,8 @@ class Admin_Products extends Simpleshop_Admin_Controller
      */
     public function edit($product_id = NULL)
     {
+        role_or_die('simpleshop', 'edit_product');
+
         $product = $this->em->find('\Entity\Product', $product_id);
 
         $product OR redirect('admin/simpleshop');

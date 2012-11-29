@@ -65,6 +65,8 @@ class Admin_Categories extends Simpleshop_Admin_Controller
      */
     public function delete($id = null)
     {
+        role_or_die('simpleshop', 'delete_category');
+
         $id_array = ( ! empty($id)) ? array($id) : $this->input->post('action_to');
 
         // Delete multiple
@@ -96,6 +98,8 @@ class Admin_Categories extends Simpleshop_Admin_Controller
      */
     public function create()
     {
+        role_or_die('simpleshop', 'create_category');
+
         $this->_display_form(new \Simpleshop\Entity\Category);
     }
 
@@ -107,6 +111,8 @@ class Admin_Categories extends Simpleshop_Admin_Controller
      */
     public function edit($category_id = NULL)
     {
+        role_or_die('simpleshop', 'edit_category');
+
         $category = $this->em->find('\Simpleshop\Entity\Category', $category_id);
 
         $category OR redirect("admin/simpleshop/catalogue?category_id={$this->viewing_category_id}");
@@ -122,8 +128,6 @@ class Admin_Categories extends Simpleshop_Admin_Controller
      */
     private function _display_form(\Simpleshop\Entity\Category $category)
     {
-        role_or_die('simpleshop', 'create_category');
-
         $this->form_validation->set_rules($this->validation_rules);
 
         if ($_POST) {

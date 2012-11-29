@@ -53,8 +53,8 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 		$this->template
 			->title($this->module_details['name'], lang('categories_title'))
 			->build('admin/categories/index', array(
-				'categories' => $this->em->getRepository('Entity\Category')->findAll(array(), 'title')
-		));
+				'categories' => $this->em->getRepository('Simpleshop\Entity\Category')->findAll(array(), 'title'),
+			));
 	}
 
 	/**
@@ -74,7 +74,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 
 			foreach ($id_array as $id)
 			{
-				$category = $this->em->find('\Entity\Category', $id);
+				$category = $this->em->find('\Simpleshop\Entity\Category', $id);
 
 				if ($category)
 				{
@@ -101,7 +101,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 	 */
 	public function create()
 	{
-		$this->_display_form(new \Entity\Category);
+		$this->_display_form(new \Simpleshop\Entity\Category);
 	}
 
 	/**
@@ -112,7 +112,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 	 */
 	public function edit($category_id = NULL)
 	{
-		$category = $this->em->find('\Entity\Category', $category_id);
+		$category = $this->em->find('\Simpleshop\Entity\Category', $category_id);
 
 		$category OR redirect("admin/simpleshop/catalogue?category_id={$this->viewing_category_id}");
 
@@ -122,10 +122,10 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 	/**
 	 * Display the create/edit form
 	 *
-	 * @param   Entity\Category $category
+	 * @param   Simpleshop\Entity\Category $category
 	 * @return  void
 	 */
-	private function _display_form(\Entity\Category $category)
+	private function _display_form(\Simpleshop\Entity\Category $category)
 	{
 		role_or_die('simpleshop', 'create_category');
 
@@ -142,7 +142,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 		{
 			// See if a parent category was selected
 			$parent_category_id = $this->input->post('parent_category');
-			$parent_category = $this->em->find('Entity\Category', $parent_category_id);
+			$parent_category = $this->em->find('Simpleshop\Entity\Category', $parent_category_id);
 
 			if ($parent_category)
 			{
@@ -197,7 +197,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 			$page_title = sprintf(lang('edit_category'), $category->getTitle());
 		}
 
-		$root_categories = $this->em->getRepository('Entity\Category')
+		$root_categories = $this->em->getRepository('Simpleshop\Entity\Category')
 			->findBy(array('parent_category' => null), array('title' => 'ASC'));
 
 		$this->template

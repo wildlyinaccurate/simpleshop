@@ -1,6 +1,6 @@
 <?php
 
-namespace Entity;
+namespace Simpleshop\Entity;
 
 /**
  * BaseModel Class
@@ -32,7 +32,7 @@ class BaseModel {
     {
         $CI =& get_instance();
         $CI->load->helper('inflector');
-        
+
         $this_as_array = array();
 
         foreach ($this as $property => $value)
@@ -73,5 +73,5 @@ class BaseModel {
 
         return $this_as_array;
     }
-	
+
 }

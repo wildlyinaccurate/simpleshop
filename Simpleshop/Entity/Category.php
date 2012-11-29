@@ -1,6 +1,6 @@
 <?php
 
-namespace Entity;
+namespace Simpleshop\Entity;
 
 use DoctrineExtensions\NestedSet\MultipleRootNode;
 
@@ -67,7 +67,7 @@ class Category extends TimestampedModel implements MultipleRootNode {
 	/**
 	 * Parent category
 	 *
-	 * @var \Entity\Category
+	 * @var \Simpleshop\Entity\Category
 	 * @ManyToOne(targetEntity="Category", inversedBy="child_categories")
 	 * @JoinColumn(name="parent_category_id", referencedColumnName="id", onDelete="SET NULL")
 	 */
@@ -181,7 +181,7 @@ class Category extends TimestampedModel implements MultipleRootNode {
 
 	/**
 	 * Get products
-	 * 
+	 *
 	 * @return \Doctrine\Common\Collections\ArrayCollection
 	 */
 	public function getProducts()
@@ -248,7 +248,7 @@ class Category extends TimestampedModel implements MultipleRootNode {
 	/**
 	 * Set parent_category
 	 *
-	 * @param   \Entity\Category  $parent_category
+	 * @param   \Simpleshop\Entity\Category  $parent_category
 	 * @return  Category
 	 */
 	public function setParentCategory($parent_category)
@@ -260,7 +260,7 @@ class Category extends TimestampedModel implements MultipleRootNode {
 	/**
 	 * Get ParentCategory
 	 *
-	 * @return  \Entity\Category
+	 * @return  \Simpleshop\Entity\Category
 	 */
 	public function getParentCategory()
 	{

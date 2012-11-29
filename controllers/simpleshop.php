@@ -30,7 +30,7 @@ class Simpleshop extends Simpleshop_Public_Controller
 	 */
 	function index($category_id = null)
 	{
-		$category_repository = $this->em->getRepository('Entity\Category');
+		$category_repository = $this->em->getRepository('Simpleshop\Entity\Category');
 		$categories = $category_repository->findBy(array('parent_category' => $category_id), array('title' => 'ASC'));
 		$current_category = $category_repository->find($category_id);
 

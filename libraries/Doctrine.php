@@ -1,50 +1,55 @@
 <?php
-use Doctrine\ORM\EntityManager,
-	Doctrine\ORM\Configuration;
 
-define('MODULE_PATH', dirname(__DIR__) . '/');
-define('DEBUGGING', false);
+use Doctrine\Common\ClassLoader;
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
 
-class Doctrine {
+define('SIMPLESHOP_MODULE_PATH', dirname(__DIR__) . '/');
 
-	/** @var \Doctrine\ORM\EntityManager */
+/**
+ * Doctrine bootstrap library for CodeIgniter
+ *
+ * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
+ * @link	http://wildlyinaccurate.com/integrating-doctrine-2-with-codeigniter-2
+ */
+class Doctrine
+{
+
 	public $em;
-
-	/** @var \CI_Controller */
-	private $_ci;
 
 	public function __construct()
 	{
-		// Include the database configuration file so we can retrieve the DB details
-		require APPPATH . 'config/database.php';
+		require_once __DIR__ . '/Doctrine/ORM/Tools/Setup.php';
 
-		// Also get the CodeIgniter instance so that we can find out the table prefix
-		$this->_ci = get_instance();
+		Setup::registerAutoloadDirectory(__DIR__);
 
-		// Set up class loading.
-		require_once MODULE_PATH . 'libraries/Doctrine/Common/ClassLoader.php';
-
-		$doctrineClassLoader = new \Doctrine\Common\ClassLoader('Doctrine', MODULE_PATH . 'libraries');
-		$doctrineClassLoader->register();
-
-		$entitiesClassLoader = new \Doctrine\Common\ClassLoader('Entity', MODULE_PATH . 'models');
-		$entitiesClassLoader->register();
-
-		$proxiesClassLoader = new \Doctrine\Common\ClassLoader('Proxies', MODULE_PATH . 'models');
-		$proxiesClassLoader->register();
-
-		$symfonyClassLoader = new \Doctrine\Common\ClassLoader('Symfony', MODULE_PATH . 'libraries/Doctrine');
-		$symfonyClassLoader->register();
-
-		$extensionsClassLoader = new \Doctrine\Common\ClassLoader('DoctrineExtensions', MODULE_PATH . 'libraries/Doctrine');
+		$extensionsClassLoader = new \Doctrine\Common\ClassLoader('DoctrineExtensions', SIMPLESHOP_MODULE_PATH . 'libraries/Doctrine');
 		$extensionsClassLoader->register();
 
-		// Set some configuration options
-		$config = new Configuration;
+		$ci =& get_instance();
 
-		// Metadata driver
-		$annotationDriver = $config->newDefaultAnnotationDriver(MODULE_PATH . 'models');
-		$config->setMetadataDriverImpl($annotationDriver);
+		// Load the database configuration from CodeIgniter
+		require APPPATH . 'config/database.php';
+
+		$connection_options = array(
+			'driver'		=> 'pdo_mysql',
+			'user'			=> $db[ENVIRONMENT]['username'],
+			'password'		=> $db[ENVIRONMENT]['password'],
+			'host'			=> $db[ENVIRONMENT]['hostname'],
+			'dbname'		=> $db[ENVIRONMENT]['database'],
+			'charset'		=> $db[ENVIRONMENT]['char_set'],
+			'driverOptions'	=> array(
+				'charset'	=> $db[ENVIRONMENT]['char_set'],
+			),
+		);
+
+		$models_namespace = 'Simpleshop/Entity';
+		$models_path = SIMPLESHOP_MODULE_PATH . 'Simpleshop';
+		$proxies_dir = SIMPLESHOP_MODULE_PATH . 'Simpleshop/Entity/Proxies';
+		$metadata_paths = array(SIMPLESHOP_MODULE_PATH . 'Simpleshop/Entity');
+
+		$dev_mode = (ENVIRONMENT == PYRO_DEVELOPMENT);
+		$config = Setup::createAnnotationMetadataConfiguration($metadata_paths, $dev_mode, $proxies_dir);
 
 		// Detect which caching mechanism is available, if any.
 		// See http://www.doctrine-project.org/docs/orm/2.1/en/reference/caching.html
@@ -79,53 +84,17 @@ class Doctrine {
 			$cache = new \Doctrine\Common\Cache\ArrayCache;
 		}
 
-		// Set metadata and query caching
 		$config->setMetadataCacheImpl($cache);
 		$config->setQueryCacheImpl($cache);
 
-		// Proxies
-		$config->setProxyDir(MODULE_PATH . 'models/Proxies');
-		$config->setProxyNamespace('Proxies');
-
-		if (ENVIRONMENT == PYRO_DEVELOPMENT)
-		{
-			$config->setAutoGenerateProxyClasses(TRUE);
-		}
-		else
-		{
-			$config->setAutoGenerateProxyClasses(FALSE);
-		}
-
-		// SQL query logger
-		if (DEBUGGING)
-		{
-			$logger = new \Doctrine\DBAL\Logging\EchoSQLLogger;
-			$config->setSQLLogger($logger);
-		}
-
-		// Event Manager
-		$evm = new \Doctrine\Common\EventManager;
+		$this->em = EntityManager::create($connection_options, $config);
 
 		// Load the TablePrefix event listener
-		$tablePrefix = new \DoctrineExtensions\TablePrefix($this->_ci->db->dbprefix);
-		$evm->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $tablePrefix);
+		$tablePrefix = new \DoctrineExtensions\TablePrefix($ci->db->dbprefix);
+		$this->em->getEventManager()->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $tablePrefix);
 
-		// Database connection information
-		$connectionOptions = array(
-			'driver' => 'pdo_mysql',
-			'user' => $db[ENVIRONMENT]['username'],
-			'password' => $db[ENVIRONMENT]['password'],
-			'host' => $db[ENVIRONMENT]['hostname'],
-			'dbname' => $db[ENVIRONMENT]['database']
-		);
-
-		// Create EntityManager
-		$this->em = EntityManager::create($connectionOptions, $config, $evm);
-
-		// Map ENUM as strings to get around errors with non-Doctrine tables containing ENUM columns
-		$db_platform = $this->em->getConnection()->getDatabasePlatform();
-		$db_platform->registerDoctrineTypeMapping('enum', 'string');
-		$db_platform->registerDoctrineTypeMapping('set', 'string');
-		$db_platform->registerDoctrineTypeMapping('blob', 'string');
+		$loader = new ClassLoader($models_namespace, $models_path);
+		$loader->register();
 	}
+
 }

@@ -27,7 +27,7 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 
 	/**
 	 * The Entity for the category currently being viewed
-	 * @var \Entity\Category|null
+	 * @var \Simpleshop\Entity\Category|null
 	 */
 	protected $viewing_category = null;
 
@@ -53,20 +53,19 @@ class Simpleshop_Admin_Controller extends Admin_Controller {
 	    ));
 
 		// Shortcuts partial
-		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts')
-				->append_metadata(css('simpleshop.css', 'simpleshop'));
+		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts');
 
 	    // Create a shortcut property to the Doctrine Entity Manager and Nested Set Manager
 	    $this->em = $this->doctrine->em;
 
-		$config = new \DoctrineExtensions\NestedSet\Config($this->em, 'Entity\Category');
+		$config = new \DoctrineExtensions\NestedSet\Config($this->em, 'Simpleshop\Entity\Category');
 		$this->nsm = new \DoctrineExtensions\NestedSet\Manager($config);
 
 		// Get the currently viewed category
 		if ($this->input->get('category_id'))
 		{
 			$this->viewing_category_id = $this->input->get('category_id');
-			$this->viewing_category = $this->em->find('\Entity\Category', $this->viewing_category_id);
+			$this->viewing_category = $this->em->find('\Simpleshop\Entity\Category', $this->viewing_category_id);
 
 			if ($this->viewing_category)
 			{

@@ -175,7 +175,7 @@ class Admin_Products extends Simpleshop_Admin_Controller
 
 			foreach ($this->input->post('categories') as $category_id)
 			{
-				if ($category = $this->em->find('Entity\Category', $category_id))
+				if ($category = $this->em->find('Simpleshop\Entity\Category', $category_id))
 				{
 					$product->addCategory($category);
 				}
@@ -211,7 +211,7 @@ class Admin_Products extends Simpleshop_Admin_Controller
 		}
 
 		// Get the root categories to build the tree from
-		$root_categories = $this->em->getRepository('Entity\Category')->findBy(array('parent_category' => null), array('title' => 'ASC'));
+		$root_categories = $this->em->getRepository('Simpleshop\Entity\Category')->findBy(array('parent_category' => null), array('title' => 'ASC'));
 
 		$this->template
 			->title($this->module_details['name'], $page_title)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Entity;
+namespace Simpleshop\Entity;
 
 /**
  * Product

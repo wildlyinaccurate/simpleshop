@@ -37,7 +37,7 @@ class Simpleshop_Public_Controller extends Public_Controller {
 	    // Create a shortcut property to the Doctrine Entity Manager and Nested Set Manager
 	    $this->em = $this->doctrine->em;
 
-		$config = new \DoctrineExtensions\NestedSet\Config($this->em, 'Entity\Category');
+		$config = new \DoctrineExtensions\NestedSet\Config($this->em, 'Simpleshop\Entity\Category');
 		$this->nsm = new \DoctrineExtensions\NestedSet\Manager($config);
 	}
 

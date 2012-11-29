@@ -1,11 +1,11 @@
 <?php
 
-namespace Entity;
+namespace Simpleshop\Entity;
 
 /**
  * Recursive Category Iterator
  *
- * Recursively iterates over an array of \Entity\Category objects.
+ * Recursively iterates over an array of \Simpleshop\Entity\Category objects.
  */
 class RecursiveCategoryIterator implements \RecursiveIterator {
 
@@ -30,7 +30,7 @@ class RecursiveCategoryIterator implements \RecursiveIterator {
 	 */
 	public function hasChildren()
 	{
-		/** @var $current_category \Entity\Category */
+		/** @var $current_category \Simpleshop\Entity\Category */
 		$current_category = $this->_data->current();
 
 		return ( ! $current_category->getChildCategories()->isEmpty());
@@ -43,9 +43,9 @@ class RecursiveCategoryIterator implements \RecursiveIterator {
 	 */
 	public function getChildren()
 	{
-		/** @var $current_category \Entity\Category */
+		/** @var $current_category \Simpleshop\Entity\Category */
 		$current_category = $this->_data->current();
-		
+
 		return new RecursiveCategoryIterator($current_category->getChildCategories());
 	}
 
@@ -88,7 +88,7 @@ class RecursiveCategoryIterator implements \RecursiveIterator {
 	 */
 	public function valid()
 	{
-		return $this->_data->current() instanceof \Entity\Category;
+		return $this->_data->current() instanceof \Simpleshop\Entity\Category;
 	}
 
 	/**

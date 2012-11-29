@@ -296,26 +296,26 @@ class Config
     {
         return $this->getBaseQueryBuilder()->getRootAlias();
     }
-	
+
 	public function setQueryHint($name, $value)
 	{
-		$this->queryHintName = $name;			
-		$this->queryHintValue = $value;			
+		$this->queryHintName = $name;
+		$this->queryHintValue = $value;
 	}
-	
+
 	public function getQueryHintName()
 	{
 		return $this->queryHintName;
 	}
-	
+
 	public function getQueryHintValue()
 	{
 		return $this->queryHintValue;
 	}
-	
+
 	/**
 	 * Checks Configuration to see if Query Hint has been set
-	 * @return bool 
+	 * @return bool
 	 */
 	public function isQueryHintSet()
 	{

@@ -32,7 +32,8 @@ class simpleshop extends Simpleshop_Public_Controller
     {
         $category_repository = $this->em->getRepository('Simpleshop\Entity\Category');
         $categories = $category_repository->findBy(array('parent_category' => $category_id), array('title' => 'ASC'));
-        $current_category = $category_repository->find($category_id);
+
+        $current_category = ($category_id) ? $category_repository->find($category_id) : null;
 
         $this->template->title($this->module_details['name'])
             ->set_breadcrumb('This should be a setting')

@@ -11,12 +11,12 @@
 
 <div id="simpleshop-category" class="form_inputs">
     <ul>
-        <li class="<?php echo alternator('even', ''); ?>">
+        <li class="<?php echo alternator('', 'even'); ?>">
             <label for="title"><?php echo lang('category_title_label'); ?> <span>*</span></label>
             <div class="input"><?php echo form_input('title', htmlspecialchars_decode($category->getTitle()), 'maxlength="130"'); ?></div>
         </li>
 
-        <li class="<?php echo alternator('even', ''); ?>">
+        <li class="<?php echo alternator('', 'even'); ?>">
             <label for="parent_category"><?php echo lang('category_parent_label'); ?></label>
             <div class="input">
                 <select name="parent_category" id="parent_category">
@@ -44,7 +44,7 @@
             </div>
         </li>
 
-        <li class="editor <?php echo alternator('even', ''); ?>">
+        <li class="editor <?php echo alternator('', 'even'); ?>">
             <label for="description"><?php echo lang('category_description_label'); ?></label><br>
             <?php echo form_textarea(array('id' => 'description', 'name' => 'description', 'value' => $category->getDescription(), 'rows' => 10, 'class' => 'wysiwyg-simple')); ?>
         </li>

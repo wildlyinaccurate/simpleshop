@@ -20,7 +20,7 @@ use DoctrineExtensions\NestedSet\MultipleRootNode;
  * )
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Category extends TimestampedModel implements MultipleRootNode
+class Category extends BaseModel implements MultipleRootNode
 {
 
     /**

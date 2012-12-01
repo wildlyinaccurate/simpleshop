@@ -18,7 +18,7 @@ namespace Simpleshop\Entity;
  * )
  * @author	Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class Product extends TimestampedModel
+class Product extends BaseModel
 {
     /**
      * @var	int

@@ -2,7 +2,7 @@
 
 use Simpleshop\Entity\Product;
 
-require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php';
+require_once __DIR__ . '/../core/Simpleshop_Admin_Controller.php';
 
 /**
  * Product management controller

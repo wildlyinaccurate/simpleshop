@@ -31,14 +31,14 @@
                             $selected = '';
                             $disabled = '';
 
-                            if ($node->getId() === $viewing_category_id ||
+                            if ($node->getId() == $viewing_category_id ||
                                 ($category->getParentCategory() && $node->getId() === $category->getParentCategory()->getId()))
                             {
                                 $selected = 'selected="selected"';
                             }
 
-                            if ($node->getId() === $category->getId()) {
-                                // $disabled = 'disabled="disabled"';
+                            if ($node->getId() == $category->getId()) {
+                                $disabled = 'disabled="disabled"';
                             }
 
                             echo '<option value="' . $node->getId() . '" ' . $selected . ' ' . $disabled . '>' . str_repeat('&nbsp;&nbsp;', $node_wrapper->getLevel() * 2) . $node->getTitle() . '</option>';

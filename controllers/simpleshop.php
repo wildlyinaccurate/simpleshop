@@ -17,16 +17,19 @@ class simpleshop extends Simpleshop_Public_Controller
     public function __construct()
     {
         parent::__construct();
+
+        $this->lang->load(array(
+            'categories',
+            'products',
+        ));
     }
 
     /**
      * View the catalogue index
      *
-     * /simpleshop/category/{id}/{slug} routes here.
-     *
-     * @param  int  $category_id
-     * @return void
-     * @author  Joseph Wynn <joe@chromaagency.com>
+     * @param   int     $category_id
+     * @return  void
+     * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
      */
     public function index($category_id = null)
     {
@@ -36,11 +39,29 @@ class simpleshop extends Simpleshop_Public_Controller
         $current_category = ($category_id) ? $category_repository->find($category_id) : null;
 
         $this->template->title($this->module_details['name'])
-            ->set_breadcrumb('This should be a setting')
             ->build('index', array(
                 'categories' => $categories,
                 'current_category' => $current_category,
         ));
+    }
+
+    /**
+     * Show details about the selected product
+     *
+     * @param   int     $id
+     * @return  void
+     * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+     */
+    public function product($id = null)
+    {
+        $product = $this->em->getRepository('Simpleshop\Entity\Product')->find($id);
+
+        $product OR show_404();
+
+        $this->template->title($product->getTitle())
+            ->build('product', array(
+                'product' => $product,
+            ));
     }
 
 }

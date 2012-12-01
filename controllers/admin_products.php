@@ -1,5 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
+use Simpleshop\Entity\Product;
+
 require_once dirname(dirname(__FILE__)) . '/core/Simpleshop_Admin_Controller.php';
 
 /**
@@ -73,7 +75,7 @@ class Admin_Products extends Simpleshop_Admin_Controller
         $this->template
             ->title($this->module_details['name'], lang('products_title'))
             ->build('admin/products/index', array(
-                'products' => $this->em->getRepository('Entity\Product')->findAll(array(), 'title')
+                'products' => $this->em->getRepository('Simpleshop\Entity\Product')->findAll(array(), 'title')
         ));
     }
 
@@ -94,7 +96,7 @@ class Admin_Products extends Simpleshop_Admin_Controller
             $deleted = array();
 
             foreach ($id_array as $id) {
-                $product = $this->em->find('\Entity\Product', $id);
+                $product = $this->em->find('Simpleshop\Entity\Product', $id);
 
                 try {
                     $this->em->remove($product);
@@ -126,7 +128,7 @@ class Admin_Products extends Simpleshop_Admin_Controller
     {
         role_or_die('simpleshop', 'create_product');
 
-        $this->_display_form(new \Entity\Product);
+        $this->_display_form(new Product);
     }
 
     /**
@@ -139,7 +141,7 @@ class Admin_Products extends Simpleshop_Admin_Controller
     {
         role_or_die('simpleshop', 'edit_product');
 
-        $product = $this->em->find('\Entity\Product', $product_id);
+        $product = $this->em->find('Simpleshop\Entity\Product', $product_id);
 
         $product OR redirect('admin/simpleshop');
 
@@ -149,10 +151,10 @@ class Admin_Products extends Simpleshop_Admin_Controller
     /**
      * Display the create/edit form
      *
-     * @param  Entity\Product $product
+     * @param  Simpleshop\Entity\Product $product
      * @return void
      */
-    private function _display_form(\Entity\Product $product)
+    private function _display_form(Product $product)
     {
         role_or_die('simpleshop', 'create_product');
 

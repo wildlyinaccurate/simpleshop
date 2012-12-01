@@ -9,6 +9,11 @@
  * @since   1.0
  */
 
+function simpleshop_product_url($product)
+{
+    return site_url("simpleshop/product/{$product->getId()}/{$product->getSlug()}");
+}
+
 /**
  * Build a breadcrumb string a root NodeWrapper object.
  *
@@ -18,11 +23,11 @@
  * @param	bool		$include_root
  * @param	string		$separator
  * @return	string
- * @author  Joseph Wynn <joe@chromaagency.com>
+ * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-function category_breadcrumbs($root_category, $include_root = false)
+function simpleshop_category_breadcrumbs($root_category, $include_root = false)
 {
-    if (! $root_category) {
+    if ( ! $root_category) {
         return '';
     }
 

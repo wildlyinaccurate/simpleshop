@@ -22,6 +22,7 @@
 
 // Public Routes
 $route['simpleshop/category/(:num)(.*)'] = 'simpleshop/index/$1';
+$route['simpleshop/product/(:num)(.*)'] = 'simpleshop/product/$1';
 
 // Admin Routes
 $route['simpleshop/admin/catalogue(.*)'] = 'admin$1';

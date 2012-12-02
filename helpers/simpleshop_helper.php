@@ -25,14 +25,13 @@ function simpleshop_product_url($product)
  * @return	string
  * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-function simpleshop_category_breadcrumbs($root_category, $include_root = false)
+function simpleshop_category_breadcrumbs($root_category, $include_root = false, $separator = '<span class="separator">&raquo;</span>')
 {
     if ( ! $root_category) {
         return '';
     }
 
     $breadcrumbs = '';
-    $separator = config_item('simpleshop_breadcrumb_separator');
     $categories = $root_category->getAncestors($include_root);
 
     foreach ($categories as $node) {

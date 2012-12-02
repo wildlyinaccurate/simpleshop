@@ -3,5 +3,3 @@
 /**
  * Simpleshop Configuration
  */
-
-$config['simpleshop_breadcrumb_separator'] = '<span class="separator">&raquo;</span>';

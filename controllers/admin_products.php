@@ -75,8 +75,8 @@ class Admin_Products extends Simpleshop_Admin_Controller
         $this->template
             ->title($this->module_details['name'], lang('simpleshop.products_title'))
             ->build('admin/products/index', array(
-                'products' => $this->em->getRepository('Simpleshop\Entity\Product')->findAll(array(), 'title')
-        ));
+                'products' => $this->em->getRepository('Simpleshop\Entity\Product')->findAll(array(), array('title' => 'ASC')),
+            ));
     }
 
     /**

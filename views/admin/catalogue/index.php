@@ -14,8 +14,8 @@
 
         <h4><?php echo sprintf(lang('category_products_title'), ($viewing_category) ? $viewing_category->getTitle() : lang('category_home_title')); ?></h4>
 
-        <?php if ($viewing_category && $viewing_category->getProducts()->count() > 0): ?>
-            <?php $this->load->view('admin/tables/products'); ?>
+        <?php if ($products->count() > 0): ?>
+            <?php $this->load->view('admin/tables/products', array('products' => $products)); ?>
         <?php else: ?>
             <p><?php echo lang('no_products'); ?> <?php echo anchor("admin/simpleshop/products/create?category_id={$viewing_category_id}", lang('create_product_now')); ?></p>
         <?php endif; ?>

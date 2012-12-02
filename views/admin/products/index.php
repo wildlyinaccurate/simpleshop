@@ -4,7 +4,7 @@
 
 <section class="item">
     <?php if ($products): ?>
-        <?php $this->load->view('admin/tables/products'); ?>
+        <?php $this->load->view('admin/tables/products', array('products' => $products)); ?>
     <?php else: ?>
         <p><?php echo lang('product_no_products'); ?></p>
     <?php endif; ?>

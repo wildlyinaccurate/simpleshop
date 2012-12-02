@@ -18,7 +18,7 @@
         </tr>
     </tfoot>
     <tbody>
-        <?php foreach ($viewing_category->getProducts() as $product): ?>
+        <?php foreach ($products as $product): ?>
         <tr>
             <td><?php echo form_checkbox('action_to[]', $product->getId()); ?></td>
             <td><?php echo anchor("admin/simpleshop/products/edit/{$product->getId()}", $product->getTitle()); ?></td>

@@ -9,7 +9,7 @@
 
 <?php echo form_open(uri_string(), 'class="crud"'); ?>
 
-<div id="simpleshop-product" class="form_inputs">
+<div class="form_inputs">
     <ul>
         <li class="<?php echo alternator('', 'even'); ?>">
             <label for="title"><?php echo lang('simpleshop.products.title_label'); ?> <span>*</span></label>
@@ -18,7 +18,10 @@
 
         <li class="<?php echo alternator('', 'even'); ?>">
             <label for="price"><?php echo lang('simpleshop.products.price_label'); ?></label>
-            <div class="input"><?php echo form_input('price', set_value('price', $product->getPrice()), 'id="price"'); ?></div>
+            <div class="input">
+                <?php echo Settings::get('currency'); ?>
+                <?php echo form_input('price', set_value('price', $product->getPrice()), 'id="price"'); ?>
+            </div>
         </li>
 
         <li class="<?php echo alternator('', 'even'); ?>">
@@ -65,9 +68,9 @@
                         'selected' => "selected"
                     );
 
-                    echo '<li>' . str_repeat('&nbsp;&nbsp;', $node_wrapper->getLevel() * 2);
+                    echo '<li style="padding-left: ' . $node_wrapper->getLevel() * 20 . 'px;">';
                     echo form_input($data, $node->getId(), set_checkbox("categories[{$node->getId()}]", $node->getId(), $default_selected));
-                    echo ' <label for="category-' . $node->getId() . '">' . $node->getTitle() . '</label>';
+                    echo form_label($node->getTitle(), "category-{$node->getId()}");
                     echo '</li>';
                 }
             }

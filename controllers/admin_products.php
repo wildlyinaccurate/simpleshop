@@ -204,6 +204,7 @@ class Admin_Products extends Simpleshop_Admin_Controller
         $this->template
             ->title($this->module_details['name'], $page_title)
             ->append_metadata($this->load->view('fragments/wysiwyg', $this->data, true))
+            ->append_css('module::products.css')
             ->build('admin/products/form', array(
                 'page_title' => $page_title,
                 'product' => $product,

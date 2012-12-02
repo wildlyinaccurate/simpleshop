@@ -142,19 +142,6 @@ TEXT;
         return true;
     }
 
-    /**
-     * Returns the module's help text
-     *
-     * @return string
-     */
-    public function help()
-    {
-        return <<<HTML
-<p>One day this might be helpful.</p>
-HTML;
-
-    }
-
     private function _update_settings()
     {
         require_once __DIR__ . '/config/simpleshop.php';
@@ -192,6 +179,14 @@ HTML;
     {
         $cacheDriver = $this->em->getConfiguration()->getMetadataCacheImpl();
         $cacheDriver->deleteAll();
+    }
+
+    public function help()
+    {
+        return <<<HTML
+Simple Shop doesn't have any documentation yet.
+Please use the <a href="https://github.com/wildlyinaccurate/simpleshop/issues">GitHub Issue Tracker</a> for assistance.
+HTML;
     }
 
 }

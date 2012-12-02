@@ -166,7 +166,6 @@ HTML;
                 $this->settings->add($setting);
             }
         }
-        exit;
     }
 
     /**

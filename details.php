@@ -24,7 +24,7 @@ class Module_Simpleshop extends Module
             ),
             'frontend' => true,
             'backend' => true,
-            'menu' => 'simpleshop',
+            'menu' => 'content',
 
             'roles' => array(
                 'create_category',

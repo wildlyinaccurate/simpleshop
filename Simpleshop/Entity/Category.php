@@ -60,7 +60,7 @@ class Category extends BaseModel implements MultipleRootNode
     /**
      * @var	\Doctrine\Common\Collections\ArrayCollection
      * @ManyToMany(targetEntity="Product", mappedBy="categories", cascade={"persist"})
-     * @JoinTable(name="product_categories")
+     * @JoinTable(name="simpleshop_product_categories")
      * @OrderBy({"title" = "ASC"})
      */
     protected $products;

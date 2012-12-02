@@ -3,3 +3,5 @@
 /**
  * Simpleshop Configuration
  */
+$config['simpleshop.default_settings'] = array(
+);

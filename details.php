@@ -73,14 +73,25 @@ class Module_Simpleshop extends Module
     {
         $this->_load_doctrine();
         $this->_clear_metadata_cache();
-
-        $metadatas = $this->em->getMetadataFactory()->getAllMetadata();
+        $this->_update_settings();
 
         $schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
-        $schemaTool->dropSchema($metadatas);
-        $schemaTool->createSchema($metadatas);
+        $metadatas = $this->em->getMetadataFactory()->getAllMetadata();
 
-        return TRUE;
+        try {
+            $schemaTool->createSchema($metadatas);
+        } catch (\Doctrine\ORM\Tools\ToolsException $e) {
+            $notice = <<<TEXT
+<b>Important:</b> Simple Shop did not update your database because it detected
+that one or more Simple Shop tables already exist. To ensure that your Simple Shop
+installation is up-to-date, it is recommended that you take a backup of your
+Simple Shop tables and re-install the module.
+TEXT;
+
+            $this->session->set_flashdata('notice', $notice);
+        }
+
+        return true;
     }
 
     /**
@@ -93,13 +104,25 @@ class Module_Simpleshop extends Module
         $this->_load_doctrine();
         $this->_clear_metadata_cache();
 
+        ci()->settings_m->delete_by(array('module' => 'simpleshop'));
+
         $metadatas = $this->em->getMetadataFactory()->getAllMetadata();
 
-        $schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
-        $schemaTool->dropSchema($metadatas);
+        foreach ($metadatas as $metadata) {
+            if ( ! $metadata->isMappedSuperclass) {
+                foreach ($metadata->associationMappings as $association) {
+                    if ( ! isset($association['joinTable'])) {
+                        continue;
+                    }
 
-        return TRUE;
+                    $this->db->query("DROP TABLE IF EXISTS `{$association['joinTable']['name']}`");
+                }
 
+                $this->db->query("DROP TABLE IF EXISTS `{$metadata->table['name']}`");
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -113,16 +136,10 @@ class Module_Simpleshop extends Module
         $old_version = (float) $old_version;
 
         if ($old_version < (float) $this->version) {
-            $this->_load_doctrine();
-            $this->_clear_metadata_cache();
-
-            $metadatas = $this->em->getMetadataFactory()->getAllMetadata();
-
-            $schemaTool = new \Doctrine\ORM\Tools\SchemaTool($this->em);
-            $schemaTool->updateSchema($metadatas, TRUE);
+            $this->_update_settings();
         }
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -138,9 +155,26 @@ HTML;
 
     }
 
+    private function _update_settings()
+    {
+        require_once __DIR__ . '/config/simpleshop.php';
+
+        foreach ($config['simpleshop.default_settings'] as $setting) {
+            if ( ! Settings::get($setting['slug'])) {
+                $setting['module'] = 'simpleshop';
+
+                $this->settings->add($setting);
+            }
+        }
+        exit;
+    }
+
     /**
-     * Load up Doctrine for any schema changes (we don't want to
-     * do this in the constructor as it creates unnecessary overhead)
+     * Load Doctrine and create a shortcut to the EntityManager
+     * in $this->em
+     *
+     * @return  void
+     * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
      */
     private function _load_doctrine()
     {
@@ -162,4 +196,3 @@ HTML;
     }
 
 }
-/* End of file details.php */

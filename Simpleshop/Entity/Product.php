@@ -5,7 +5,7 @@ namespace Simpleshop\Entity;
 /**
  * Product
  *
- * @Entity
+ * @Entity(repositoryClass="Simpleshop\Entity\ProductRepository")
  * @Table(name="simpleshop_product",
  * 		uniqueConstraints={
  * 			@uniqueConstraint(name="product_title_unique", columns={"title"}),

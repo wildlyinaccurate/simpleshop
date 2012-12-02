@@ -170,7 +170,7 @@ class Admin_Products extends Simpleshop_Admin_Controller
             // Remove all product categories, and then set them from form data
             $product->getCategories()->clear();
 
-            foreach ($this->input->post('categories') as $category_id) {
+            foreach ((array) $this->input->post('categories') as $category_id) {
                 if ($category = $this->em->find('Simpleshop\Entity\Category', $category_id)) {
                     $product->addCategory($category);
                 }

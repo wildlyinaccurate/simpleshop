@@ -27,6 +27,14 @@ class BaseModel
     protected $modified_date;
 
     /**
+     * Constructor ahoy!
+     */
+    public function __construct()
+    {
+
+    }
+
+    /**
      * Set created_date to the current date/time before persisting an object
      *
      * @PrePersist

@@ -56,7 +56,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
     public function index()
     {
         $this->template
-            ->title($this->module_details['name'], lang('categories_title'))
+            ->title($this->module_details['name'], lang('simpleshop.categories_title'))
             ->build('admin/categories/index', array(
                 'categories' => $this->em->getRepository('Simpleshop\Entity\Category')->findAll(array(), 'title'),
             ));
@@ -88,9 +88,9 @@ class Admin_Categories extends Simpleshop_Admin_Controller
                 }
             }
 
-            $this->session->set_flashdata('success', sprintf($this->lang->line('category_mass_delete_success'), implode(', ', $deleted)));
+            $this->session->set_flashdata('success', sprintf(lang('simpleshop.categories.mass_delete_success'), implode(', ', $deleted)));
         } else {
-            $this->session->set_flashdata('error', $this->lang->line('category_no_select_error'));
+            $this->session->set_flashdata('error', lang('simpleshop.categories.no_select_error'));
         }
 
         redirect("admin/simpleshop/catalogue?category_id={$this->viewing_category_id}");
@@ -168,7 +168,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
                 }
             }
 
-            $message = ($this->method == 'create') ? $this->lang->line('category_add_success') : $this->lang->line('category_edit_success');
+            $message = ($this->method == 'create') ? lang('simpleshop.categories.add_success') : lang('simpleshop.categories.edit_success');
             $this->session->set_flashdata('success', sprintf($message, $this->input->post('title')));
 
             // Redirect back to the form or main page
@@ -181,9 +181,9 @@ class Admin_Categories extends Simpleshop_Admin_Controller
 
         // Set the page title depending on whether we're creating or editing a category
         if ($this->method == 'create') {
-            $page_title = lang('create_category');
+            $page_title = lang('simpleshop.create_category');
         } else {
-            $page_title = sprintf(lang('edit_category'), $category->getTitle());
+            $page_title = sprintf(lang('simpleshop.edit_category'), $category->getTitle());
         }
 
         $root_categories = $this->em->getRepository('Simpleshop\Entity\Category')
@@ -214,7 +214,7 @@ class Admin_Categories extends Simpleshop_Admin_Controller
             return true;
         }
 
-        $this->form_validation->set_message('_not_selected_category', lang('category_invalid_parent'));
+        $this->form_validation->set_message('_not_selected_category', lang('simpleshop.categories.invalid_parent'));
         return false;
     }
 

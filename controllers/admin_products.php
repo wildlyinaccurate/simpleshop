@@ -25,32 +25,32 @@ class Admin_Products extends Simpleshop_Admin_Controller
     private $validation_rules = array(
         array(
             'field' => 'title',
-            'label' => 'lang:product_title_label',
+            'label' => 'lang:simpleshop.products.title_label',
             'rules' => 'trim|required|max_length[130]'
         ),
         array(
             'field'	=> 'description',
-            'label'	=> 'lang:product_description_label',
+            'label'	=> 'lang:simpleshop.products.description_label',
             'rules'	=> 'trim|max_length[2000]'
         ),
         array(
             'field'	=> 'price',
-            'label'	=> 'lang:product_price_label',
+            'label'	=> 'lang:simpleshop.products.price_label',
             'rules'	=> 'numeric'
         ),
         array(
             'field'	=> 'categories',
-            'label'	=> 'lang:product_categories_label',
+            'label'	=> 'lang:simpleshop.products.categories_label',
             'rules'	=> ''
         ),
         array(
             'field' => 'stock',
-            'label' => 'lang:product_stock_label',
+            'label' => 'lang:simpleshop.products.stock_label',
             'rules' => 'is_natural'
         ),
         array(
             'field' => 'unlimited_stock',
-            'label' => 'lang:product_unlimited_stock_label',
+            'label' => 'lang:simpleshop.products.unlimited_stock_label',
             'rules' => ''
         ),
     );
@@ -73,7 +73,7 @@ class Admin_Products extends Simpleshop_Admin_Controller
     public function index()
     {
         $this->template
-            ->title($this->module_details['name'], lang('products_title'))
+            ->title($this->module_details['name'], lang('simpleshop.products_title'))
             ->build('admin/products/index', array(
                 'products' => $this->em->getRepository('Simpleshop\Entity\Product')->findAll(array(), 'title')
         ));
@@ -102,18 +102,18 @@ class Admin_Products extends Simpleshop_Admin_Controller
                     $this->em->remove($product);
                     $deleted[] = $product->getTitle();
                 } catch (InvalidArgumentException $e) {
-                    $this->session->set_flashdata('error', sprintf($this->lang->line('product_single_delete_error'), $product->getTitle()));
+                    $this->session->set_flashdata('error', sprintf(lang('simpleshop.products.single_delete_error'), $product->getTitle()));
                 }
             }
 
             try {
                 $this->em->flush();
-                $this->session->set_flashdata('success', sprintf($this->lang->line('product_mass_delete_success'), implode(', ', $deleted)));
+                $this->session->set_flashdata('success', sprintf(lang('simpleshop.products.mass_delete_success'), implode(', ', $deleted)));
             } catch (\Doctrine\ORM\OptimisticLockException $e) {
-                $this->session->set_flashdata('error', $this->lang->line('product_mass_delete_error'));
+                $this->session->set_flashdata('error', lang('simpleshop.products.mass_delete_error'));
             }
         } else {
-            $this->session->set_flashdata('error', $this->lang->line('product_no_select_error'));
+            $this->session->set_flashdata('error', lang('simpleshop.products.no_select_error'));
         }
 
         redirect('admin/simpleshop');
@@ -182,7 +182,7 @@ class Admin_Products extends Simpleshop_Admin_Controller
             $this->em->persist($product);
             $this->em->flush();
 
-            $this->session->set_flashdata('success', sprintf(lang('product_save_success'), $product->getTitle()));
+            $this->session->set_flashdata('success', sprintf(lang('simpleshop.products.save_success'), $product->getTitle()));
 
             // Redirect back to the form or main page
             if ($this->input->post('btnAction') == 'save_exit') {
@@ -193,9 +193,9 @@ class Admin_Products extends Simpleshop_Admin_Controller
         }
 
         if ($this->method == 'create') {
-            $page_title = lang('create_product');
+            $page_title = lang('simpleshop.create_product');
         } else {
-            $page_title = sprintf(lang('edit_product'), $product->getTitle());
+            $page_title = sprintf(lang('simpleshop.edit_product'), $product->getTitle());
         }
 
         // Get the root categories to build the tree from

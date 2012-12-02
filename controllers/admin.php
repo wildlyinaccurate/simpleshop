@@ -19,7 +19,7 @@ class admin extends Simpleshop_Admin_Controller
 
         $this->load->language(array(
             'categories',
-            'products'
+            'products',
         ));
     }
 
@@ -41,7 +41,7 @@ class admin extends Simpleshop_Admin_Controller
         }
 
         $this->template
-            ->title($this->module_details['name'], lang('catalogue_title'))
+            ->title($this->module_details['name'], lang('simpleshop.catalogue_title'))
             ->append_js('module::catalogue.js')
             ->build('admin/catalogue/index', array(
                 'categories' => $categories,

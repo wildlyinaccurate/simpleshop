@@ -37,23 +37,23 @@ class Module_Simpleshop extends Module
 
             'sections' => array(
                 'catalogue' => array(
-                    'name' => 'catalogue_title',
+                    'name' => 'simpleshop.catalogue_title',
                     'uri' => 'admin/simpleshop/catalogue',
                     'shortcuts' => array(
                         array(
-                            'name' => 'create_product',
+                            'name' => 'simpleshop.create_product',
                             'uri' => "admin/simpleshop/products/create?category_id={$this->input->get('category_id')}",
                             'class' => 'add'
                         ),
                         array(
-                            'name' => 'create_category',
+                            'name' => 'simpleshop.create_category',
                             'uri' => "admin/simpleshop/categories/create?category_id={$this->input->get('category_id')}",
                             'class' => 'add'
                         ),
                     ),
                 ),
                 'orders' => array(
-                    'name' => 'orders_title',
+                    'name' => 'simpleshop.orders_title',
                     'uri' => 'admin/simpleshop/orders',
                 ),
             )

@@ -1,24 +1,23 @@
 <?php
 
 // Titles
-$lang['welcome_title']        			= 'Welcome to Simple Shop!';
-$lang['orders_title']					= 'Orders';
-$lang['catalogue_title']				= 'Catalogue';
-$lang['settings_title']					= 'Settings';
-$lang['categories_title']				= 'Categories';
-$lang['products_title']					= 'Products';
-$lang['category_products_title']        = 'Products in "%s"';
+$lang['simpleshop.orders_title']                = 'Orders';
+$lang['simpleshop.catalogue_title']             = 'Catalogue';
+$lang['simpleshop.settings_title']              = 'Settings';
+$lang['simpleshop.categories_title']            = 'Categories';
+$lang['simpleshop.products_title']              = 'Products';
+$lang['simpleshop.category_products_title']     = 'Products in "%s"';
 
 // Labels
-$lang['create_category']				= 'Add Category';
-$lang['edit_category']					= 'Edit category "%s"';
-$lang['create_product']					= 'Add Product';
+$lang['simpleshop.create_category']             = 'Add Category';
+$lang['simpleshop.edit_category']               = 'Edit category "%s"';
+$lang['simpleshop.create_product']              = 'Add Product';
 
 // Common Fields
-$lang['none_label']                     = '-- None --';
+$lang['simpleshop.none_label']                  = '-- None --';
 
 // Content
-$lang['no_categories']                  = 'There are no categories.';
-$lang['no_products']                    = 'There are no products in this category.';
-$lang['create_category_now']            = 'Create a category';
-$lang['create_product_now']             = 'Create a product';
+$lang['simpleshop.no_categories']               = 'There are no categories.';
+$lang['simpleshop.no_products']                 = 'There are no products in this category.';
+$lang['simpleshop.create_category_now']         = 'Create a category';
+$lang['simpleshop.create_product_now']          = 'Create a product';

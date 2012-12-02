@@ -4,8 +4,8 @@
         <thead>
         <tr>
             <th width="20"><?php echo form_checkbox(array('name' => 'action_to_all', 'class' => 'check-all')); ?></th>
-            <th><?php echo lang('category_category_label'); ?></th>
-            <th><?php echo lang('category_products_label'); ?></th>
+            <th><?php echo lang('simpleshop.categories.category_label'); ?></th>
+            <th><?php echo lang('simpleshop.categories.products_label'); ?></th>
             <th width="110"></th>
         </tr>
         </thead>

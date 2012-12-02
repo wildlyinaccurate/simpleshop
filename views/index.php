@@ -1,5 +1,5 @@
 <div class="categories">
-    <h3><?php echo lang('categories_title'); ?></h3>
+    <h3><?php echo lang('simpleshop.categories_title'); ?></h3>
 
     <ul>
     <?php foreach ($categories as $category): ?>
@@ -10,7 +10,7 @@
 
 <?php if ($current_category): ?>
     <div class="products">
-        <h3><?php echo lang('products_title'); ?></h3>
+        <h3><?php echo lang('simpleshop.products_title'); ?></h3>
 
         <ul>
         <?php foreach ($current_category->getProducts() as $product): ?>

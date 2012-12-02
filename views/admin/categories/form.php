@@ -9,18 +9,18 @@
 
 <?php echo form_open(uri_string(), 'class="crud"'); ?>
 
-<div id="simpleshop-category" class="form_inputs">
+<div class="form_inputs">
     <ul>
         <li class="<?php echo alternator('', 'even'); ?>">
-            <label for="title"><?php echo lang('category_title_label'); ?> <span>*</span></label>
+            <label for="title"><?php echo lang('simpleshop.categories.title_label'); ?> <span>*</span></label>
             <div class="input"><?php echo form_input('title', htmlspecialchars_decode($category->getTitle()), 'maxlength="130"'); ?></div>
         </li>
 
         <li class="<?php echo alternator('', 'even'); ?>">
-            <label for="parent_category"><?php echo lang('category_parent_label'); ?></label>
+            <label for="parent_category"><?php echo lang('simpleshop.categories.parent_label'); ?></label>
             <div class="input">
                 <select name="parent_category" id="parent_category">
-                    <option value="0"><?php echo lang('none_label'); ?></option>
+                    <option value="0"><?php echo lang('simpleshop.none_label'); ?></option>
 
                     <?php
                     foreach ($root_categories as $root_category) {
@@ -50,7 +50,7 @@
         </li>
 
         <li class="editor <?php echo alternator('', 'even'); ?>">
-            <label for="description"><?php echo lang('category_description_label'); ?></label><br>
+            <label for="description"><?php echo lang('simpleshop.categories.description_label'); ?></label><br>
             <?php echo form_textarea(array('id' => 'description', 'name' => 'description', 'value' => $category->getDescription(), 'rows' => 10, 'class' => 'wysiwyg-simple')); ?>
         </li>
 

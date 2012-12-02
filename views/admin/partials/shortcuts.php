@@ -1,6 +1,6 @@
 <nav id="shortcuts">
     <ul>
-        <li><?php echo anchor('admin/simpleshop/categories', lang('categories')); ?></li>
-        <li><?php echo anchor('admin/simpleshop/products', lang('products')); ?></li>
+        <li><?php echo anchor('admin/simpleshop/categories', lang('simpleshop.categories')); ?></li>
+        <li><?php echo anchor('admin/simpleshop/products', lang('simpleshop.products')); ?></li>
     </ul>
 </nav>

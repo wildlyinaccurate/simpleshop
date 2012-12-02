@@ -56,13 +56,13 @@ class Product extends BaseModel
      * @var int
      * @Column(type="integer", nullable=false)
      */
-    protected $stock;
+    protected $stock = 0;
 
     /**
      * @var bool
      * @Column(type="boolean", nullable=false)
      */
-    protected $unlimited_stock;
+    protected $unlimited_stock = false;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection

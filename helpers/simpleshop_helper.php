@@ -9,9 +9,28 @@
  * @since   1.0
  */
 
+/**
+ * Generate the URL to view a product
+ *
+ * @param   Simpleshop\Entity\Product
+ * @return  string
+ * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+ */
 function simpleshop_product_url($product)
 {
     return site_url("simpleshop/product/{$product->getId()}/{$product->getSlug()}");
+}
+
+/**
+ * Generate the URL to purchase a product
+ *
+ * @param   Simpleshop\Entity\Product
+ * @return  string
+ * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
+ */
+function simpleshop_purchase_url($product)
+{
+    return site_url("simpleshop/cart/checkout?product={$product->getId()}");
 }
 
 /**

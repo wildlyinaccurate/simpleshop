@@ -18,7 +18,8 @@
 
             <li>
                 <b class="title"><?php echo anchor($product_url, $product->getTitle()); ?></b>
-                <span class="price"><?php echo anchor($product_url, $product->getPrice()); ?></span>
+                <span class="price"><?php echo Settings::get('currency'); ?><?php echo anchor($product_url, $product->getPrice()); ?></span>
+                <a class="buy" href="<?php echo simpleshop_purchase_url($product); ?>"><?php echo lang('simpleshop.products.add_to_cart'); ?></a>
             </li>
         <?php endforeach; ?>
         </ul>

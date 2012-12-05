@@ -3,16 +3,15 @@
 require_once __DIR__ . '/../core/Simpleshop_Public_Controller.php';
 
 /**
- * Simple Shop provides basic e-commerce functionality to a PyroCMS site.
+ * Main front-end controller (catalogue)
  *
- * @category    Modules
- * @author      Joseph Wynn
+ * @author  Joseph Wynn <joseph@wildlyinaccurate.com>
  */
-class simpleshop extends Simpleshop_Public_Controller
+class Simpleshop extends Simpleshop_Public_Controller
 {
 
     /**
-     * Constructor
+     * Constructor ahoy!
      */
     public function __construct()
     {
@@ -38,8 +37,15 @@ class simpleshop extends Simpleshop_Public_Controller
 
         $current_category = ($category_id) ? $category_repository->find($category_id) : null;
 
+        if ($category_id) {
+            $products = $current_category->getProducts();
+        } else {
+            $products = $this->em->getRepository('Simpleshop\Entity\Product')
+                ->getProductsWithNoCategory();
+        }
+
         $this->template->title($this->module_details['name'])
-            ->build('index', array(
+            ->build('catalogue/index', array(
                 'categories' => $categories,
                 'current_category' => $current_category,
         ));
@@ -59,7 +65,7 @@ class simpleshop extends Simpleshop_Public_Controller
         $product OR show_404();
 
         $this->template->title($product->getTitle())
-            ->build('product', array(
+            ->build('catalogue/product', array(
                 'product' => $product,
             ));
     }

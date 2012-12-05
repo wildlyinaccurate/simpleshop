@@ -20,7 +20,7 @@
 |	http://www.codeigniter.com/user_guide/general/routing.html
 */
 
-// Public Routes
+// Catalogue
 $route['simpleshop/category/(:num)(.*)'] = 'simpleshop/index/$1';
 $route['simpleshop/product/(:num)(.*)'] = 'simpleshop/product/$1';
 

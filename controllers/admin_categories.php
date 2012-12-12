@@ -49,20 +49,6 @@ class Admin_Categories extends Simpleshop_Admin_Controller
     }
 
     /**
-     * List all categories
-     *
-     * @return void
-     */
-    public function index()
-    {
-        $this->template
-            ->title($this->module_details['name'], lang('simpleshop.categories_title'))
-            ->build('admin/categories/index', array(
-                'categories' => $this->em->getRepository('Simpleshop\Entity\Category')->findAll(array(), 'title'),
-            ));
-    }
-
-    /**
      * Delete a category
      *
      * @param  int  $id

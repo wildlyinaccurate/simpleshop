@@ -6,6 +6,9 @@
     <?php if ($products): ?>
         <?php $this->load->view('admin/tables/products', array('products' => $products)); ?>
     <?php else: ?>
-        <p><?php echo lang('simpleshop.products.no_products'); ?></p>
+        <div class="no_data">
+        	<?php echo lang('simpleshop.products.no_products'); ?>
+        	<?php echo anchor("admin/simpleshop/products/create", lang('simpleshop.create_product_now')); ?>
+    	</div>
     <?php endif; ?>
 </section>

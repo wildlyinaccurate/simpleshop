@@ -45,32 +45,21 @@ class Simpleshop_Admin_Controller extends Admin_Controller
     {
         parent::__construct();
 
-        $this->lang->load('simpleshop');
-        $this->load->config('simpleshop');
-        $this->load->helper('simpleshop');
-        $this->load->library(array(
-            'doctrine',
-            'form_validation'
-        ));
-
-        // Shortcuts partial
-        $this->template->set_partial('shortcuts', 'admin/partials/shortcuts');
-
-        // Create a shortcut property to the Doctrine Entity Manager and Nested Set Manager
         $this->em = $this->doctrine->em;
-
         $config = new \DoctrineExtensions\NestedSet\Config($this->em, 'Simpleshop\Entity\Category');
         $this->nsm = new \DoctrineExtensions\NestedSet\Manager($config);
 
         // Get the currently viewed category
         if ($this->input->get('category_id')) {
             $this->viewing_category_id = $this->input->get('category_id');
-            $this->viewing_category = $this->em->find('\Simpleshop\Entity\Category', $this->viewing_category_id);
+            $this->viewing_category = $this->em->find('Simpleshop\Entity\Category', $this->viewing_category_id);
 
             if ($this->viewing_category) {
                 $this->viewing_category_node = $this->nsm->wrapNode($this->viewing_category);
             }
         }
+
+        $this->template->set_partial('shortcuts', 'admin/partials/shortcuts');
 
         // Make the currently viewed category available in all views
         $this->load->vars(array(
